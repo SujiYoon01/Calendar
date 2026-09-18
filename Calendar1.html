@@ -1,1 +1,751 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2026 우주사업총괄 KPI &amp; HR Calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f6f5f1;
+    --surface: #ffffff;
+    --surface-2: #fbfaf7;
+    --ink: #17160f;
+    --ink-2: #5c5a4f;
+    --ink-muted: #9b978a;
+    --grid: #dedad0;
+    --grid-soft: #ececE4;
+    --border: rgba(23,22,15,0.10);
+    --accent-biz: #1f6f72;
+    --accent-biz-soft: #e4f1ef;
+    --accent-hr: #7a4f96;
+    --accent-hr-soft: #f0e8f4;
+    --khaki: #cfa843;
+    --khaki-soft: #f2e3b0;
+    --strong-border: #3a3324;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page: #14140f; --surface: #1c1b16; --surface-2: #201f19;
+      --ink: #f4f2ea; --ink-2: #c7c3b5; --ink-muted: #8f8b7d;
+      --grid: #3a3930; --grid-soft: #2b2a24; --border: rgba(244,242,234,0.12);
+      --accent-biz: #4aa3a4; --accent-biz-soft: #1c3130;
+      --accent-hr: #b28dcb; --accent-hr-soft: #322a3a;
+      --khaki: #d9b656; --khaki-soft: #3d3213; --strong-border: #e8e2d2;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #14140f; --surface: #1c1b16; --surface-2: #201f19;
+    --ink: #f4f2ea; --ink-2: #c7c3b5; --ink-muted: #8f8b7d;
+    --grid: #3a3930; --grid-soft: #2b2a24; --border: rgba(244,242,234,0.12);
+    --accent-biz: #4aa3a4; --accent-biz-soft: #1c3130;
+    --accent-hr: #b28dcb; --accent-hr-soft: #322a3a;
+    --khaki: #d9b656; --khaki-soft: #3d3213; --strong-border: #e8e2d2;
+  }
 
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: "Noto Sans KR", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-feature-settings: "tnum" 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .wrap {
+    max-width: 1900px;
+    margin: 0 auto;
+    padding: 18px 22px 14px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+
+  header.top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    flex: none;
+  }
+  header.top h1 { margin: 0; font-size: 20px; font-weight: 900; letter-spacing: -0.01em; }
+  header.top p { margin: 3px 0 0; color: var(--ink-2); font-size: 12px; }
+  .btn-print {
+    appearance: none; border: 1px solid var(--border); background: var(--surface);
+    color: var(--ink-2); font: inherit; font-size: 12px; font-weight: 700;
+    padding: 6px 12px; border-radius: 7px; cursor: pointer;
+  }
+  .btn-print:hover { border-color: var(--accent-biz); color: var(--accent-biz); }
+
+  .control-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap; margin-bottom: 8px; flex: none;
+  }
+  .filter-group { display: flex; align-items: center; gap: 6px; }
+  .filter-pill {
+    appearance: none; border: 1px solid var(--border); background: var(--surface);
+    color: var(--ink-2); font: inherit; font-size: 12px; font-weight: 700;
+    padding: 6px 13px; border-radius: 999px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: background .12s ease, color .12s ease, border-color .12s ease;
+  }
+  .filter-pill i { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--ink-muted); }
+  .filter-pill:hover { border-color: var(--ink-muted); }
+  .filter-pill[data-f="biz"].active { background: var(--accent-biz); border-color: var(--accent-biz); color: #fff; }
+  .filter-pill[data-f="biz"].active i { background: #fff; }
+  .filter-pill[data-f="hr"].active { background: var(--accent-hr); border-color: var(--accent-hr); color: #fff; }
+  .filter-pill[data-f="hr"].active i { background: #fff; }
+  .filter-pill[data-f="all"].active { background: var(--ink); border-color: var(--ink); color: var(--surface); }
+  .filter-pill[data-f="all"].active i { background: var(--surface); }
+  .filter-pill[data-f="biz"] i { background: var(--accent-biz); }
+  .filter-pill[data-f="hr"] i { background: var(--accent-hr); }
+
+  .switch { position: relative; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; font-size: 12px; font-weight: 700; color: var(--ink-2); }
+  .switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .switch .track { width: 34px; height: 20px; border-radius: 999px; background: var(--grid); position: relative; transition: background .15s ease; flex: none; }
+  .switch .track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); box-shadow: 0 1px 2px rgba(0,0,0,0.25); transition: transform .15s ease; }
+  .switch input:checked + .track { background: var(--accent-biz); }
+  .switch input:checked + .track::after { transform: translateX(14px); }
+
+  body.edit-on .ed { outline: none; border-radius: 4px; cursor: text; }
+  body.edit-on .ed:hover { background: color-mix(in srgb, var(--accent-biz) 10%, transparent); }
+  body.edit-on .ed:focus { background: var(--surface-2); box-shadow: 0 0 0 2px var(--accent-biz); }
+
+  .edit-banner {
+    display: none; align-items: center; gap: 8px; background: var(--khaki-soft);
+    border: 1px solid color-mix(in srgb, var(--khaki) 50%, transparent); color: var(--ink);
+    font-size: 11.5px; border-radius: 9px; padding: 6px 12px; margin-bottom: 8px; flex: none;
+  }
+  body.edit-on .edit-banner { display: flex; }
+
+  .legend-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .swatch { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--ink-muted); font-weight: 600; }
+  .swatch i { width: 12px; height: 9px; border-radius: 2px; display: inline-block; flex: none; border: 1px solid var(--grid); }
+
+  .stat-bar {
+    display: flex; align-items: stretch; gap: 0; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; flex: none; overflow: hidden;
+  }
+  .stat { padding: 8px 18px; display: flex; align-items: baseline; gap: 8px; border-right: 1px solid var(--grid); }
+  .stat:last-child { border-right: none; }
+  .stat .n { font-size: 18px; font-weight: 900; letter-spacing: -0.01em; }
+  .stat .l { font-size: 11px; color: var(--ink-muted); font-weight: 600; }
+
+  .stage { flex: 1; min-height: 0; position: relative; overflow: hidden; }
+  .table-shell {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    overflow: hidden; transform-origin: top left; position: absolute; top: 0; left: 0;
+  }
+  table.kpi { border-collapse: separate; border-spacing: 0; width: 1900px; font-size: 11.5px; }
+  table.kpi th, table.kpi td {
+    border-bottom: 1px solid var(--grid); border-right: 1px solid var(--grid);
+    padding: 0; vertical-align: middle; background: var(--surface);
+  }
+  table.kpi thead th {
+    background: var(--accent-biz-soft); color: var(--ink); font-size: 11px; font-weight: 700;
+    padding: 7px 5px; text-align: center; border-bottom: 1px solid var(--border);
+  }
+  .c-lead { border-right: 2px solid var(--border) !important; }
+
+  .c-ctrl     { display: none; width: 62px; }
+  body.edit-on .c-ctrl { display: table-cell; }
+  .c-section  { width: 26px; }
+  .c-group    { width: 92px; }
+  .c-subgroup { width: 110px; }
+  .c-weight   { width: 44px; }
+  .c-target   { width: 150px; }
+  .c-kpi      { width: 54px; }
+  .c-detail   { width: 210px; }
+  .c-sub      { width: 96px; }
+
+  td.c-ctrl { padding: 3px; background: var(--surface-2); }
+  .ctrl-merge { display: flex; gap: 2px; margin-bottom: 2px; }
+  .mbtn {
+    flex: 1; appearance: none; border: 1px solid var(--grid); background: var(--surface);
+    color: var(--ink-muted); font-size: 9px; font-weight: 800; border-radius: 3px;
+    padding: 2px 0; cursor: pointer; line-height: 1.2;
+  }
+  .mbtn.on { background: var(--accent-biz); border-color: var(--accent-biz); color: #fff; }
+  .mbtn[disabled] { opacity: .35; cursor: not-allowed; }
+  .ctrl-actions { display: flex; gap: 2px; }
+  .ctrl-actions button {
+    flex: 1; appearance: none; border: 1px solid var(--border); background: var(--surface);
+    font-size: 10px; font-weight: 800; border-radius: 3px; padding: 1px 0; cursor: pointer; color: var(--ink-2);
+  }
+  .addbtn:hover { border-color: #2f8f4e; color: #2f8f4e; }
+  .delbtn:hover { border-color: #bd4038; color: #bd4038; }
+
+  td.c-section {
+    padding: 6px 2px; text-align: center; font-weight: 900; letter-spacing: .05em; font-size: 10px;
+    writing-mode: vertical-rl; text-orientation: upright;
+  }
+  td.c-section.section-biz { background: var(--accent-biz-soft); color: var(--accent-biz); }
+  td.c-section.section-hr  { background: var(--accent-hr-soft); color: var(--accent-hr); }
+
+  td.c-group { padding: 6px 6px; font-weight: 700; font-size: 11px; line-height: 1.28; text-align: center; }
+  td.c-group.section-biz { border-left: 3px solid var(--accent-biz); }
+  td.c-group.section-hr  { border-left: 3px solid var(--accent-hr); }
+
+  td.c-subgroup { padding: 6px 6px; font-weight: 600; font-size: 10.8px; line-height: 1.28; text-align: center; color: var(--ink-2); }
+  td.c-weight { padding: 6px 3px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink-2); }
+  td.c-target { padding: 6px 6px; font-weight: 700; line-height: 1.28; text-align: center; }
+  td.c-kpi { padding: 6px 4px; font-weight: 700; color: var(--ink-2); text-align: center; font-variant-numeric: tabular-nums; font-size: 10.5px; }
+  td.c-detail { padding: 6px 7px; line-height: 1.28; color: var(--ink-2); text-align: center; font-size: 10.5px; }
+  td.c-sub { padding: 6px 6px; line-height: 1.24; color: var(--ink-2); text-align: center; font-size: 10px; background: var(--surface-2); }
+  td.c-extra { padding: 6px 7px; line-height: 1.28; color: var(--ink-2); text-align: center; font-size: 10.5px; }
+
+  .c-addcol { width: 26px; }
+  .addcol-btn {
+    display: none; width: 100%; height: 100%; min-height: 26px;
+    appearance: none; border: none; background: transparent; color: var(--ink-muted);
+    font-size: 14px; font-weight: 800; cursor: pointer;
+  }
+  body.edit-on .addcol-btn { display: block; }
+  .addcol-btn:hover { color: var(--accent-biz); }
+  .col-head-wrap { display: flex; align-items: center; justify-content: center; gap: 4px; }
+  .delcol-btn {
+    display: none; appearance: none; border: none; background: transparent;
+    color: var(--ink-muted); font-size: 10px; font-weight: 800; cursor: pointer; line-height: 1; padding: 0;
+  }
+  body.edit-on .delcol-btn { display: inline-block; }
+  .delcol-btn:hover { color: #bd4038; }
+
+  body.filter-biz tr.section-hr-row { display: none; }
+  body.filter-hr tr.section-biz-row { display: none; }
+
+  .timeline-td { padding: 0; }
+  .lane { position: relative; height: 30px; background-image: repeating-linear-gradient(to right, var(--grid) 0, var(--grid) 1px, transparent 1px, transparent calc(100%/11)); }
+  .week-overlay { position: absolute; inset: 0; opacity: 0; transition: opacity .12s ease; pointer-events: none; background-image: var(--week-bg); }
+  .lane:hover .week-overlay { opacity: 1; }
+
+  .chip {
+    position: absolute; top: 0; bottom: 0; margin: 2px 1px;
+    border-radius: 3px; padding: 0 4px; font-size: 9.5px; font-weight: 700; line-height: 1.15;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    overflow: hidden; border: 1px solid var(--grid); background: var(--surface); color: var(--ink-2);
+    white-space: nowrap;
+  }
+  .chip.hl { background: var(--khaki-soft); border-color: color-mix(in srgb, var(--khaki) 60%, transparent); color: var(--ink); font-weight: 800; }
+  .chip.strong { border: 1.5px solid var(--strong-border); font-weight: 900; white-space: normal; line-height: 1.15; }
+
+  footer.note { margin-top: 6px; font-size: 10px; color: var(--ink-muted); line-height: 1.45; flex: none; }
+
+  @media print {
+    body { overflow: visible; height: auto; }
+    .table-shell { position: static; transform: none !important; }
+    .stage { overflow: visible; height: auto; }
+    .btn-print, footer.note, .c-ctrl { display: none !important; }
+    @page { size: A3 landscape; margin: 8mm; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>2026 우주사업총괄 KPI &amp; HR Calendar</h1>
+      <p>사업부 KPI 및 HR 스케줄을 한눈에 보는 HRBP 리포트</p>
+    </div>
+    <button type="button" class="btn-print" id="printBtn">인쇄 / PDF</button>
+  </header>
+
+  <div class="control-row">
+    <label class="switch">
+      <input type="checkbox" id="editToggle" aria-label="편집 모드" />
+      <span class="track"></span>
+      편집 모드
+    </label>
+    <div class="filter-group">
+      <button type="button" class="filter-pill active" data-f="all"><i></i>전체</button>
+      <button type="button" class="filter-pill" data-f="biz"><i></i>사업부 KPI</button>
+      <button type="button" class="filter-pill" data-f="hr"><i></i>HR Calendar</button>
+    </div>
+    <div class="legend-row">
+      <span class="swatch"><i style="background:var(--surface)"></i>일반</span>
+      <span class="swatch"><i style="background:var(--khaki-soft)"></i>강조 표시</span>
+      <span class="swatch" style="font-size:11px;color:var(--ink-muted)">행에 마우스를 올리면 주 단위 보조선이 표시돼요</span>
+    </div>
+  </div>
+
+  <div class="edit-banner">✎ 편집 모드 — 왼쪽 칸의 <b>구/소/K/세</b> 버튼으로 구분·소구분(가중치·목표 포함)·KPI No.·세부내용 셀을 위 행과 병합/분리, <b>+/×</b>로 행 추가/삭제, 세부구분 오른쪽 끝 <b>+</b>로 열 추가. 텍스트는 클릭해서 바로 수정. 저장은 안 되니 캡처해서 보내주세요.</div>
+
+  <div class="stat-bar" id="summaryRow"></div>
+
+  <div class="stage" id="stage">
+    <div class="table-shell" id="tableShell">
+      <table class="kpi" id="kpiTable" aria-label="2026 우주사업 KPI 및 HR 스케줄">
+        <thead><tr id="headRow"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer class="note">
+    ※ 원본 "가로형 우주 연간 사업 KPI 및 HR 스케줄" 스캔본을 바탕으로 재구성했습니다. 일정 바(칩)의 시작·기간은 월 단위로 스냅되어 있어 스캔상의 정확한 주차와는 다소 오차가 있을 수 있습니다.
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var MONTHS = [2,3,4,5,6,7,8,9,10,11,12];
+
+  function chip(s, n, t, hl, strong){
+    return { s: s, n: n, t: t, hl: !!hl, strong: !!strong };
+  }
+
+  // ---- Week-count-per-month (2026), computed via real ISO week numbers ----
+  function isoWeek(y, m, d){
+    var dt = new Date(Date.UTC(y, m - 1, d));
+    var dayNum = dt.getUTCDay() || 7;
+    dt.setUTCDate(dt.getUTCDate() + 4 - dayNum);
+    var yearStart = new Date(Date.UTC(dt.getUTCFullYear(), 0, 1));
+    return Math.ceil((((dt - yearStart) / 86400000) + 1) / 7);
+  }
+  function daysInMonth(y, m){ return new Date(y, m, 0).getDate(); }
+  function weeksInMonth(y, m){
+    var set = {};
+    var dim = daysInMonth(y, m);
+    for (var d = 1; d <= dim; d++) set[isoWeek(y, m, d)] = true;
+    return Object.keys(set).length;
+  }
+  var WEEKS_PER_MONTH = MONTHS.map(function(m){ return weeksInMonth(2026, m); });
+
+  // Build a decorative (non-calendar-precise) week-line background: within each
+  // equal-width month column, draw N-1 faint internal lines where N = weeks in
+  // that month. Purely a visual aid — chip positions still snap to months.
+  function buildWeekBg(){
+    var stops = [];
+    var monthW = 100 / 11;
+    WEEKS_PER_MONTH.forEach(function(n, mi){
+      for (var w = 1; w < n; w++){
+        var pct = mi * monthW + (w / n) * monthW;
+        stops.push(pct);
+      }
+    });
+    var parts = ["to right"];
+    stops.forEach(function(p){
+      parts.push("transparent " + p.toFixed(3) + "%");
+      parts.push("var(--grid) " + p.toFixed(3) + "%");
+      parts.push("var(--grid) " + (p + 0.12).toFixed(3) + "%");
+      parts.push("transparent " + (p + 0.12).toFixed(3) + "%");
+    });
+    return "linear-gradient(" + parts.join(",") + ")";
+  }
+
+  // ---- Data: 대분류 > 구분 > 소구분(+가중치·목표) > KPI No. > (세부내용, 세부구분) ----
+  var ROWS = [
+    // ===== 사업부 KPI =====
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:false,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:false,
+      kpi:"A111", kpiMergeUp:false, sub:"", detail:"(전략사업) 다부처 1차 SAR위성(40기) — 4,743억원", detailMergeUp:false,
+      chips:[chip(7,1,"RFP 공고"), chip(8,1,"업체 선정"), chip(9,1,"계약",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
+      kpi:"A112", kpiMergeUp:false, sub:"", detail:"(전략사업) 다목적실용위성 8호 본체 — 1,330억원", detailMergeUp:false,
+      chips:[chip(8,1,"RFP 공고"), chip(9,1,"업체 선정/협상"), chip(10,1,"계약",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
+      kpi:"A113", kpiMergeUp:false, sub:"", detail:"(전략사업) 수자원 C-Band SAR 위성 — 410억원", detailMergeUp:false,
+      chips:[chip(9,1,"RFP 공고"), chip(10,1,"계약",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
+      kpi:"A114", kpiMergeUp:false, sub:"", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 모뎀/망제어기 — 523억원", detailMergeUp:false,
+      chips:[chip(10,1,"RFP 공고")] },
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
+      kpi:"A114", kpiMergeUp:true, sub:"", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 운반용단말 — 161억원", detailMergeUp:false,
+      chips:[chip(11,1,"RFP 공고")] },
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
+      kpi:"A114", kpiMergeUp:true, sub:"", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 휴대용단말 — 114억원", detailMergeUp:false,
+      chips:[chip(9,4,"군-Ⅲ\n제안 제출 '27.01\n계약 '26.02", true, true)] },
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
+      kpi:"A114", kpiMergeUp:true, sub:"", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 고정단말 — 219억원", detailMergeUp:false,
+      chips:[chip(12,1,"RFP 공고")] },
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
+      kpi:"A115", kpiMergeUp:false, sub:"", detail:"다출처체계(기본형) 연동장비 개발 — 96억원", detailMergeUp:false,
+      chips:[chip(12,1,"RFP 공고")] },
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
+      subgroup:"국내사업 경쟁력 회복", weight:"20%", target:"국내 전략사업 3건중 1건 이상 수주", sgMergeUp:false,
+      kpi:"A116", kpiMergeUp:false, sub:"", detail:"군집큐브 통신위성 기술개발(2과제) — 60억원", detailMergeUp:false,
+      chips:[chip(2,1,"RFP 공고(1과제)"), chip(3,1,"제안서 제출(1과제)"), chip(4,1,"계약(1과제)·나라스페이스 수주(시스템 컨소시엄)",true),
+             chip(5,1,"RFP 공고(2과제)"), chip(7,1,"업체 선정/협상(2과제)·시스템 수주",true), chip(8,1,"계약(2과제)",true)] },
+
+    { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:false,
+      subgroup:"전략제품 적기 출시/핵심기술 확보", weight:"20%", target:"UHR SAR 위성", sgMergeUp:false,
+      kpi:"A211", kpiMergeUp:false, sub:"체계종합", detail:"CDR 80점 이상 & ETB(전기적테스트베드) 연동시험", detailMergeUp:false,
+      chips:[chip(4,3,"기본설계(PDR)"), chip(7,6,"상세설계(CDR)",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
+      subgroup:"전략제품 적기 출시/핵심기술 확보", weight:"20%", target:"UHR SAR 위성", sgMergeUp:true,
+      kpi:"A211", kpiMergeUp:true, sub:"위성본체/탑재체", detail:"CDR 80점 이상 & ETB(전기적테스트베드) 연동시험", detailMergeUp:true,
+      chips:[chip(6,3,"EQM 제작/시험"), chip(9,4,"ETB 연동시험",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
+      subgroup:"전략제품 적기 출시/핵심기술 확보", weight:"20%", target:"위성영상 AI 분석 솔루션", sgMergeUp:false,
+      kpi:"A212", kpiMergeUp:false, sub:"제품 출시", detail:"AI 솔루션 핵심기능 3종 추가", detailMergeUp:false,
+      chips:[chip(2,5,"SAR AI Pack 고도화 학습"), chip(7,1,"제품 출시(SIA)",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
+      subgroup:"전략제품 적기 출시/핵심기술 확보", weight:"20%", target:"위성영상 AI 분석 솔루션", sgMergeUp:true,
+      kpi:"A212", kpiMergeUp:true, sub:"기능 추가", detail:"AI 솔루션 핵심기능 3종 추가", detailMergeUp:true,
+      chips:[chip(8,5,"SAR AI 솔루션 기능 추가 (Fake 객체 식별·피해량 분석·타격지점 예측)",true)] },
+
+    { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
+      subgroup:"해외사업 기반 구축", weight:"15%", target:"위성영상 AI 솔루션 수출 기반 구축", sgMergeUp:false,
+      kpi:"A221", kpiMergeUp:false, sub:"유럽(기획과제 선정)", detail:"핵심 권역(유럽,중동,미국) 중 1개 권역 목표 달성", detailMergeUp:false,
+      chips:[chip(2,3,"현지 파트너십 구축(공동개발)"), chip(5,3,"RFI 획득 및 기획, 제안서 제출"), chip(8,5,"기획과제 선정",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
+      subgroup:"해외사업 기반 구축", weight:"15%", target:"위성영상 AI 솔루션 수출 기반 구축", sgMergeUp:true,
+      kpi:"A221", kpiMergeUp:true, sub:"중동(소요군 대상 현지시연)", detail:"핵심 권역(유럽,중동,미국) 중 1개 권역 목표 달성", detailMergeUp:true,
+      chips:[chip(2,3,"현지 파트너십 구축(현지화)"), chip(5,3,"기획 제안 및 시연 계획 제출"), chip(8,5,"소요군 대상 현지 시연",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
+      subgroup:"해외사업 기반 구축", weight:"15%", target:"위성영상 AI 솔루션 수출 기반 구축", sgMergeUp:true,
+      kpi:"A221", kpiMergeUp:true, sub:"미국(Short List 선정)", detail:"핵심 권역(유럽,중동,미국) 중 1개 권역 목표 달성", detailMergeUp:true,
+      chips:[chip(2,7,"DIU, 소요군의 소요 창출 및 사업 공고 유도"), chip(9,3,"Solution Brief 제출"), chip(12,1,"Short List 선정(PT업체)",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
+      subgroup:"핵심인력 확보", weight:"", target:"", sgMergeUp:false,
+      kpi:"A222", kpiMergeUp:false, sub:"솔루션사업팀장 외부 채용", detail:"위성영상분석 AI/SW 리더급 인력 1명", detailMergeUp:false,
+      chips:[chip(8,1,"입사완료",true)] },
+
+    { accent:"biz", section:"사업부 KPI", group:"중장기 전략 달성(고유목표)", groupMergeUp:false,
+      subgroup:"", weight:"10%", target:"위성영상분석 AI솔루션 Open Platform MAU 20건이상 및 프로젝트 생성이력", sgMergeUp:false,
+      kpi:"A311", kpiMergeUp:false, sub:"", detail:"Cloud 기반 Open Platform을 구축하여 위성 Data/User를 단기간에 확충", detailMergeUp:false,
+      chips:[chip(8,5,"제품 출시 후 국가별 사용 이력 확인",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"중장기 전략 달성(고유목표)", groupMergeUp:true,
+      subgroup:"", weight:"15%", target:"법령 내 데이터 구독/임차 서비스 관련 내용 반영", sgMergeUp:false,
+      kpi:"A321", kpiMergeUp:false, sub:"", detail:"국회(과방위,국방위), 기관(국방부/방사청) 등 주요 의사결정기관 대상 대관활동 강화", detailMergeUp:false,
+      chips:[chip(12,1,"법령 반영",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"중장기 전략 달성(고유목표)", groupMergeUp:true,
+      subgroup:"", weight:"10%", target:"K-LEO 통합소요검증 Spec-in(해외기술협력)", sgMergeUp:false,
+      kpi:"A331", kpiMergeUp:false, sub:"", detail:"해외 상용 네트워크 활용이 아닌 '해외기술협력+국내개발' 사업으로 결정 필요", detailMergeUp:false,
+      chips:[chip(2,1,"캐나다 잠수함 제안 지원"), chip(3,1,"방사청 TF참여"), chip(4,5,"시스템-국과연-Telesat Joint Study"),
+             chip(9,4,"통합소요 검토 지원",true), chip(12,1,"ROC 내역 확인",true)] },
+
+    { accent:"biz", section:"사업부 KPI", group:"재무목표달성", groupMergeUp:false,
+      subgroup:"", weight:"5%", target:"미정", sgMergeUp:false,
+      kpi:"A411", kpiMergeUp:false, sub:"", detail:"미정", detailMergeUp:false, chips:[] },
+
+    // ===== HR Calendar =====
+    { accent:"hr", section:"HR Calendar", group:"평가/승격", groupMergeUp:false,
+      subgroup:"", weight:"-", target:"평가 및 승격 내실화", sgMergeUp:false,
+      kpi:"B101", kpiMergeUp:false, sub:"", detail:"업무 완료 전 조직별 단위별 세부 리뷰를 사업부-팀간 조직 목표 Cascading 강화", detailMergeUp:false,
+      chips:[chip(2,1,"승격세션",true), chip(8,1,"임원/1갑 평가 조"), chip(9,1,"임원/1갑",true), chip(11,1,"직원 평가"), chip(12,1,"직원")] },
+    { accent:"hr", section:"HR Calendar", group:"업무목표수립", groupMergeUp:false,
+      subgroup:"", weight:"-", target:"업무목표(KPI) 연계성 강화", sgMergeUp:false,
+      kpi:"B102", kpiMergeUp:false, sub:"", detail:"조직별 사전조사 및 Cascading 적용을 통한 목표 수립", detailMergeUp:false,
+      chips:[chip(2,1,"조직별"), chip(3,1,"목표수립",true)] },
+    { accent:"hr", section:"HR Calendar", group:"Succession Plan", groupMergeUp:false,
+      subgroup:"", weight:"-", target:"적합한 대상자 선정 및 사후 계획 실행력 제고", sgMergeUp:false,
+      kpi:"B103", kpiMergeUp:false, sub:"", detail:"업무 완료 전 조직별 단위별 세부 리뷰를 통한 결과의 내실화 및 사후 관리", detailMergeUp:false,
+      chips:[chip(4,1,"조직별 사전조사 및"), chip(5,1,"리뷰 및 세션"), chip(6,1,"수립 완료",true)] },
+    { accent:"hr", section:"HR Calendar", group:"임원인사", groupMergeUp:false,
+      subgroup:"", weight:"-", target:"임원 모니터링 및 신임 선발", sgMergeUp:false,
+      kpi:"B104", kpiMergeUp:false, sub:"", detail:"임원 리더십 점검 및 신임 후보자 발굴", detailMergeUp:false,
+      chips:[chip(4,1,"임원"), chip(7,1,"신임 대상"), chip(8,1,"초안 수립",true), chip(9,1,"세부 자료")] },
+    { accent:"hr", section:"HR Calendar", group:"조직개편", groupMergeUp:false,
+      subgroup:"", weight:"-", target:"사업부 조직개편 소요 발굴/실행", sgMergeUp:false,
+      kpi:"B105", kpiMergeUp:false, sub:"", detail:"조직목표 달성을 위한 Top-down, Bottom-up", detailMergeUp:false,
+      chips:[chip(4,1,"팀별별"), chip(8,1,"사업부",true), chip(9,1,"세부 자료")] },
+    { accent:"hr", section:"HR Calendar", group:"인력계획", groupMergeUp:false,
+      subgroup:"", weight:"-", target:"적정인력 운영 및 적기 인력 수급", sgMergeUp:false,
+      kpi:"B106", kpiMergeUp:false, sub:"", detail:"매월 인력계획 점검을 통한 인력 In/out 실행", detailMergeUp:false,
+      chips:[chip(2,10,"사업부 인력계획 매월 점검"), chip(12,1,"경영계획 수립",true)] }
+  ];
+
+  var EXTRA_COLS = []; // { id, title }
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[c];
+    });
+  }
+  function nl2br(s){ return esc(s).replace(/\n/g, "<br>"); }
+
+  function renderHead(){
+    var head = document.getElementById("headRow");
+    var html = "";
+    html += '<th class="c-ctrl"></th>';
+    html += '<th class="c-lead c-section">대분류</th>';
+    html += '<th class="c-group">구분</th>';
+    html += '<th class="c-subgroup">소구분</th>';
+    html += '<th class="c-weight">가중치</th>';
+    html += '<th class="c-target">목표</th>';
+    html += '<th class="c-kpi">KPI No.</th>';
+    html += '<th class="c-lead c-detail">세부내용</th>';
+    html += '<th class="c-lead c-sub">세부구분</th>';
+    EXTRA_COLS.forEach(function(col){
+      html += '<th class="c-extra"><span class="col-head-wrap">'
+            + '<span class="ed" contenteditable="false" data-field="colhead" data-colid="' + col.id + '">' + esc(col.title) + '</span>'
+            + '<button type="button" class="delcol-btn" data-act="delcol" data-colid="' + col.id + '" title="열 삭제">×</button>'
+            + '</span></th>';
+    });
+    html += '<th class="c-addcol"><button type="button" class="addcol-btn" data-act="addcol" title="열 추가">+</button></th>';
+    MONTHS.forEach(function(m){
+      html += '<th>' + "'26." + m + '</th>';
+    });
+    head.innerHTML = html;
+  }
+
+  function laneHTML(row, idx){
+    var html = '<div class="lane"><div class="week-overlay"></div>';
+    row.chips.forEach(function(c, ci){
+      var left = ((c.s - 2) / 11 * 100).toFixed(4);
+      var width = (c.n / 11 * 100).toFixed(4);
+      html += '<div class="chip' + (c.hl ? ' hl' : '') + (c.strong ? ' strong' : '') + '" style="left:' + left + '%;width:calc(' + width + '% - 2px)" title="' + esc(c.t.replace(/\n/g, " · ")) + '">'
+            + '<span class="ed" contenteditable="false" data-idx="' + idx + '" data-field="chip" data-ci="' + ci + '">' + nl2br(c.t) + '</span>'
+            + '</div>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  function computeSpans(mergeKey){
+    var spans = new Array(ROWS.length);
+    var i = 0;
+    while (i < ROWS.length){
+      var span = 1;
+      while (i + span < ROWS.length && ROWS[i + span][mergeKey]) span++;
+      spans[i] = span;
+      for (var k = 1; k < span; k++) spans[i + k] = 0;
+      i += span;
+    }
+    return spans;
+  }
+
+  function render(){
+    var tbody = document.getElementById("tbody");
+    var groupSpans = computeSpans("groupMergeUp");
+    var sgSpans = computeSpans("sgMergeUp");
+    var kpiSpans = computeSpans("kpiMergeUp");
+    var detailSpans = computeSpans("detailMergeUp");
+
+    var sectionSpans = new Array(ROWS.length);
+    (function(){
+      var i = 0;
+      while (i < ROWS.length){
+        var span = 1;
+        while (i + span < ROWS.length && ROWS[i + span].accent === ROWS[i].accent) span++;
+        sectionSpans[i] = span;
+        for (var k = 1; k < span; k++) sectionSpans[i + k] = 0;
+        i += span;
+      }
+    })();
+
+    var rowsHTML = "";
+    ROWS.forEach(function(row, idx){
+      var accentClass = row.accent === "hr" ? "section-hr" : "section-biz";
+      var rowMarkerClass = row.accent === "hr" ? "section-hr-row" : "section-biz-row";
+
+      rowsHTML += '<tr class="' + rowMarkerClass + '">';
+
+      rowsHTML += '<td class="c-ctrl">'
+        + '<div class="ctrl-merge">'
+        + '<button type="button" class="mbtn' + (row.groupMergeUp ? ' on' : '') + '" data-act="mtoggle" data-col="group" data-idx="' + idx + '"' + (idx === 0 ? ' disabled' : '') + '>구</button>'
+        + '<button type="button" class="mbtn' + (row.sgMergeUp ? ' on' : '') + '" data-act="mtoggle" data-col="sg" data-idx="' + idx + '"' + (idx === 0 ? ' disabled' : '') + '>소</button>'
+        + '<button type="button" class="mbtn' + (row.kpiMergeUp ? ' on' : '') + '" data-act="mtoggle" data-col="kpi" data-idx="' + idx + '"' + (idx === 0 ? ' disabled' : '') + '>K</button>'
+        + '<button type="button" class="mbtn' + (row.detailMergeUp ? ' on' : '') + '" data-act="mtoggle" data-col="detail" data-idx="' + idx + '"' + (idx === 0 ? ' disabled' : '') + '>세</button>'
+        + '</div>'
+        + '<div class="ctrl-actions">'
+        + '<button type="button" class="addbtn" data-act="addrow" data-idx="' + idx + '" title="아래에 행 추가">+</button>'
+        + '<button type="button" class="delbtn" data-act="delrow" data-idx="' + idx + '" title="행 삭제">×</button>'
+        + '</div></td>';
+
+      if (sectionSpans[idx] > 0) rowsHTML += '<td class="c-lead c-section ' + accentClass + ' ed" contenteditable="false" data-idx="' + idx + '" data-field="section" rowspan="' + sectionSpans[idx] + '">' + esc(row.section) + '</td>';
+      if (groupSpans[idx] > 0) rowsHTML += '<td class="c-group ' + accentClass + ' ed" contenteditable="false" data-idx="' + idx + '" data-field="group" rowspan="' + groupSpans[idx] + '">' + esc(row.group) + '</td>';
+      if (sgSpans[idx] > 0){
+        rowsHTML += '<td class="c-subgroup ed" contenteditable="false" data-idx="' + idx + '" data-field="subgroup" rowspan="' + sgSpans[idx] + '">' + esc(row.subgroup) + '</td>';
+        rowsHTML += '<td class="c-weight ed" contenteditable="false" data-idx="' + idx + '" data-field="weight" rowspan="' + sgSpans[idx] + '">' + esc(row.weight) + '</td>';
+        rowsHTML += '<td class="c-target ed" contenteditable="false" data-idx="' + idx + '" data-field="target" rowspan="' + sgSpans[idx] + '">' + esc(row.target) + '</td>';
+      }
+      if (kpiSpans[idx] > 0) rowsHTML += '<td class="c-kpi ed" contenteditable="false" data-idx="' + idx + '" data-field="kpi" rowspan="' + kpiSpans[idx] + '">' + esc(row.kpi) + '</td>';
+      if (detailSpans[idx] > 0) rowsHTML += '<td class="c-lead c-detail ed" contenteditable="false" data-idx="' + idx + '" data-field="detail" rowspan="' + detailSpans[idx] + '">' + esc(row.detail) + '</td>';
+      rowsHTML += '<td class="c-lead c-sub ed" contenteditable="false" data-idx="' + idx + '" data-field="sub">' + esc(row.sub) + '</td>';
+
+      EXTRA_COLS.forEach(function(col){
+        var val = (row.extra && row.extra[col.id]) || "";
+        rowsHTML += '<td class="c-extra ed" contenteditable="false" data-idx="' + idx + '" data-field="extra" data-colid="' + col.id + '">' + esc(val) + '</td>';
+      });
+      rowsHTML += '<td class="c-addcol"></td>';
+
+      rowsHTML += '<td class="timeline-td" colspan="11">' + laneHTML(row, idx) + '</td>';
+      rowsHTML += '</tr>';
+    });
+
+    tbody.innerHTML = rowsHTML;
+    applyEditability();
+    renderSummary();
+    fitStage();
+  }
+
+  function renderSummary(){
+    var totalRows = ROWS.length, totalChips = 0, hlCount = 0;
+    ROWS.forEach(function(row){
+      row.chips.forEach(function(c){ totalChips++; if (c.hl) hlCount++; });
+    });
+    document.getElementById("summaryRow").innerHTML =
+      '<div class="stat"><span class="n">' + totalRows + '</span><span class="l">전체 KPI 항목</span></div>' +
+      '<div class="stat"><span class="n">' + totalChips + '</span><span class="l">등록된 일정</span></div>' +
+      '<div class="stat"><span class="n">' + hlCount + '</span><span class="l">강조 표시 일정</span></div>';
+  }
+
+  function fitStage(){
+    var stage = document.getElementById("stage");
+    var shell = document.getElementById("tableShell");
+    shell.style.transform = "scale(1)";
+    var naturalW = shell.offsetWidth, naturalH = shell.offsetHeight;
+    var availW = stage.clientWidth, availH = stage.clientHeight;
+    if (!naturalW || !naturalH || !availW || !availH) return;
+    var scale = Math.min(availW / naturalW, availH / naturalH, 1);
+    shell.style.transform = "scale(" + scale + ")";
+    stage.style.height = (naturalH * scale) + "px";
+  }
+
+  var editMode = false;
+  function applyEditability(){
+    document.querySelectorAll(".ed").forEach(function(el){ el.contentEditable = editMode ? "true" : "false"; });
+  }
+
+  function setFilter(f){
+    document.body.classList.remove("filter-biz", "filter-hr");
+    if (f === "biz") document.body.classList.add("filter-biz");
+    if (f === "hr") document.body.classList.add("filter-hr");
+    document.querySelectorAll(".filter-pill").forEach(function(btn){ btn.classList.toggle("active", btn.dataset.f === f); });
+    requestAnimationFrame(fitStage);
+  }
+
+  function syncField(el){
+    if (el.dataset.field === "colhead"){
+      var col = EXTRA_COLS.filter(function(c){ return c.id === el.dataset.colid; })[0];
+      if (col) col.title = el.textContent.trim();
+      return;
+    }
+    var idx = +el.dataset.idx;
+    var row = ROWS[idx];
+    if (!row) return;
+    if (el.dataset.field === "chip"){
+      var ci = +el.dataset.ci;
+      if (row.chips[ci]) row.chips[ci].t = el.textContent.trim();
+    } else if (el.dataset.field === "extra"){
+      row.extra = row.extra || {};
+      row.extra[el.dataset.colid] = el.textContent.trim();
+    } else {
+      row[el.dataset.field] = el.textContent.trim();
+    }
+  }
+
+  var extraColSeq = 0;
+  function addColumn(){
+    extraColSeq++;
+    EXTRA_COLS.push({ id: "extra" + extraColSeq, title: "새 항목" });
+    renderHead(); render();
+  }
+  function removeColumn(colId){
+    EXTRA_COLS = EXTRA_COLS.filter(function(c){ return c.id !== colId; });
+    renderHead(); render();
+  }
+
+  function addRowAfter(idx){
+    var src = ROWS[idx];
+    ROWS.splice(idx + 1, 0, {
+      accent: src.accent, section: src.section,
+      group: src.group, groupMergeUp: true,
+      subgroup: src.subgroup, weight: src.weight, target: src.target, sgMergeUp: true,
+      kpi: "새 KPI", kpiMergeUp: false,
+      sub: "", detail: "새 세부내용을 입력하세요", detailMergeUp: false,
+      chips: []
+    });
+    render();
+  }
+
+  function removeRow(idx){
+    if (ROWS.length <= 1) return;
+    var row = ROWS[idx], next = ROWS[idx + 1];
+    [["group","groupMergeUp"], ["sg","sgMergeUp"], ["kpi","kpiMergeUp"], ["detail","detailMergeUp"]].forEach(function(pair){
+      var mkey = pair[1];
+      if (!row[mkey] && next && next[mkey]){
+        next[mkey] = false;
+        if (pair[0] === "group") next.group = row.group;
+        else if (pair[0] === "sg") { next.subgroup = row.subgroup; next.weight = row.weight; next.target = row.target; }
+        else if (pair[0] === "kpi") next.kpi = row.kpi;
+        else if (pair[0] === "detail") next.detail = row.detail;
+      }
+    });
+    ROWS.splice(idx, 1);
+    render();
+  }
+
+  function toggleMerge(col, idx){
+    if (idx === 0) return;
+    var key = col + "MergeUp";
+    ROWS[idx][key] = !ROWS[idx][key];
+    render();
+  }
+
+  function init(){
+    document.documentElement.style.setProperty("--week-bg", buildWeekBg());
+    renderHead();
+    render();
+
+    document.getElementById("editToggle").addEventListener("change", function(e){
+      editMode = e.target.checked;
+      document.body.classList.toggle("edit-on", editMode);
+      applyEditability();
+    });
+
+    document.querySelectorAll(".filter-pill").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var f = btn.dataset.f, current = btn.classList.contains("active");
+        setFilter(current && f !== "all" ? "all" : f);
+      });
+    });
+
+    var stage = document.getElementById("stage");
+
+    stage.addEventListener("focusout", function(e){
+      var t = e.target;
+      if (t.classList && t.classList.contains("ed")) syncField(t);
+    });
+
+    stage.addEventListener("keydown", function(e){
+      var t = e.target;
+      if (!t.classList || !t.classList.contains("ed")) return;
+      var multiline = (t.dataset.field === "detail" || t.dataset.field === "target" || t.dataset.field === "chip" || t.dataset.field === "sub");
+      if (e.key === "Enter" && !multiline) { e.preventDefault(); t.blur(); }
+    });
+
+    stage.addEventListener("click", function(e){
+      var actEl = e.target.closest("[data-act]");
+      if (!actEl || !editMode) return;
+      var idx = +actEl.dataset.idx, act = actEl.dataset.act;
+      if (act === "mtoggle") toggleMerge(actEl.dataset.col, idx);
+      else if (act === "addrow") addRowAfter(idx);
+      else if (act === "delrow") removeRow(idx);
+      else if (act === "addcol") addColumn();
+      else if (act === "delcol") removeColumn(actEl.dataset.colid);
+    });
+
+    document.getElementById("printBtn").addEventListener("click", function(){ window.print(); });
+    window.addEventListener("resize", fitStage);
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
+</script>
+</body>
+</html>
