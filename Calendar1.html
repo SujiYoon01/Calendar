@@ -148,7 +148,7 @@
     background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
     overflow: hidden; transform-origin: top left; position: absolute; top: 0; left: 0;
   }
-  table.kpi { border-collapse: separate; border-spacing: 0; width: 1900px; font-size: 11.5px; }
+  table.kpi { border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: 11.5px; }
   table.kpi th, table.kpi td {
     border-bottom: 1px solid var(--grid); border-right: 1px solid var(--grid);
     padding: 0; vertical-align: middle; background: var(--surface);
@@ -226,9 +226,8 @@
   body.filter-hr tr.section-biz-row { display: none; }
 
   .timeline-td { padding: 0; }
-  .lane { position: relative; height: 30px; background-image: repeating-linear-gradient(to right, var(--grid) 0, var(--grid) 1px, transparent 1px, transparent calc(100%/11)); }
-  .week-overlay { position: absolute; inset: 0; opacity: 0; transition: opacity .12s ease; pointer-events: none; background-image: var(--week-bg); }
-  .lane:hover .week-overlay { opacity: 1; }
+  .lane { position: relative; height: 30px; background-image: repeating-linear-gradient(to right, var(--grid) 0, var(--grid) 1px, transparent 1px, transparent calc(100%/11)); transition: background-color .1s ease; }
+  .lane:hover { background-color: var(--grid-soft); }
 
   .chip {
     position: absolute; top: 0; bottom: 0; margin: 2px 1px;
@@ -276,7 +275,6 @@
     <div class="legend-row">
       <span class="swatch"><i style="background:var(--surface)"></i>일반</span>
       <span class="swatch"><i style="background:var(--khaki-soft)"></i>강조 표시</span>
-      <span class="swatch" style="font-size:11px;color:var(--ink-muted)">행에 마우스를 올리면 주 단위 보조선이 표시돼요</span>
     </div>
   </div>
 
@@ -287,15 +285,12 @@
   <div class="stage" id="stage">
     <div class="table-shell" id="tableShell">
       <table class="kpi" id="kpiTable" aria-label="2026 우주사업 KPI 및 HR 스케줄">
+        <colgroup id="colgroup"></colgroup>
         <thead><tr id="headRow"></tr></thead>
         <tbody id="tbody"></tbody>
       </table>
     </div>
   </div>
-
-  <footer class="note">
-    ※ 원본 "가로형 우주 연간 사업 KPI 및 HR 스케줄" 스캔본을 바탕으로 재구성했습니다. 일정 바(칩)의 시작·기간은 월 단위로 스냅되어 있어 스캔상의 정확한 주차와는 다소 오차가 있을 수 있습니다.
-  </footer>
 </div>
 
 <script>
@@ -306,45 +301,6 @@
 
   function chip(s, n, t, hl, strong){
     return { s: s, n: n, t: t, hl: !!hl, strong: !!strong };
-  }
-
-  // ---- Week-count-per-month (2026), computed via real ISO week numbers ----
-  function isoWeek(y, m, d){
-    var dt = new Date(Date.UTC(y, m - 1, d));
-    var dayNum = dt.getUTCDay() || 7;
-    dt.setUTCDate(dt.getUTCDate() + 4 - dayNum);
-    var yearStart = new Date(Date.UTC(dt.getUTCFullYear(), 0, 1));
-    return Math.ceil((((dt - yearStart) / 86400000) + 1) / 7);
-  }
-  function daysInMonth(y, m){ return new Date(y, m, 0).getDate(); }
-  function weeksInMonth(y, m){
-    var set = {};
-    var dim = daysInMonth(y, m);
-    for (var d = 1; d <= dim; d++) set[isoWeek(y, m, d)] = true;
-    return Object.keys(set).length;
-  }
-  var WEEKS_PER_MONTH = MONTHS.map(function(m){ return weeksInMonth(2026, m); });
-
-  // Build a decorative (non-calendar-precise) week-line background: within each
-  // equal-width month column, draw N-1 faint internal lines where N = weeks in
-  // that month. Purely a visual aid — chip positions still snap to months.
-  function buildWeekBg(){
-    var stops = [];
-    var monthW = 100 / 11;
-    WEEKS_PER_MONTH.forEach(function(n, mi){
-      for (var w = 1; w < n; w++){
-        var pct = mi * monthW + (w / n) * monthW;
-        stops.push(pct);
-      }
-    });
-    var parts = ["to right"];
-    stops.forEach(function(p){
-      parts.push("transparent " + p.toFixed(3) + "%");
-      parts.push("var(--grid) " + p.toFixed(3) + "%");
-      parts.push("var(--grid) " + (p + 0.12).toFixed(3) + "%");
-      parts.push("transparent " + (p + 0.12).toFixed(3) + "%");
-    });
-    return "linear-gradient(" + parts.join(",") + ")";
   }
 
   // ---- Data: 대분류 > 구분 > 소구분(+가중치·목표) > KPI No. > (세부내용, 세부구분) ----
@@ -476,18 +432,33 @@
   }
   function nl2br(s){ return esc(s).replace(/\n/g, "<br>"); }
 
+  function renderColgroup(){
+    var cg = document.getElementById("colgroup");
+    var html = '<col id="col-ctrl" style="width:' + (editMode ? "62px" : "0px") + '">';
+    html += '<col style="width:26px">';   // section
+    html += '<col style="width:92px">';   // group
+    html += '<col style="width:100px">';  // subgroup
+    html += '<col style="width:44px">';   // weight
+    html += '<col style="width:150px">';  // target
+    html += '<col style="width:54px">';   // kpi
+    html += '<col style="width:190px">';  // detail
+    html += '<col style="width:90px">';   // sub
+    EXTRA_COLS.forEach(function(){ html += '<col style="width:140px">'; });
+    html += '<col style="width:26px">';   // addcol
+    MONTHS.forEach(function(){ html += '<col style="width:90px">'; });
+    cg.innerHTML = html;
+  }
+
   function renderHead(){
     var head = document.getElementById("headRow");
     var html = "";
     html += '<th class="c-ctrl"></th>';
     html += '<th class="c-lead c-section">대분류</th>';
-    html += '<th class="c-group">구분</th>';
-    html += '<th class="c-subgroup">소구분</th>';
+    html += '<th class="c-group" colspan="2">구분</th>';
     html += '<th class="c-weight">가중치</th>';
     html += '<th class="c-target">목표</th>';
     html += '<th class="c-kpi">KPI No.</th>';
-    html += '<th class="c-lead c-detail">세부내용</th>';
-    html += '<th class="c-lead c-sub">세부구분</th>';
+    html += '<th class="c-lead c-detail" colspan="2">세부내용</th>';
     EXTRA_COLS.forEach(function(col){
       html += '<th class="c-extra"><span class="col-head-wrap">'
             + '<span class="ed" contenteditable="false" data-field="colhead" data-colid="' + col.id + '">' + esc(col.title) + '</span>'
@@ -566,15 +537,23 @@
         + '</div></td>';
 
       if (sectionSpans[idx] > 0) rowsHTML += '<td class="c-lead c-section ' + accentClass + ' ed" contenteditable="false" data-idx="' + idx + '" data-field="section" rowspan="' + sectionSpans[idx] + '">' + esc(row.section) + '</td>';
-      if (groupSpans[idx] > 0) rowsHTML += '<td class="c-group ' + accentClass + ' ed" contenteditable="false" data-idx="' + idx + '" data-field="group" rowspan="' + groupSpans[idx] + '">' + esc(row.group) + '</td>';
+      if (groupSpans[idx] > 0){
+        var groupColspan = row.subgroup === "" ? 2 : 1;
+        rowsHTML += '<td class="c-group ' + accentClass + ' ed" contenteditable="false" data-idx="' + idx + '" data-field="group" rowspan="' + groupSpans[idx] + '"' + (groupColspan === 2 ? ' colspan="2"' : '') + '>' + esc(row.group) + '</td>';
+      }
       if (sgSpans[idx] > 0){
-        rowsHTML += '<td class="c-subgroup ed" contenteditable="false" data-idx="' + idx + '" data-field="subgroup" rowspan="' + sgSpans[idx] + '">' + esc(row.subgroup) + '</td>';
+        if (row.subgroup !== ""){
+          rowsHTML += '<td class="c-subgroup ed" contenteditable="false" data-idx="' + idx + '" data-field="subgroup" rowspan="' + sgSpans[idx] + '">' + esc(row.subgroup) + '</td>';
+        }
         rowsHTML += '<td class="c-weight ed" contenteditable="false" data-idx="' + idx + '" data-field="weight" rowspan="' + sgSpans[idx] + '">' + esc(row.weight) + '</td>';
         rowsHTML += '<td class="c-target ed" contenteditable="false" data-idx="' + idx + '" data-field="target" rowspan="' + sgSpans[idx] + '">' + esc(row.target) + '</td>';
       }
       if (kpiSpans[idx] > 0) rowsHTML += '<td class="c-kpi ed" contenteditable="false" data-idx="' + idx + '" data-field="kpi" rowspan="' + kpiSpans[idx] + '">' + esc(row.kpi) + '</td>';
-      if (detailSpans[idx] > 0) rowsHTML += '<td class="c-lead c-detail ed" contenteditable="false" data-idx="' + idx + '" data-field="detail" rowspan="' + detailSpans[idx] + '">' + esc(row.detail) + '</td>';
-      rowsHTML += '<td class="c-lead c-sub ed" contenteditable="false" data-idx="' + idx + '" data-field="sub">' + esc(row.sub) + '</td>';
+      if (detailSpans[idx] > 0){
+        var detailColspan = row.sub === "" ? 2 : 1;
+        rowsHTML += '<td class="c-lead c-detail ed" contenteditable="false" data-idx="' + idx + '" data-field="detail" rowspan="' + detailSpans[idx] + '"' + (detailColspan === 2 ? ' colspan="2"' : '') + '>' + esc(row.detail) + '</td>';
+      }
+      if (row.sub !== "") rowsHTML += '<td class="c-lead c-sub ed" contenteditable="false" data-idx="' + idx + '" data-field="sub">' + esc(row.sub) + '</td>';
 
       EXTRA_COLS.forEach(function(col){
         var val = (row.extra && row.extra[col.id]) || "";
@@ -652,11 +631,11 @@
   function addColumn(){
     extraColSeq++;
     EXTRA_COLS.push({ id: "extra" + extraColSeq, title: "새 항목" });
-    renderHead(); render();
+    renderColgroup(); renderHead(); render();
   }
   function removeColumn(colId){
     EXTRA_COLS = EXTRA_COLS.filter(function(c){ return c.id !== colId; });
-    renderHead(); render();
+    renderColgroup(); renderHead(); render();
   }
 
   function addRowAfter(idx){
@@ -697,13 +676,14 @@
   }
 
   function init(){
-    document.documentElement.style.setProperty("--week-bg", buildWeekBg());
+    renderColgroup();
     renderHead();
     render();
 
     document.getElementById("editToggle").addEventListener("change", function(e){
       editMode = e.target.checked;
       document.body.classList.toggle("edit-on", editMode);
+      renderColgroup();
       applyEditability();
     });
 
