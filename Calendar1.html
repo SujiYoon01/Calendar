@@ -143,7 +143,7 @@
   .stat .n { font-size: 18px; font-weight: 900; letter-spacing: -0.01em; }
   .stat .l { font-size: 11px; color: var(--ink-muted); font-weight: 600; }
 
-  .stage { flex: 1; min-height: 0; position: relative; overflow: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+  .stage { flex: 0 1 auto; min-height: 0; position: relative; overflow: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
   .table-shell { display: inline-block; min-width: 100%; }
   table.kpi { border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: 11.5px; }
   table.kpi th, table.kpi td {
@@ -204,7 +204,8 @@
   td.c-sub { padding: 6px 6px; line-height: 1.24; color: var(--ink-2); text-align: center; font-size: 10px; background: var(--surface-2); }
   td.c-extra { padding: 6px 7px; line-height: 1.28; color: var(--ink-2); text-align: center; font-size: 10.5px; }
 
-  .c-addcol { width: 26px; }
+  .c-addcol { display: none; width: 26px; }
+  body.edit-on .c-addcol { display: table-cell; }
   .addcol-btn {
     display: none; width: 100%; height: 100%; min-height: 26px;
     appearance: none; border: none; background: transparent; color: var(--ink-muted);
@@ -223,19 +224,19 @@
   body.filter-biz tr.section-hr-row { display: none; }
   body.filter-hr tr.section-biz-row { display: none; }
 
-  .timeline-td { padding: 0; }
-  .lane { position: relative; height: 30px; background-image: repeating-linear-gradient(to right, var(--grid) 0, var(--grid) 1px, transparent 1px, transparent calc(100%/11)); transition: background-color .1s ease; }
-  .lane:hover { background-color: var(--grid-soft); }
-
-  .chip {
-    position: absolute; top: 0; bottom: 0; margin: 2px 1px;
-    border-radius: 3px; padding: 0 4px; font-size: 9.5px; font-weight: 700; line-height: 1.15;
-    display: flex; align-items: center; justify-content: center; text-align: center;
-    overflow: hidden; border: 1px solid var(--grid); background: var(--surface); color: var(--ink-2);
-    white-space: nowrap;
+  td.c-month {
+    padding: 0; height: 30px; text-align: center; vertical-align: middle;
+    transition: background-color .08s ease;
   }
-  .chip.hl { background: var(--khaki-soft); border-color: color-mix(in srgb, var(--khaki) 60%, transparent); color: var(--ink); font-weight: 800; }
-  .chip.strong { border: 1.5px solid var(--strong-border); font-weight: 900; white-space: normal; line-height: 1.15; }
+  td.c-month:hover { background-color: var(--grid-soft); }
+
+  td.chip-cell {
+    padding: 2px 4px; font-size: 9.5px; font-weight: 700; line-height: 1.15;
+    text-align: center; vertical-align: middle; color: var(--ink-2);
+  }
+  td.chip-cell.hl { background: var(--khaki-soft); color: var(--ink); font-weight: 800; }
+  td.chip-cell.strong { border: 1.5px solid var(--strong-border) !important; font-weight: 900; }
+  td.chip-cell:hover { filter: brightness(0.95); }
 
   @media print {
     body { overflow: visible; height: auto; }
@@ -439,7 +440,7 @@
     html += '<col style="width:210px">';  // detail
     html += '<col style="width:96px">';   // sub
     EXTRA_COLS.forEach(function(){ html += '<col style="width:140px">'; });
-    html += '<col style="width:26px">';   // addcol
+    html += '<col id="col-addcol" style="width:' + (editMode ? "26px" : "0px") + '">';   // addcol
     MONTHS.forEach(function(){ html += '<col style="width:90px">'; });
     cg.innerHTML = html;
   }
@@ -467,16 +468,28 @@
     head.innerHTML = html;
   }
 
-  function laneHTML(row, idx){
-    var html = '<div class="lane"><div class="week-overlay"></div>';
-    row.chips.forEach(function(c, ci){
-      var left = ((c.s - 2) / 11 * 100).toFixed(4);
-      var width = (c.n / 11 * 100).toFixed(4);
-      html += '<div class="chip' + (c.hl ? ' hl' : '') + (c.strong ? ' strong' : '') + '" style="left:' + left + '%;width:calc(' + width + '% - 2px)" title="' + esc(c.t.replace(/\n/g, " · ")) + '">'
-            + '<span class="ed" contenteditable="false" data-idx="' + idx + '" data-field="chip" data-ci="' + ci + '">' + nl2br(c.t) + '</span>'
-            + '</div>';
+  // Real <td> per month (merged via colspan for multi-month chips) — this
+  // guarantees pixel-perfect alignment with the header, since grid lines are
+  // actual cell borders on the same columns, not a simulated background.
+  function monthCellsHTML(row, idx){
+    var byStart = {};
+    row.chips.forEach(function(c, ci){ byStart[c.s] = { c: c, ci: ci }; });
+    var covered = 0; // remaining months already consumed by an earlier chip
+    var html = "";
+    MONTHS.forEach(function(m){
+      if (covered > 0){ covered--; return; }
+      var hit = byStart[m];
+      if (hit){
+        var c = hit.c;
+        var span = Math.max(1, Math.min(c.n, 12 - m + 1));
+        covered = span - 1;
+        html += '<td class="chip-cell' + (c.hl ? ' hl' : '') + (c.strong ? ' strong' : '') + '" colspan="' + span + '" title="' + esc(c.t.replace(/\n/g, " · ")) + '">'
+              + '<span class="ed" contenteditable="false" data-idx="' + idx + '" data-field="chip" data-ci="' + hit.ci + '">' + nl2br(c.t) + '</span>'
+              + '</td>';
+      } else {
+        html += '<td class="c-month"></td>';
+      }
     });
-    html += '</div>';
     return html;
   }
 
@@ -556,7 +569,7 @@
       });
       rowsHTML += '<td class="c-addcol"></td>';
 
-      rowsHTML += '<td class="timeline-td" colspan="11">' + laneHTML(row, idx) + '</td>';
+      rowsHTML += monthCellsHTML(row, idx);
       rowsHTML += '</tr>';
     });
 
