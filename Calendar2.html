@@ -162,6 +162,8 @@
     border-radius: 999px; padding: 1px 8px; cursor: pointer;
   }
   .prog-btn[data-p="0"] { color: var(--ink-muted); }
+  .prog-btn.empty { border-style: dashed; opacity: .55; padding: 1px 6px; font-size: 9px; }
+  .prog-btn.empty:hover { opacity: 1; }
   .prog-btn[data-p="50"] { background: var(--warn-soft, #f8f0dc); border-color: var(--khaki); color: var(--ink); }
   .prog-btn[data-p="100"] { background: color-mix(in srgb, #2f8f4e 18%, var(--surface)); border-color: #2f8f4e; color: #1f6b38; }
 
@@ -291,6 +293,11 @@
   td.chip-cell.hl { background: var(--khaki-soft); color: var(--ink); font-weight: 800; }
   td.chip-cell.strong { border: 1.5px solid var(--strong-border) !important; font-weight: 900; }
   td.chip-cell:hover { filter: brightness(0.95); }
+  td.chip-cell.spotlight {
+    filter: brightness(1.15) saturate(1.3);
+    box-shadow: inset 0 0 0 2px var(--accent-biz), 0 0 8px 1px color-mix(in srgb, var(--accent-biz) 50%, transparent);
+    position: relative; z-index: 2;
+  }
 
   @media print {
     body { overflow: visible; height: auto; }
@@ -386,7 +393,7 @@
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
       subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
       kpi:"A114", kpiMergeUp:true, sub:"114억원", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 휴대용단말", detailMergeUp:false,
-      chips:[chip(9,4,"군-Ⅲ\n제안 제출 '27.01\n계약 '26.02", true, true)] },
+      chips:[chip(10,4,"군-Ⅲ\n제안 제출 '27.01\n계약 '26.02", true, true)] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
       subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
       kpi:"A114", kpiMergeUp:true, sub:"219억원", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 고정단말", detailMergeUp:false,
@@ -488,6 +495,7 @@
 
   var collapsedGroups = new Set();
   var searchQuery = "";
+  var spotlight = null; // { idx, ci } — the single chip currently spotlighted from the month panel
 
   // ---- Weighted progress (per-browser convenience via localStorage; not shared/synced) ----
   function progKey(row){ return "kpi-progress:" + row.group + "|" + row.subgroup + "|" + row.kpi; }
@@ -569,7 +577,8 @@
         var span = Math.max(1, Math.min(c.n, 12 - m + 1));
         covered = span - 1;
         var spansCurrent = CUR_M && m <= CUR_M && CUR_M <= (m + span - 1);
-        html += '<td class="chip-cell' + (c.hl ? ' hl' : '') + (c.strong ? ' strong' : '') + (spansCurrent ? ' cur-month' : '') + '" colspan="' + span + '" title="' + esc(c.t.replace(/\n/g, " · ")) + '">'
+        var isSpot = spotlight && spotlight.idx === idx && spotlight.ci === hit.ci;
+        html += '<td class="chip-cell' + (c.hl ? ' hl' : '') + (c.strong ? ' strong' : '') + (spansCurrent ? ' cur-month' : '') + (isSpot ? ' spotlight' : '') + '" colspan="' + span + '" title="' + esc(c.t.replace(/\n/g, " · ")) + '">'
               + '<span class="ed" contenteditable="false" data-idx="' + idx + '" data-field="chip" data-ci="' + hit.ci + '">' + nl2br(c.t) + '</span>'
               + '</td>';
       } else {
@@ -700,8 +709,8 @@
         var progHTML = "";
         if (!row.isSummary && /%$/.test(row.weight)){
           var p = row.progress || 0;
-          var label = p === 100 ? "완료" : (p === 50 ? "진행중" : "예정");
-          progHTML = '<button type="button" class="prog-btn" data-act="progress" data-idx="' + idx + '" data-p="' + p + '">' + label + '</button>';
+          var label = p === 100 ? "완료" : (p === 50 ? "진행중" : "○");
+          progHTML = '<button type="button" class="prog-btn' + (p === 0 ? ' empty' : '') + '" data-act="progress" data-idx="' + idx + '" data-p="' + p + '" title="클릭해서 진행 상태 변경">' + label + '</button>';
         }
         rowsHTML += '<td class="c-target ed" contenteditable="false" data-idx="' + idx + '" data-field="target" rowspan="' + sgSpans[pos] + '">' + nl2br(row.target) + progHTML + '</td>';
       }
@@ -768,7 +777,7 @@
       html += '<span class="mp-empty">이번 달 예정된 일정이 없습니다.</span>';
     } else {
       items.forEach(function(it){
-        html += '<button type="button" class="mp-item" data-act="jumpto" data-idx="' + it.idx + '">' + esc(it.label) + '</button>';
+        html += '<button type="button" class="mp-item" data-act="jumpto" data-idx="' + it.idx + '" data-ci="' + it.ci + '">' + esc(it.label) + '</button>';
       });
     }
     panel.innerHTML = html;
@@ -930,12 +939,15 @@
       var actEl = e.target.closest('[data-act="jumpto"]');
       if (!actEl) return;
       var idx = +actEl.dataset.idx;
+      var ci = +actEl.dataset.ci;
       var row = ROWS[idx];
       var key = row.section + "||" + row.group;
-      if (collapsedGroups.has(key)){ collapsedGroups.delete(key); render(); }
+      spotlight = { idx: idx, ci: ci };
+      if (collapsedGroups.has(key)){ collapsedGroups.delete(key); }
+      render();
       requestAnimationFrame(function(){
-        var el = document.querySelector('[data-idx="' + idx + '"][data-field="detail"]');
-        if (el && el.scrollIntoView) el.scrollIntoView({ behavior: "smooth", block: "center" });
+        var el = document.querySelector('.chip-cell.spotlight');
+        if (el && el.scrollIntoView) el.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
       });
     });
   }
