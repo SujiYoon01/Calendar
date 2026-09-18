@@ -149,6 +149,7 @@
   table.kpi th, table.kpi td {
     border-bottom: 1px solid var(--grid); border-right: 1px solid var(--grid);
     padding: 0; vertical-align: middle; background: var(--surface);
+    overflow: hidden; word-break: break-word;
   }
   table.kpi thead th {
     background: var(--accent-biz-soft); color: var(--ink); font-size: 11px; font-weight: 700;
@@ -226,8 +227,9 @@
 
   td.c-month {
     padding: 0; height: 30px; text-align: center; vertical-align: middle;
-    transition: background-color .08s ease;
+    transition: background-color .08s ease; width: 90px;
   }
+  th.c-month-h { width: 90px; }
   td.c-month:hover { background-color: var(--grid-soft); }
 
   td.chip-cell {
@@ -463,7 +465,7 @@
     });
     html += '<th class="c-addcol"><button type="button" class="addcol-btn" data-act="addcol" title="열 추가">+</button></th>';
     MONTHS.forEach(function(m){
-      html += '<th>' + "'26." + m + '</th>';
+      html += '<th class="c-month-h">' + "'26." + m + '</th>';
     });
     head.innerHTML = html;
   }
