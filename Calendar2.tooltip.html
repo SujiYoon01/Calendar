@@ -814,13 +814,31 @@
       }
     });
     var score = totalWeight > 0 ? Math.round((weightedDone / totalWeight) * 100) : 0;
+    var circ = 2 * Math.PI * 21; // r=21
+    var arcLen = (score / 100) * circ;
+    var angle = (score / 100) * 2 * Math.PI - Math.PI / 2; // 0% at top, clockwise
+    var satX = 26 + 21 * Math.cos(angle);
+    var satY = 26 + 21 * Math.sin(angle);
+    var satRot = (angle * 180 / Math.PI) + 90;
+    var ringSVG =
+      '<svg width="46" height="46" viewBox="0 0 52 52" style="flex:none">' +
+        '<circle class="orbit-track" cx="26" cy="26" r="21"/>' +
+        '<circle class="orbit-arc" cx="26" cy="26" r="21" stroke-dasharray="' + arcLen.toFixed(2) + ' ' + circ.toFixed(2) + '" transform="rotate(-90 26 26)"/>' +
+        '<g transform="translate(' + satX.toFixed(2) + ' ' + satY.toFixed(2) + ') rotate(' + satRot.toFixed(1) + ')">' +
+          '<rect class="sat-panel" x="-6" y="-1.6" width="3.2" height="3.2" rx=".6"/>' +
+          '<rect class="sat-panel" x="2.8" y="-1.6" width="3.2" height="3.2" rx=".6"/>' +
+          '<line class="sat-line" x1="-2.8" y1="0" x2="-1.6" y2="0"/>' +
+          '<line class="sat-line" x1="1.6" y1="0" x2="2.8" y2="0"/>' +
+          '<rect class="sat-body" x="-1.6" y="-1.6" width="3.2" height="3.2" rx=".8"/>' +
+        '</g>' +
+      '</svg>';
     document.getElementById("summaryRow").innerHTML =
       '<div class="stat"><span class="n">' + totalRows + '</span><span class="l">전체 KPI 항목</span></div>' +
       '<div class="stat"><span class="n">' + totalChips + '</span><span class="l">등록된 일정</span></div>' +
       '<div class="stat"><span class="n">' + hlCount + '</span><span class="l">강조 표시 일정</span></div>' +
       '<div class="stat score">' +
-        '<div class="score-top"><span class="n">' + score + '%</span><span class="l">가중 진행률(사업부 KPI)</span></div>' +
-        '<div class="score-bar"><span style="width:' + score + '%"></span></div>' +
+        ringSVG +
+        '<div class="score-text"><span class="n">' + score + '%</span><span class="l">가중 진행률(사업부 KPI)</span></div>' +
       '</div>';
   }
 
