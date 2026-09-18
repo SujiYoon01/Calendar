@@ -143,11 +143,8 @@
   .stat .n { font-size: 18px; font-weight: 900; letter-spacing: -0.01em; }
   .stat .l { font-size: 11px; color: var(--ink-muted); font-weight: 600; }
 
-  .stage { flex: 1; min-height: 0; position: relative; overflow: hidden; }
-  .table-shell {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-    overflow: hidden; transform-origin: top left; position: absolute; top: 0; left: 0;
-  }
+  .stage { flex: 1; min-height: 0; position: relative; overflow: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+  .table-shell { display: inline-block; min-width: 100%; }
   table.kpi { border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: 11.5px; }
   table.kpi th, table.kpi td {
     border-bottom: 1px solid var(--grid); border-right: 1px solid var(--grid);
@@ -156,16 +153,17 @@
   table.kpi thead th {
     background: var(--accent-biz-soft); color: var(--ink); font-size: 11px; font-weight: 700;
     padding: 7px 5px; text-align: center; border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 5;
   }
   .c-lead { border-right: 2px solid var(--border) !important; }
 
   .c-ctrl     { display: none; width: 62px; }
   body.edit-on .c-ctrl { display: table-cell; }
-  .c-section  { width: 26px; }
-  .c-group    { width: 92px; }
-  .c-subgroup { width: 110px; }
-  .c-weight   { width: 44px; }
-  .c-target   { width: 150px; }
+  .c-section  { width: 42px; }
+  .c-group    { width: 100px; }
+  .c-subgroup { width: 118px; }
+  .c-weight   { width: 46px; }
+  .c-target   { width: 160px; }
   .c-kpi      { width: 54px; }
   .c-detail   { width: 210px; }
   .c-sub      { width: 96px; }
@@ -239,13 +237,10 @@
   .chip.hl { background: var(--khaki-soft); border-color: color-mix(in srgb, var(--khaki) 60%, transparent); color: var(--ink); font-weight: 800; }
   .chip.strong { border: 1.5px solid var(--strong-border); font-weight: 900; white-space: normal; line-height: 1.15; }
 
-  footer.note { margin-top: 6px; font-size: 10px; color: var(--ink-muted); line-height: 1.45; flex: none; }
-
   @media print {
     body { overflow: visible; height: auto; }
-    .table-shell { position: static; transform: none !important; }
-    .stage { overflow: visible; height: auto; }
-    .btn-print, footer.note, .c-ctrl { display: none !important; }
+    .stage { overflow: visible; height: auto; border: none; }
+    .btn-print, .c-ctrl { display: none !important; }
     @page { size: A3 landscape; margin: 8mm; }
   }
 </style>
@@ -308,39 +303,39 @@
     // ===== 사업부 KPI =====
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:false,
       subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:false,
-      kpi:"A111", kpiMergeUp:false, sub:"", detail:"(전략사업) 다부처 1차 SAR위성(40기) — 4,743억원", detailMergeUp:false,
+      kpi:"A111", kpiMergeUp:false, sub:"4,743억원", detail:"(전략사업) 다부처 1차 SAR위성(40기)", detailMergeUp:false,
       chips:[chip(7,1,"RFP 공고"), chip(8,1,"업체 선정"), chip(9,1,"계약",true)] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
       subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
-      kpi:"A112", kpiMergeUp:false, sub:"", detail:"(전략사업) 다목적실용위성 8호 본체 — 1,330억원", detailMergeUp:false,
+      kpi:"A112", kpiMergeUp:false, sub:"1,330억원", detail:"(전략사업) 다목적실용위성 8호 본체", detailMergeUp:false,
       chips:[chip(8,1,"RFP 공고"), chip(9,1,"업체 선정/협상"), chip(10,1,"계약",true)] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
       subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
-      kpi:"A113", kpiMergeUp:false, sub:"", detail:"(전략사업) 수자원 C-Band SAR 위성 — 410억원", detailMergeUp:false,
+      kpi:"A113", kpiMergeUp:false, sub:"410억원", detail:"(전략사업) 수자원 C-Band SAR 위성", detailMergeUp:false,
       chips:[chip(9,1,"RFP 공고"), chip(10,1,"계약",true)] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
       subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
-      kpi:"A114", kpiMergeUp:false, sub:"", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 모뎀/망제어기 — 523억원", detailMergeUp:false,
+      kpi:"A114", kpiMergeUp:false, sub:"523억원", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 모뎀/망제어기", detailMergeUp:false,
       chips:[chip(10,1,"RFP 공고")] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
       subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
-      kpi:"A114", kpiMergeUp:true, sub:"", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 운반용단말 — 161억원", detailMergeUp:false,
+      kpi:"A114", kpiMergeUp:true, sub:"161억원", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 운반용단말", detailMergeUp:false,
       chips:[chip(11,1,"RFP 공고")] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
       subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
-      kpi:"A114", kpiMergeUp:true, sub:"", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 휴대용단말 — 114억원", detailMergeUp:false,
+      kpi:"A114", kpiMergeUp:true, sub:"114억원", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 휴대용단말", detailMergeUp:false,
       chips:[chip(9,4,"군-Ⅲ\n제안 제출 '27.01\n계약 '26.02", true, true)] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
       subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
-      kpi:"A114", kpiMergeUp:true, sub:"", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 고정단말 — 219억원", detailMergeUp:false,
+      kpi:"A114", kpiMergeUp:true, sub:"219억원", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 고정단말", detailMergeUp:false,
       chips:[chip(12,1,"RFP 공고")] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
       subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
-      kpi:"A115", kpiMergeUp:false, sub:"", detail:"다출처체계(기본형) 연동장비 개발 — 96억원", detailMergeUp:false,
+      kpi:"A115", kpiMergeUp:false, sub:"96억원", detail:"다출처체계(기본형) 연동장비 개발", detailMergeUp:false,
       chips:[chip(12,1,"RFP 공고")] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
       subgroup:"국내사업 경쟁력 회복", weight:"20%", target:"국내 전략사업 3건중 1건 이상 수주", sgMergeUp:false,
-      kpi:"A116", kpiMergeUp:false, sub:"", detail:"군집큐브 통신위성 기술개발(2과제) — 60억원", detailMergeUp:false,
+      kpi:"A116", kpiMergeUp:false, sub:"60억원\n(2과제)", detail:"군집큐브 통신위성 기술개발", detailMergeUp:false,
       chips:[chip(2,1,"RFP 공고(1과제)"), chip(3,1,"제안서 제출(1과제)"), chip(4,1,"계약(1과제)·나라스페이스 수주(시스템 컨소시엄)",true),
              chip(5,1,"RFP 공고(2과제)"), chip(7,1,"업체 선정/협상(2과제)·시스템 수주",true), chip(8,1,"계약(2과제)",true)] },
 
@@ -372,7 +367,7 @@
     { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
       subgroup:"해외사업 기반 구축", weight:"15%", target:"위성영상 AI 솔루션 수출 기반 구축", sgMergeUp:true,
       kpi:"A221", kpiMergeUp:true, sub:"미국(Short List 선정)", detail:"핵심 권역(유럽,중동,미국) 중 1개 권역 목표 달성", detailMergeUp:true,
-      chips:[chip(2,7,"DIU, 소요군의 소요 창출 및 사업 공고 유도"), chip(9,3,"Solution Brief 제출"), chip(12,1,"Short List 선정(PT업체)",true)] },
+      chips:[chip(2,7,"DIU, 소요군의 소요 창출 및 사업 공고 유도"), chip(9,3,"Solution Brief 제출"), chip(11,2,"Short List 선정(PT업체)",true)] },
     { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
       subgroup:"핵심인력 확보", weight:"", target:"", sgMergeUp:false,
       kpi:"A222", kpiMergeUp:false, sub:"솔루션사업팀장 외부 채용", detail:"위성영상분석 AI/SW 리더급 인력 1명", detailMergeUp:false,
@@ -420,7 +415,7 @@
     { accent:"hr", section:"HR Calendar", group:"인력계획", groupMergeUp:false,
       subgroup:"", weight:"-", target:"적정인력 운영 및 적기 인력 수급", sgMergeUp:false,
       kpi:"B106", kpiMergeUp:false, sub:"", detail:"매월 인력계획 점검을 통한 인력 In/out 실행", detailMergeUp:false,
-      chips:[chip(2,10,"사업부 인력계획 매월 점검"), chip(12,1,"경영계획 수립",true)] }
+      chips:[chip(2,7,"사업부 인력계획 매월 점검"), chip(9,1,"경영계획 수립",true)] }
   ];
 
   var EXTRA_COLS = []; // { id, title }
@@ -435,14 +430,14 @@
   function renderColgroup(){
     var cg = document.getElementById("colgroup");
     var html = '<col id="col-ctrl" style="width:' + (editMode ? "62px" : "0px") + '">';
-    html += '<col style="width:26px">';   // section
-    html += '<col style="width:92px">';   // group
-    html += '<col style="width:100px">';  // subgroup
-    html += '<col style="width:44px">';   // weight
-    html += '<col style="width:150px">';  // target
+    html += '<col style="width:42px">';   // section
+    html += '<col style="width:100px">';  // group
+    html += '<col style="width:118px">';  // subgroup
+    html += '<col style="width:46px">';   // weight
+    html += '<col style="width:160px">';  // target
     html += '<col style="width:54px">';   // kpi
-    html += '<col style="width:190px">';  // detail
-    html += '<col style="width:90px">';   // sub
+    html += '<col style="width:210px">';  // detail
+    html += '<col style="width:96px">';   // sub
     EXTRA_COLS.forEach(function(){ html += '<col style="width:140px">'; });
     html += '<col style="width:26px">';   // addcol
     MONTHS.forEach(function(){ html += '<col style="width:90px">'; });
@@ -553,7 +548,7 @@
         var detailColspan = row.sub === "" ? 2 : 1;
         rowsHTML += '<td class="c-lead c-detail ed" contenteditable="false" data-idx="' + idx + '" data-field="detail" rowspan="' + detailSpans[idx] + '"' + (detailColspan === 2 ? ' colspan="2"' : '') + '>' + esc(row.detail) + '</td>';
       }
-      if (row.sub !== "") rowsHTML += '<td class="c-lead c-sub ed" contenteditable="false" data-idx="' + idx + '" data-field="sub">' + esc(row.sub) + '</td>';
+      if (row.sub !== "") rowsHTML += '<td class="c-lead c-sub ed" contenteditable="false" data-idx="' + idx + '" data-field="sub">' + nl2br(row.sub) + '</td>';
 
       EXTRA_COLS.forEach(function(col){
         var val = (row.extra && row.extra[col.id]) || "";
@@ -568,7 +563,6 @@
     tbody.innerHTML = rowsHTML;
     applyEditability();
     renderSummary();
-    fitStage();
   }
 
   function renderSummary(){
@@ -582,18 +576,6 @@
       '<div class="stat"><span class="n">' + hlCount + '</span><span class="l">강조 표시 일정</span></div>';
   }
 
-  function fitStage(){
-    var stage = document.getElementById("stage");
-    var shell = document.getElementById("tableShell");
-    shell.style.transform = "scale(1)";
-    var naturalW = shell.offsetWidth, naturalH = shell.offsetHeight;
-    var availW = stage.clientWidth, availH = stage.clientHeight;
-    if (!naturalW || !naturalH || !availW || !availH) return;
-    var scale = Math.min(availW / naturalW, availH / naturalH, 1);
-    shell.style.transform = "scale(" + scale + ")";
-    stage.style.height = (naturalH * scale) + "px";
-  }
-
   var editMode = false;
   function applyEditability(){
     document.querySelectorAll(".ed").forEach(function(el){ el.contentEditable = editMode ? "true" : "false"; });
@@ -604,7 +586,6 @@
     if (f === "biz") document.body.classList.add("filter-biz");
     if (f === "hr") document.body.classList.add("filter-hr");
     document.querySelectorAll(".filter-pill").forEach(function(btn){ btn.classList.toggle("active", btn.dataset.f === f); });
-    requestAnimationFrame(fitStage);
   }
 
   function syncField(el){
@@ -720,7 +701,6 @@
     });
 
     document.getElementById("printBtn").addEventListener("click", function(){ window.print(); });
-    window.addEventListener("resize", fitStage);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
