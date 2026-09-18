@@ -167,9 +167,9 @@
   .prog-btn[data-p="50"] { background: var(--warn-soft, #f8f0dc); border-color: var(--khaki); color: var(--ink); }
   .prog-btn[data-p="100"] { background: color-mix(in srgb, #2f8f4e 18%, var(--surface)); border-color: #2f8f4e; color: #1f6b38; }
 
-  th.th-current { box-shadow: inset 0 0 0 2px var(--accent-biz); }
-  td.cur-month:not(.chip-cell) { box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--accent-biz) 55%, transparent); }
-  td.chip-cell.cur-month { box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--accent-biz) 65%, transparent); }
+  th.th-current { background: color-mix(in srgb, var(--accent-biz) 32%, var(--accent-biz-soft)); color: #fff; }
+  td.cur-month:not(.chip-cell) { background-image: linear-gradient(color-mix(in srgb, var(--accent-biz) 10%, transparent), color-mix(in srgb, var(--accent-biz) 10%, transparent)); }
+  td.chip-cell.cur-month { background-image: linear-gradient(color-mix(in srgb, var(--accent-biz) 16%, transparent), color-mix(in srgb, var(--accent-biz) 16%, transparent)); }
 
   .month-panel {
     border: 1px solid var(--border); border-radius: 10px; background: var(--surface);
@@ -1033,4 +1033,3 @@
 </script>
 </body>
 </html>
-
