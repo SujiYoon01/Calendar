@@ -112,24 +112,6 @@
   .filter-pill[data-f="biz"] i { background: var(--accent-biz); }
   .filter-pill[data-f="hr"] i { background: var(--accent-hr); }
 
-  .switch { position: relative; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; font-size: 12px; font-weight: 700; color: var(--ink-2); }
-  .switch input { position: absolute; opacity: 0; width: 0; height: 0; }
-  .switch .track { width: 34px; height: 20px; border-radius: 999px; background: var(--grid); position: relative; transition: background .15s ease; flex: none; }
-  .switch .track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); box-shadow: 0 1px 2px rgba(0,0,0,0.25); transition: transform .15s ease; }
-  .switch input:checked + .track { background: var(--accent-biz); }
-  .switch input:checked + .track::after { transform: translateX(14px); }
-
-  body.edit-on .ed { outline: none; border-radius: 4px; cursor: text; }
-  body.edit-on .ed:hover { background: color-mix(in srgb, var(--accent-biz) 10%, transparent); }
-  body.edit-on .ed:focus { background: var(--surface-2); box-shadow: 0 0 0 2px var(--accent-biz); }
-
-  .edit-banner {
-    display: none; align-items: center; gap: 8px; background: var(--khaki-soft);
-    border: 1px solid color-mix(in srgb, var(--khaki) 50%, transparent); color: var(--ink);
-    font-size: 11.5px; border-radius: 9px; padding: 6px 12px; margin-bottom: 8px; flex: none;
-  }
-  body.edit-on .edit-banner { display: flex; }
-
   .legend-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
   .swatch { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--ink-muted); font-weight: 600; }
   .swatch i { width: 12px; height: 9px; border-radius: 2px; display: inline-block; flex: none; border: 1px solid var(--grid); }
@@ -212,6 +194,18 @@
   .info-chip.hl { background: var(--khaki-soft); border-color: color-mix(in srgb, var(--khaki) 60%, transparent); color: var(--ink); }
   .info-period { font-size: 11.5px; color: var(--ink-muted); font-weight: 700; }
 
+  .grade-table { display: flex; flex-direction: column; gap: 5px; margin: 8px 0 10px; }
+  .grade-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 7px 10px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--grid);
+  }
+  .grade-row.current { background: var(--khaki-soft); border-color: color-mix(in srgb, var(--khaki) 60%, transparent); }
+  .grade-tier {
+    font-size: 11.5px; font-weight: 900; color: var(--ink-2); min-width: 26px;
+  }
+  .grade-row.current .grade-tier { color: var(--ink); }
+  .grade-amt { font-size: 13px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+
   .stat-bar {
     display: flex; align-items: stretch; gap: 0; background: var(--surface);
     border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; flex: none; overflow: hidden;
@@ -222,9 +216,9 @@
   .stat .l { font-size: 11px; color: var(--ink-muted); font-weight: 600; }
   .stat.score { flex-direction: row; align-items: center; gap: 10px; min-width: 190px; }
   .stat.score .score-text { display: flex; flex-direction: column; gap: 2px; }
-  .orbit-track { fill: none; stroke: var(--grid); stroke-width: 8; }
-  .orbit-arc { fill: none; stroke: var(--accent-biz); stroke-width: 8; stroke-linecap: round; transition: stroke-dasharray .3s ease; }
-  .sat-emoji { font-size: 22px; text-anchor: middle; dominant-baseline: central; }
+  .orbit-track { fill: none; stroke: var(--grid); stroke-width: 9; }
+  .orbit-arc { fill: none; stroke: var(--accent-biz); stroke-width: 9; stroke-linecap: round; transition: stroke-dasharray .3s ease; }
+  .sat-emoji { font-size: 26px; text-anchor: middle; dominant-baseline: central; }
 
   .stage { flex: 0 1 auto; min-height: 260px; position: relative; overflow: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
   .table-shell { display: inline-block; min-width: 100%; }
@@ -241,8 +235,6 @@
   }
   .c-lead { border-right: 2px solid var(--border) !important; }
 
-  .c-ctrl     { display: none; width: 62px; }
-  body.edit-on .c-ctrl { display: table-cell; }
   .c-section  { width: 42px; }
   .c-group    { width: 100px; }
   .c-subgroup { width: 118px; }
@@ -250,23 +242,6 @@
   .c-target   { width: 160px; }
   .c-detail   { width: 210px; }
   .c-sub      { width: 96px; }
-
-  td.c-ctrl { padding: 3px; background: var(--surface-2); }
-  .ctrl-merge { display: flex; gap: 2px; margin-bottom: 2px; }
-  .mbtn {
-    flex: 1; appearance: none; border: 1px solid var(--grid); background: var(--surface);
-    color: var(--ink-muted); font-size: 9px; font-weight: 800; border-radius: 3px;
-    padding: 2px 0; cursor: pointer; line-height: 1.2;
-  }
-  .mbtn.on { background: var(--accent-biz); border-color: var(--accent-biz); color: #fff; }
-  .mbtn[disabled] { opacity: .35; cursor: not-allowed; }
-  .ctrl-actions { display: flex; gap: 2px; }
-  .ctrl-actions button {
-    flex: 1; appearance: none; border: 1px solid var(--border); background: var(--surface);
-    font-size: 10px; font-weight: 800; border-radius: 3px; padding: 1px 0; cursor: pointer; color: var(--ink-2);
-  }
-  .addbtn:hover { border-color: #2f8f4e; color: #2f8f4e; }
-  .delbtn:hover { border-color: #bd4038; color: #bd4038; }
 
   td.c-section {
     padding: 6px 2px; text-align: center; font-weight: 900; letter-spacing: .05em; font-size: 10px;
@@ -280,28 +255,12 @@
   td.c-group.section-hr  { border-left: 3px solid var(--accent-hr); }
 
   td.c-subgroup { padding: 6px 6px; font-weight: 600; font-size: 10.8px; line-height: 1.28; text-align: center; color: var(--ink-2); }
+  td.c-subgroup.has-grades { cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px; text-decoration-color: var(--accent-biz); }
+  td.c-subgroup.has-grades:hover { color: var(--accent-biz); background: var(--accent-biz-soft); }
   td.c-weight { padding: 6px 3px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink-2); }
   td.c-target { padding: 6px 6px; font-weight: 700; line-height: 1.28; text-align: center; }
   td.c-detail { padding: 6px 7px; line-height: 1.28; color: var(--ink-2); text-align: center; font-size: 10.5px; }
   td.c-sub { padding: 6px 6px; line-height: 1.24; color: var(--ink-2); text-align: center; font-size: 10px; background: var(--surface-2); }
-  td.c-extra { padding: 6px 7px; line-height: 1.28; color: var(--ink-2); text-align: center; font-size: 10.5px; }
-
-  .c-addcol { display: none; width: 26px; }
-  body.edit-on .c-addcol { display: table-cell; }
-  .addcol-btn {
-    display: none; width: 100%; height: 100%; min-height: 26px;
-    appearance: none; border: none; background: transparent; color: var(--ink-muted);
-    font-size: 14px; font-weight: 800; cursor: pointer;
-  }
-  body.edit-on .addcol-btn { display: block; }
-  .addcol-btn:hover { color: var(--accent-biz); }
-  .col-head-wrap { display: flex; align-items: center; justify-content: center; gap: 4px; }
-  .delcol-btn {
-    display: none; appearance: none; border: none; background: transparent;
-    color: var(--ink-muted); font-size: 10px; font-weight: 800; cursor: pointer; line-height: 1; padding: 0;
-  }
-  body.edit-on .delcol-btn { display: inline-block; }
-  .delcol-btn:hover { color: #bd4038; }
 
   body.filter-biz tr.section-hr-row { display: none; }
   body.filter-hr tr.section-biz-row { display: none; }
@@ -329,7 +288,7 @@
   @media print {
     body { overflow: visible; height: auto; }
     .stage { overflow: visible; height: auto; border: none; }
-    .btn-print, .c-ctrl { display: none !important; }
+    .btn-print { display: none !important; }
     @page { size: A3 landscape; margin: 8mm; }
   }
 </style>
@@ -346,11 +305,6 @@
   </header>
 
   <div class="control-row">
-    <label class="switch">
-      <input type="checkbox" id="editToggle" aria-label="편집 모드" />
-      <span class="track"></span>
-      편집 모드
-    </label>
     <div class="filter-group">
       <button type="button" class="filter-pill active" data-f="all"><i></i>전체</button>
       <button type="button" class="filter-pill" data-f="biz"><i></i>사업부 KPI</button>
@@ -358,7 +312,7 @@
     </div>
     <div class="search-box" id="searchBox">
       <span aria-hidden="true">🔍</span>
-      <input type="text" id="searchInput" placeholder="구분·KPI No.·내용 검색" />
+      <input type="text" id="searchInput" placeholder="구분·세부내용 검색" />
       <button type="button" class="clear-btn" id="searchClear" title="검색어 지우기">×</button>
     </div>
     <div class="legend-row">
@@ -366,8 +320,6 @@
       <span class="swatch"><i style="background:var(--khaki-soft)"></i>강조 표시</span>
     </div>
   </div>
-
-  <div class="edit-banner">✎ 편집 모드 — 왼쪽 칸의 <b>구/소/세</b> 버튼으로 구분·소구분(가중치·목표 포함)·세부내용 셀을 위 행과 병합/분리, <b>+/×</b>로 행 추가/삭제, 세부구분 오른쪽 끝 <b>+</b>로 열 추가. 텍스트는 클릭해서 바로 수정. 저장은 안 되니 캡처해서 보내주세요.</div>
 
   <div class="month-panel" id="monthPanel"></div>
 
@@ -400,35 +352,37 @@
   var ROWS = [
     // ===== 사업부 KPI =====
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:false,
-      subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:false,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,516억원 달성", sgMergeUp:false,
+      grades:{ S:"9,099억원", A:"8,308억원", "B+":"7,516억원", B:"6,725억원", C:"-" },
+      gradeNote:"연초 목표 7,912억원 → B+ 기준 7,516억원으로 조정",
       kpi:"A111", kpiMergeUp:false, sub:"4,743억원", detail:"(전략사업) 다부처 1차 SAR위성(40기)", detailMergeUp:false,
       chips:[chip(7,1,"RFP 공고"), chip(8,1,"업체 선정"), chip(9,1,"계약",true)] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
-      subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,516억원 달성", sgMergeUp:true,
       kpi:"A112", kpiMergeUp:false, sub:"1,330억원", detail:"(전략사업) 다목적실용위성 8호 본체", detailMergeUp:false,
       chips:[chip(8,1,"RFP 공고"), chip(9,1,"업체 선정/협상"), chip(10,1,"계약",true)] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
-      subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,516억원 달성", sgMergeUp:true,
       kpi:"A113", kpiMergeUp:false, sub:"410억원", detail:"(전략사업) 수자원 C-Band SAR 위성", detailMergeUp:false,
       chips:[chip(9,1,"RFP 공고"), chip(10,1,"계약",true)] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
-      subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,516억원 달성", sgMergeUp:true,
       kpi:"A114", kpiMergeUp:false, sub:"523억원", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 모뎀/망제어기", detailMergeUp:false,
       chips:[chip(10,1,"RFP 공고")] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
-      subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,516억원 달성", sgMergeUp:true,
       kpi:"A114", kpiMergeUp:true, sub:"161억원", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 운반용단말", detailMergeUp:false,
       chips:[chip(11,1,"RFP 공고")] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
-      subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,516억원 달성", sgMergeUp:true,
       kpi:"A114", kpiMergeUp:true, sub:"114억원", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 휴대용단말", detailMergeUp:false,
       chips:[chip(10,4,"군-Ⅲ\n제안 제출 '27.01\n계약 '26.02", true, true)] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
-      subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,516억원 달성", sgMergeUp:true,
       kpi:"A114", kpiMergeUp:true, sub:"219억원", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 고정단말", detailMergeUp:false,
       chips:[chip(12,1,"RFP 공고")] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
-      subgroup:"수주 목표 달성", weight:"5%", target:"7,912억원 달성", sgMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,516억원 달성", sgMergeUp:true,
       kpi:"A115", kpiMergeUp:false, sub:"96억원", detail:"다출처체계(기본형) 연동장비 개발", detailMergeUp:false,
       chips:[chip(12,1,"RFP 공고")] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
@@ -516,7 +470,7 @@
       chips:[chip(2,7,"사업부 인력계획 매월 점검"), chip(9,1,"경영계획 수립",true)] }
   ];
 
-  var EXTRA_COLS = []; // { id, title }
+
 
   var TODAY = new Date();
   var CUR_M = TODAY.getMonth() + 1; // real device month — used only for "이번 달" emphasis, not shown as a date label
@@ -552,16 +506,13 @@
 
   function renderColgroup(){
     var cg = document.getElementById("colgroup");
-    var html = '<col id="col-ctrl" style="width:' + (editMode ? "62px" : "0px") + '">';
-    html += '<col style="width:42px">';   // section
+    var html = '<col style="width:42px">';   // section
     html += '<col style="width:100px">';  // group
     html += '<col style="width:118px">';  // subgroup
     html += '<col style="width:46px">';   // weight
     html += '<col style="width:160px">';  // target
     html += '<col style="width:210px">';  // detail
     html += '<col style="width:96px">';   // sub
-    EXTRA_COLS.forEach(function(){ html += '<col style="width:140px">'; });
-    html += '<col id="col-addcol" style="width:' + (editMode ? "26px" : "0px") + '">';   // addcol
     MONTHS.forEach(function(){ html += '<col style="width:90px">'; });
     cg.innerHTML = html;
   }
@@ -569,19 +520,11 @@
   function renderHead(){
     var head = document.getElementById("headRow");
     var html = "";
-    html += '<th class="c-ctrl"></th>';
     html += '<th class="c-lead c-section">대분류</th>';
     html += '<th class="c-group" colspan="2">구분</th>';
     html += '<th class="c-weight">가중치</th>';
     html += '<th class="c-target">목표</th>';
     html += '<th class="c-lead c-detail" colspan="2">세부내용</th>';
-    EXTRA_COLS.forEach(function(col){
-      html += '<th class="c-extra"><span class="col-head-wrap">'
-            + '<span class="ed" contenteditable="false" data-field="colhead" data-colid="' + col.id + '">' + esc(col.title) + '</span>'
-            + '<button type="button" class="delcol-btn" data-act="delcol" data-colid="' + col.id + '" title="열 삭제">×</button>'
-            + '</span></th>';
-    });
-    html += '<th class="c-addcol"><button type="button" class="addcol-btn" data-act="addcol" title="열 추가">+</button></th>';
     MONTHS.forEach(function(m){
       html += '<th class="c-month-h' + (m === CUR_M ? ' th-current' : '') + '">' + "'26." + m + '</th>';
     });
@@ -606,7 +549,7 @@
         var spansCurrent = CUR_M && m <= CUR_M && CUR_M <= (m + span - 1);
         var isSpot = spotlight && spotlight.idx === idx && spotlight.ci === hit.ci;
         html += '<td class="chip-cell' + (c.hl ? ' hl' : '') + (c.strong ? ' strong' : '') + (spansCurrent ? ' cur-month' : '') + (isSpot ? ' spotlight' : '') + '" colspan="' + span + '" data-act="showinfo" data-idx="' + idx + '" data-ci="' + hit.ci + '" title="' + esc(c.t.replace(/\n/g, " · ")) + '">'
-              + '<span class="ed" contenteditable="false" data-idx="' + idx + '" data-field="chip" data-ci="' + hit.ci + '">' + nl2br(c.t) + '</span>'
+              + nl2br(c.t)
               + '</td>';
       } else {
         html += '<td class="c-month' + (m === CUR_M ? ' cur-month' : '') + '"></td>';
@@ -647,6 +590,28 @@
   }
   function closeInfoCard(){
     document.getElementById("infoCard").classList.remove("open");
+  }
+
+  function showGradeCard(idx){
+    var row = ROWS[idx];
+    if (!row || !row.grades) return;
+    var order = ["S","A","B+","B","C"];
+    var rowsHtml = order.map(function(g){
+      var isCurrent = row.target.indexOf(row.grades[g]) !== -1 && g === "B+"; // B+ is today's official target
+      return '<div class="grade-row' + (isCurrent ? ' current' : '') + '"><span class="grade-tier">' + esc(g) + '</span><span class="grade-amt">' + esc(row.grades[g]) + '</span></div>';
+    }).join("");
+
+    var card = document.getElementById("infoCard");
+    card.innerHTML =
+      '<div class="info-card-backdrop" data-act="closeinfo"></div>' +
+      '<div class="info-card">' +
+        '<button type="button" class="info-close" data-act="closeinfo" aria-label="닫기">×</button>' +
+        '<div class="info-breadcrumb">' + esc(row.section + " › " + row.group.replace(/\n/g, " ")) + '</div>' +
+        '<div class="info-detail">' + esc(row.subgroup.replace(/\n/g, " ")) + ' · 등급별 목표</div>' +
+        '<div class="grade-table">' + rowsHtml + '</div>' +
+        (row.gradeNote ? '<div class="info-period">' + esc(row.gradeNote) + '</div>' : '') +
+      '</div>';
+    card.classList.add("open");
   }
 
   function computeSpans(list, mergeKey){
@@ -743,54 +708,37 @@
         rowsHTML += '<tr class="' + rowMarkerClass + (dim ? ' row-dim' : '') + '">';
       }
 
-      rowsHTML += '<td class="c-ctrl">' + (row.isSummary ? '' :
-          '<div class="ctrl-merge">'
-        + '<button type="button" class="mbtn' + (row.groupMergeUp ? ' on' : '') + '" data-act="mtoggle" data-col="group" data-idx="' + idx + '"' + (idx === 0 ? ' disabled' : '') + '>구</button>'
-        + '<button type="button" class="mbtn' + (row.sgMergeUp ? ' on' : '') + '" data-act="mtoggle" data-col="sg" data-idx="' + idx + '"' + (idx === 0 ? ' disabled' : '') + '>소</button>'
-        + '<button type="button" class="mbtn' + (row.detailMergeUp ? ' on' : '') + '" data-act="mtoggle" data-col="detail" data-idx="' + idx + '"' + (idx === 0 ? ' disabled' : '') + '>세</button>'
-        + '</div>'
-        + '<div class="ctrl-actions">'
-        + '<button type="button" class="addbtn" data-act="addrow" data-idx="' + idx + '" title="아래에 행 추가">+</button>'
-        + '<button type="button" class="delbtn" data-act="delrow" data-idx="' + idx + '" title="행 삭제">×</button>'
-        + '</div>') + '</td>';
-
-      if (sectionSpans[pos] > 0) rowsHTML += '<td class="c-lead c-section ' + accentClass + (row.isSummary ? '' : ' ed') + '" contenteditable="false" data-idx="' + idx + '" data-field="section" rowspan="' + sectionSpans[pos] + '">' + esc(row.section) + '</td>';
+      if (sectionSpans[pos] > 0) rowsHTML += '<td class="c-lead c-section ' + accentClass + '" rowspan="' + sectionSpans[pos] + '">' + esc(row.section) + '</td>';
       if (groupSpans[pos] > 0){
         var groupColspan = row.subgroup === "" ? 2 : 1;
         var chevron = (!row.isSummary && !query) ? '<button type="button" class="group-toggle" data-act="collapsegroup" data-key="' + esc(row.section + "||" + row.group) + '" title="그룹 접기">▾</button>' : '';
-        rowsHTML += '<td class="c-group ' + accentClass + (row.isSummary ? '' : ' ed') + '" contenteditable="false" data-idx="' + idx + '" data-field="group" rowspan="' + groupSpans[pos] + '"' + (groupColspan === 2 ? ' colspan="2"' : '') + '>' + chevron + nl2br(row.group) + '</td>';
+        rowsHTML += '<td class="c-group ' + accentClass + '" rowspan="' + groupSpans[pos] + '"' + (groupColspan === 2 ? ' colspan="2"' : '') + '>' + chevron + nl2br(row.group) + '</td>';
       }
       if (sgSpans[pos] > 0){
         if (row.subgroup !== ""){
-          rowsHTML += '<td class="c-subgroup ed" contenteditable="false" data-idx="' + idx + '" data-field="subgroup" rowspan="' + sgSpans[pos] + '">' + nl2br(row.subgroup) + '</td>';
+          var hasGrades = !row.isSummary && row.grades;
+          rowsHTML += '<td class="c-subgroup' + (hasGrades ? ' has-grades' : '') + '" rowspan="' + sgSpans[pos] + '"' + (hasGrades ? ' data-act="showgrades" data-idx="' + idx + '" title="클릭하면 등급별 목표를 볼 수 있어요"' : '') + '>' + nl2br(row.subgroup) + '</td>';
         }
-        rowsHTML += '<td class="c-weight ed" contenteditable="false" data-idx="' + idx + '" data-field="weight" rowspan="' + sgSpans[pos] + '">' + esc(row.weight) + '</td>';
+        rowsHTML += '<td class="c-weight" rowspan="' + sgSpans[pos] + '">' + esc(row.weight) + '</td>';
         var progHTML = "";
         if (!row.isSummary && /%$/.test(row.weight)){
           var p = row.progress || 0;
           var label = p === 100 ? "완료" : (p === 50 ? "진행중" : "○");
           progHTML = '<button type="button" class="prog-btn' + (p === 0 ? ' empty' : '') + '" data-act="progress" data-idx="' + idx + '" data-p="' + p + '" title="클릭해서 진행 상태 변경">' + label + '</button>';
         }
-        rowsHTML += '<td class="c-target ed" contenteditable="false" data-idx="' + idx + '" data-field="target" rowspan="' + sgSpans[pos] + '">' + nl2br(row.target) + progHTML + '</td>';
+        rowsHTML += '<td class="c-target" rowspan="' + sgSpans[pos] + '">' + nl2br(row.target) + progHTML + '</td>';
       }
       if (detailSpans[pos] > 0){
         var detailColspan = row.sub === "" ? 2 : 1;
-        rowsHTML += '<td class="c-lead c-detail' + (row.isSummary ? '' : ' ed') + '" contenteditable="false" data-idx="' + idx + '" data-field="detail" rowspan="' + detailSpans[pos] + '"' + (detailColspan === 2 ? ' colspan="2"' : '') + '>' + nl2br(row.detail) + '</td>';
+        rowsHTML += '<td class="c-lead c-detail" rowspan="' + detailSpans[pos] + '"' + (detailColspan === 2 ? ' colspan="2"' : '') + '>' + nl2br(row.detail) + '</td>';
       }
-      if (row.sub !== "") rowsHTML += '<td class="c-lead c-sub ed" contenteditable="false" data-idx="' + idx + '" data-field="sub">' + nl2br(row.sub) + '</td>';
-
-      EXTRA_COLS.forEach(function(col){
-        var val = (row.extra && row.extra[col.id]) || "";
-        rowsHTML += '<td class="c-extra' + (row.isSummary ? '' : ' ed') + '" contenteditable="false" data-idx="' + idx + '" data-field="extra" data-colid="' + col.id + '">' + esc(val) + '</td>';
-      });
-      rowsHTML += '<td class="c-addcol"></td>';
+      if (row.sub !== "") rowsHTML += '<td class="c-lead c-sub">' + nl2br(row.sub) + '</td>';
 
       rowsHTML += monthCellsHTML(row, idx);
       rowsHTML += '</tr>';
     });
 
     tbody.innerHTML = rowsHTML;
-    applyEditability();
     renderSummary();
     renderMonthPanel();
   }
@@ -809,7 +757,7 @@
       }
     });
     var score = totalWeight > 0 ? Math.round((weightedDone / totalWeight) * 100) : 0;
-    var R = 19, CX = 28, CY = 28;
+    var R = 21, CX = 31, CY = 31;
     var circ = 2 * Math.PI * R;
     var arcLen = (score / 100) * circ;
     var angle = (score / 100) * 2 * Math.PI - Math.PI / 2; // 0% at top, clockwise
@@ -817,7 +765,7 @@
     var satY = CY + R * Math.sin(angle);
     var satRot = (angle * 180 / Math.PI) + 90;
     var ringSVG =
-      '<svg width="52" height="52" viewBox="0 0 56 56" style="flex:none; overflow:visible">' +
+      '<svg width="60" height="60" viewBox="0 0 62 62" style="flex:none; overflow:visible">' +
         '<circle class="orbit-track" cx="' + CX + '" cy="' + CY + '" r="' + R + '"/>' +
         (arcLen > 0 ? '<circle class="orbit-arc" cx="' + CX + '" cy="' + CY + '" r="' + R + '" stroke-dasharray="' + arcLen.toFixed(2) + ' ' + circ.toFixed(2) + '" transform="rotate(-90 ' + CX + ' ' + CY + ')"/>' : '') +
         '<text class="sat-emoji" x="' + satX.toFixed(2) + '" y="' + satY.toFixed(2) + '">🛰️</text>' +
@@ -828,7 +776,7 @@
       '<div class="stat"><span class="n">' + hlCount + '</span><span class="l">강조 표시 일정</span></div>' +
       '<div class="stat score">' +
         ringSVG +
-        '<div class="score-text"><span class="n">' + score + '%</span><span class="l">진행률</span></div>' +
+        '<div class="score-text"><span class="n">' + score + '%</span><span class="l">KPI 달성 진척도</span></div>' +
       '</div>';
   }
 
@@ -854,11 +802,6 @@
     panel.innerHTML = html;
   }
 
-  var editMode = false;
-  function applyEditability(){
-    document.querySelectorAll(".ed").forEach(function(el){ el.contentEditable = editMode ? "true" : "false"; });
-  }
-
   function setFilter(f){
     document.body.classList.remove("filter-biz", "filter-hr");
     if (f === "biz") document.body.classList.add("filter-biz");
@@ -866,85 +809,10 @@
     document.querySelectorAll(".filter-pill").forEach(function(btn){ btn.classList.toggle("active", btn.dataset.f === f); });
   }
 
-  function syncField(el){
-    if (el.dataset.field === "colhead"){
-      var col = EXTRA_COLS.filter(function(c){ return c.id === el.dataset.colid; })[0];
-      if (col) col.title = el.textContent.trim();
-      return;
-    }
-    var idx = +el.dataset.idx;
-    var row = ROWS[idx];
-    if (!row) return;
-    if (el.dataset.field === "chip"){
-      var ci = +el.dataset.ci;
-      if (row.chips[ci]) row.chips[ci].t = el.textContent.trim();
-    } else if (el.dataset.field === "extra"){
-      row.extra = row.extra || {};
-      row.extra[el.dataset.colid] = el.textContent.trim();
-    } else {
-      row[el.dataset.field] = el.textContent.trim();
-    }
-  }
-
-  var extraColSeq = 0;
-  function addColumn(){
-    extraColSeq++;
-    EXTRA_COLS.push({ id: "extra" + extraColSeq, title: "새 항목" });
-    renderColgroup(); renderHead(); render();
-  }
-  function removeColumn(colId){
-    EXTRA_COLS = EXTRA_COLS.filter(function(c){ return c.id !== colId; });
-    renderColgroup(); renderHead(); render();
-  }
-
-  function addRowAfter(idx){
-    var src = ROWS[idx];
-    ROWS.splice(idx + 1, 0, {
-      accent: src.accent, section: src.section,
-      group: src.group, groupMergeUp: true,
-      subgroup: src.subgroup, weight: src.weight, target: src.target, sgMergeUp: true,
-      kpi: "새 KPI", kpiMergeUp: false,
-      sub: "", detail: "새 세부내용을 입력하세요", detailMergeUp: false,
-      chips: []
-    });
-    render();
-  }
-
-  function removeRow(idx){
-    if (ROWS.length <= 1) return;
-    var row = ROWS[idx], next = ROWS[idx + 1];
-    [["group","groupMergeUp"], ["sg","sgMergeUp"], ["kpi","kpiMergeUp"], ["detail","detailMergeUp"]].forEach(function(pair){
-      var mkey = pair[1];
-      if (!row[mkey] && next && next[mkey]){
-        next[mkey] = false;
-        if (pair[0] === "group") next.group = row.group;
-        else if (pair[0] === "sg") { next.subgroup = row.subgroup; next.weight = row.weight; next.target = row.target; }
-        else if (pair[0] === "kpi") next.kpi = row.kpi;
-        else if (pair[0] === "detail") next.detail = row.detail;
-      }
-    });
-    ROWS.splice(idx, 1);
-    render();
-  }
-
-  function toggleMerge(col, idx){
-    if (idx === 0) return;
-    var key = col + "MergeUp";
-    ROWS[idx][key] = !ROWS[idx][key];
-    render();
-  }
-
   function init(){
     renderColgroup();
     renderHead();
     render();
-
-    document.getElementById("editToggle").addEventListener("change", function(e){
-      editMode = e.target.checked;
-      document.body.classList.toggle("edit-on", editMode);
-      renderColgroup();
-      applyEditability();
-    });
 
     document.querySelectorAll(".filter-pill").forEach(function(btn){
       btn.addEventListener("click", function(){
@@ -954,18 +822,6 @@
     });
 
     var stage = document.getElementById("stage");
-
-    stage.addEventListener("focusout", function(e){
-      var t = e.target;
-      if (t.classList && t.classList.contains("ed")) syncField(t);
-    });
-
-    stage.addEventListener("keydown", function(e){
-      var t = e.target;
-      if (!t.classList || !t.classList.contains("ed")) return;
-      var multiline = (t.dataset.field === "detail" || t.dataset.field === "target" || t.dataset.field === "chip" || t.dataset.field === "sub");
-      if (e.key === "Enter" && !multiline) { e.preventDefault(); t.blur(); }
-    });
 
     stage.addEventListener("click", function(e){
       var actEl = e.target.closest("[data-act]");
@@ -984,18 +840,13 @@
         return;
       }
       if (act === "showinfo"){
-        if (editMode) return; // let edit-mode clicks focus the editable text instead
         showInfoCard(+actEl.dataset.idx, +actEl.dataset.ci);
         return;
       }
-
-      if (!editMode) return;
-      var idx = +actEl.dataset.idx;
-      if (act === "mtoggle") toggleMerge(actEl.dataset.col, idx);
-      else if (act === "addrow") addRowAfter(idx);
-      else if (act === "delrow") removeRow(idx);
-      else if (act === "addcol") addColumn();
-      else if (act === "delcol") removeColumn(actEl.dataset.colid);
+      if (act === "showgrades"){
+        showGradeCard(+actEl.dataset.idx);
+        return;
+      }
     });
 
     document.getElementById("printBtn").addEventListener("click", function(){ window.print(); });
