@@ -171,9 +171,6 @@
   .info-card-overlay { display: none; position: fixed; inset: 0; z-index: 50; }
   .info-card-overlay.open { display: block; }
   .info-card-backdrop { position: absolute; inset: 0; background: rgba(15,14,10,0.4); }
-  .info-card.stack-1 { margin-left: 22px; margin-top: 22px; }
-  .info-card.stack-2 { margin-left: 44px; margin-top: 44px; }
-  .info-card.stack-3 { margin-left: 66px; margin-top: 66px; }
   .info-card {
     position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
     width: 90%; max-width: 420px; max-height: 60vh; overflow: auto;
@@ -181,8 +178,16 @@
     padding: 26px 20px 18px; box-shadow: 0 12px 40px rgba(0,0,0,0.28);
     animation: info-card-pop .14s ease-out; cursor: grab;
   }
+  /* 2-card combo (큰 표 + 작은 표): 작은 표는 화면 위쪽 가로 스트립에 */
   .info-card.stack-1 { top: 2vh; bottom: auto; transform: translateX(-50%); max-height: 22vh; max-width: 320px; }
-  .info-card.stack-2 { top: 4vh; left: 50%; margin-left: 30px; }
+  /* 큰 표(사업현황/과제별 평가구간): 항상 화면 중앙, 크게, 스크롤 없이 보이도록 */
+  .info-card.wide { top: 50%; left: 50%; right: auto; bottom: auto; transform: translate(-50%, -50%); width: 92%; max-width: 480px; max-height: 82vh; }
+  /* 4-card 그리드(해외사업 기반 구축 등 4개 동시): 화면 네 귀퉁이에 배치 */
+  .info-card.quad { top: auto; left: auto; right: auto; bottom: auto; transform: none; width: 44%; max-width: 230px; max-height: 32vh; padding: 20px 12px 12px; }
+  .info-card.quad-a { top: 2vh; left: 3%; }
+  .info-card.quad-b { top: 2vh; left: auto; right: 3%; }
+  .info-card.quad-c { top: auto; bottom: 2vh; left: 3%; }
+  .info-card.quad-d { top: auto; bottom: 2vh; left: auto; right: 3%; }
   @keyframes info-card-pop { from { opacity: 0; } to { opacity: 1; } }
   .info-drag-handle {
     position: absolute; top: 0; left: 0; right: 0; height: 22px;
@@ -205,7 +210,6 @@
   .info-chip.hl { background: var(--khaki-soft); border-color: color-mix(in srgb, var(--khaki) 60%, transparent); color: var(--ink); }
   .info-period { font-size: 11.5px; color: var(--ink-muted); font-weight: 700; }
 
-  .info-card.wide { max-width: 480px; max-height: 82vh; }
   .bs-table-wrap { overflow-x: auto; margin-top: 8px; }
   table.bs-table { border-collapse: collapse; width: 100%; min-width: 360px; font-size: 10px; }
   table.bs-table th, table.bs-table td {
@@ -457,6 +461,13 @@
 
     { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:false,
       subgroup:"전략제품 적기 출시/\n핵심기술 확보", weight:"20%", target:"UHR SAR 위성", sgMergeUp:false, targetMergeUp:false,
+      matrixGrades:{ cols:["S","A","B+","B","C"], rows:[
+        { label:"UHR SAR 위성(10%)", cells:["FM¹ 조립, 통합, 시험","EQM⁶ 환경시험","CDR 80점 이상 & ETB⁶ 연동시험","CDR 80점 미만 & 핵심기술² 확보","CDR 미수행"] },
+        { label:"위성영상 AI 분석 솔루션(10%)", cells:["-","SAR AI 솔루션 고도화(최대 식별률 95%³ 이상@신규 Armed Aircraft)","AI 솔루션 핵심기능 3종 추가","SAR AI 솔루션 출시(최대 식별률 90% 이상@기존 Armed Aircraft)","-"] }
+      ] },
+      pctGrades:{ cols:["S","A","B+","B","C"], rows:[
+        { label:"전략제품 적기 출시", cells:["200% 달성","150% 달성","100% 달성","50% 달성","-"] }
+      ] },
       kpi:"A211", kpiMergeUp:false, sub:"체계종합", detail:"CDR 80점 이상\n& ETB(전기적테스트베드) 연동시험", detailMergeUp:false,
       chips:[chip(2,5,"기본설계(PDR)"), chip(7,6,"상세설계(CDR)",true)] },
     { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
@@ -474,23 +485,41 @@
 
     { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
       subgroup:"해외사업 기반 구축", weight:"15%", target:"위성영상 AI 솔루션\n수출 기반 구축", sgMergeUp:false, targetMergeUp:false,
+      subgroupPctGrades:{ cols:["S","A","B+","B","C"], rows:[
+        { label:"해외사업 기반 구축", cells:["200% 달성","150% 달성","100% 달성","50% 달성","-"] }
+      ] },
+      pctGrades:{ cols:["S","A","B+","B","C"], rows:[
+        { label:"유럽", cells:["계약","예산반영","100% 달성","50% 달성","-"] }
+      ] },
       kpi:"A221", kpiMergeUp:false, sub:"유럽(기획과제 선정)", detail:"핵심 권역(유럽,중동,미국) 중\n1개 권역 목표 달성", detailMergeUp:false,
       chips:[chip(2,2,"현지 파트너십 구축(공동개발)"), chip(4,4,"RFI 획득 및 기획, 제안서 제출"), chip(8,5,"기획과제 선정",true)] },
     { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
       subgroup:"해외사업 기반 구축", weight:"15%", target:"위성영상 AI 솔루션\n수출 기반 구축", sgMergeUp:true, targetMergeUp:true,
+      pctGrades:{ cols:["S","A","B+","B","C"], rows:[
+        { label:"중동", cells:["추가 계약 1건","최종 제안 제출 및 계약","소요군 대상 현지 시연","시연 계획서 제출","-"] }
+      ] },
       kpi:"A221", kpiMergeUp:true, sub:"중동(소요군 대상 현지시연)", detail:"핵심 권역(유럽,중동,미국) 중\n1개 권역 목표 달성", detailMergeUp:true,
       chips:[chip(2,2,"현지 파트너십 구축(현지화)"), chip(4,3,"기획 제안 및 시연 계획 제출"), chip(7,6,"소요군 대상 현지 시연",true)] },
     { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
       subgroup:"해외사업 기반 구축", weight:"15%", target:"위성영상 AI 솔루션\n수출 기반 구축", sgMergeUp:true, targetMergeUp:true,
+      pctGrades:{ cols:["S","A","B+","B","C"], rows:[
+        { label:"미국", cells:["실증/PoC","최종 제안 제출 및 계약","Short List 선정","계획서 제출","-"] }
+      ] },
       kpi:"A221", kpiMergeUp:true, sub:"미국(Short List 선정)", detail:"핵심 권역(유럽,중동,미국) 중\n1개 권역 목표 달성", detailMergeUp:true,
       chips:[chip(2,5,"DIU, 소요군向 소요 창출 및 사업 공고 유도"), chip(7,3,"Solution Brief 제출"), chip(10,3,"Short List 선정(PT업체)")] },
     { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
-      subgroup:"핵심인력 확보", weight:"", target:"위성영상 AI 솔루션\n수출 기반 구축", sgMergeUp:false, targetMergeUp:true, weightMergeUp:true,
+      subgroup:"핵심인력 확보", weight:"", target:"위성영상 AI 솔루션\n수출 기반 구축", sgMergeUp:false, targetMergeUp:true,
+      pctGrades:{ cols:["S","A","B+","B","C"], rows:[
+        { label:"핵심인력 확보", cells:["정성평가","1명(1개월 단축)","1명(2Q 이내)","1명(1개월 초과)","-"] }
+      ] },
       kpi:"A222", kpiMergeUp:false, sub:"솔루션사업팀장 외부 채용", detail:"위성영상분석 AI/SW\n리더급 인력 1명", detailMergeUp:false,
       chips:[chip(6,1,"입사완료",true)] },
 
     { accent:"biz", section:"사업부 KPI", group:"중장기 전략 달성\n(고유목표)", groupMergeUp:false,
       subgroup:"생태계 구축 가속화", weight:"10%", target:"위성영상분석 AI솔루션 Open Platform MAU 20건 이상\n및 프로젝트 생성 이력", sgMergeUp:false, targetMergeUp:false,
+      pctGrades:{ cols:["S","A","B+","B","C"], rows:[
+        { label:"생태계 구축 가속화", cells:["MAU 50건 이상 & SAR 분석 기능 추가 반영 3건","MAU 30건 이상 & 관심지역 지정 가능 접속 이력","MAU 20건 이상 & 프로젝트 생성 이력","데모/배포 50건 이상","-"] }
+      ] },
       kpi:"A311", kpiMergeUp:false, sub:"", detail:"Cloud 기반 Open Platform을 구축하여\n위성 Data/User를 단기간에 확충", detailMergeUp:false,
       chips:[chip(7,6,"제품 출시 후 국가별 사용 이력 확인",true)] },
     { accent:"biz", section:"사업부 KPI", group:"중장기 전략 달성\n(고유목표)", groupMergeUp:true,
@@ -787,6 +816,23 @@
     openCard(bodyHtml, "wide");
   }
 
+  // Generic small/matrix grade table: row.<field> = { cols:[...], rows:[{label, cells:[...]}] }.
+  // Reused for the 2x5 matrix (전략제품 적기 출시) and every single-row S~C table.
+  function showMatrixCard(idx, field, title, extraClass){
+    var row = ROWS[idx];
+    var t = row && row[field];
+    if (!t) return;
+    var thead = '<tr><th></th>' + t.cols.map(function(c){ return '<th>' + esc(c) + '</th>'; }).join('') + '</tr>';
+    var tbody = t.rows.map(function(r){
+      return '<tr><td class="bs-name">' + esc(r.label) + '</td>' + r.cells.map(function(v){ return '<td>' + esc(v) + '</td>'; }).join('') + '</tr>';
+    }).join('');
+    var bodyHtml =
+      '<div class="info-breadcrumb">' + esc(row.section + " › " + row.group.replace(/\n/g, " ")) + '</div>' +
+      '<div class="info-detail">' + esc(title) + '</div>' +
+      '<div class="bs-table-wrap"><table class="bs-table"><thead>' + thead + '</thead><tbody>' + tbody + '</tbody></table></div>';
+    openCard(bodyHtml, extraClass);
+  }
+
   function computeSpans(list, mergeKey){
     var spans = new Array(list.length);
     var i = 0;
@@ -855,18 +901,6 @@
     var groupSpans = computeSpans(list, "groupMergeUp");
     var sgSpans = computeSpans(list, "sgMergeUp");
     var targetSpans = computeSpans(list, "targetMergeUp");
-    var weightSpans = (function(){
-      var arr = new Array(list.length), i = 0;
-      function wmu(r){ return r.weightMergeUp !== undefined ? r.weightMergeUp : r.sgMergeUp; }
-      while (i < list.length){
-        var span = 1;
-        while (i + span < list.length && wmu(list[i + span])) span++;
-        arr[i] = span;
-        for (var k = 1; k < span; k++) arr[i + k] = 0;
-        i += span;
-      }
-      return arr;
-    })();
     var detailSpans = computeSpans(list, "detailMergeUp");
 
     // A group's rowspan cell may absorb the subgroup column (colspan 2) only
@@ -933,12 +967,10 @@
       }
       if (sgSpans[pos] > 0){
         if (!groupAbsorbsSub[pos]){
-          var hasGrades = !row.isSummary && row.gradeSections;
+          var hasGrades = !row.isSummary && (row.gradeSections || row.matrixGrades || row.pctGrades || row.subgroupPctGrades);
           rowsHTML += '<td class="c-subgroup' + (hasGrades ? ' has-grades' : '') + '" rowspan="' + sgSpans[pos] + '"' + (hasGrades ? ' data-act="showgrades" data-idx="' + idx + '" title="클릭하면 등급별 목표를 볼 수 있어요"' : '') + '>' + (row.subgroup !== "" ? nl2br(row.subgroup) : '') + '</td>';
         }
-      }
-      if (weightSpans[pos] > 0){
-        rowsHTML += '<td class="c-weight" rowspan="' + weightSpans[pos] + '">' + esc(row.weight) + '</td>';
+        rowsHTML += '<td class="c-weight" rowspan="' + sgSpans[pos] + '">' + esc(row.weight) + '</td>';
       }
       if (targetSpans[pos] > 0){
         var lightHTML = "";
@@ -1087,8 +1119,19 @@
       }
       if (act === "showgrades"){
         var gIdx = +actEl.dataset.idx;
-        showBizStatusCard(gIdx);
-        showGradeCard(gIdx);
+        var gRow = ROWS[gIdx];
+        if (gRow.gradeSections) showGradeCard(gIdx);
+        if (gRow.bizStatusTable) showBizStatusCard(gIdx);
+        if (gRow.matrixGrades) showMatrixCard(gIdx, "matrixGrades", "대상 과제별 수행결과 평가 구간(Milestone 기준)", "wide");
+        if (gRow.kpi === "A221"){
+          // 해외사업 기반 구축: 전체 + 유럽/중동/미국 3개, 네 귀퉁이 그리드로
+          if (gRow.subgroupPctGrades) showMatrixCard(gIdx, "subgroupPctGrades", "해외사업 기반 구축 평가 구간", "quad quad-a");
+          if (gRow.pctGrades) showMatrixCard(gIdx, "pctGrades", "유럽 평가 구간", "quad quad-b");
+          if (ROWS[gIdx + 1] && ROWS[gIdx + 1].pctGrades) showMatrixCard(gIdx + 1, "pctGrades", "중동 평가 구간", "quad quad-c");
+          if (ROWS[gIdx + 2] && ROWS[gIdx + 2].pctGrades) showMatrixCard(gIdx + 2, "pctGrades", "미국 평가 구간", "quad quad-d");
+        } else if (gRow.pctGrades){
+          showMatrixCard(gIdx, "pctGrades", (gRow.subgroup || "").replace(/\n/g, " ") + " 평가 구간");
+        }
         return;
       }
     });
