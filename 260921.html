@@ -171,16 +171,22 @@
   .info-card-overlay.open { display: block; }
   .info-card-backdrop { position: absolute; inset: 0; background: rgba(15,14,10,0.4); }
   .info-card {
-    position: absolute; left: 0; right: 0; bottom: 0; margin: 0 auto;
-    max-width: 460px; max-height: 72vh; overflow: auto;
-    background: var(--surface); border-radius: 16px 16px 0 0;
-    padding: 20px 20px 24px; box-shadow: 0 -6px 28px rgba(0,0,0,0.22);
-    animation: info-card-up .16s ease-out;
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 90%; max-width: 420px; max-height: 74vh; overflow: auto;
+    background: var(--surface); border-radius: 16px;
+    padding: 30px 20px 22px; box-shadow: 0 12px 40px rgba(0,0,0,0.28);
+    animation: info-card-pop .14s ease-out;
   }
-  @keyframes info-card-up { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes info-card-pop { from { transform: translate(-50%, -50%) scale(.96); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+  .info-drag-handle {
+    position: absolute; top: 0; left: 0; right: 0; height: 26px;
+    cursor: move; touch-action: none; display: flex; align-items: center; justify-content: center;
+  }
+  .info-drag-handle::after { content: ""; width: 34px; height: 4px; border-radius: 999px; background: var(--grid); }
+  .info-drag-handle:hover::after { background: var(--ink-muted); }
   .info-close {
-    position: absolute; top: 10px; right: 14px; border: none; background: transparent;
-    font-size: 20px; line-height: 1; color: var(--ink-muted); cursor: pointer; padding: 4px;
+    position: absolute; top: 8px; right: 12px; border: none; background: transparent;
+    font-size: 20px; line-height: 1; color: var(--ink-muted); cursor: pointer; padding: 4px; z-index: 2;
   }
   .info-close:hover { color: var(--ink); }
   .info-breadcrumb { font-size: 11px; color: var(--ink-muted); font-weight: 700; margin: 2px 26px 6px 0; }
@@ -194,17 +200,19 @@
   .info-chip.hl { background: var(--khaki-soft); border-color: color-mix(in srgb, var(--khaki) 60%, transparent); color: var(--ink); }
   .info-period { font-size: 11.5px; color: var(--ink-muted); font-weight: 700; }
 
-  .grade-table { display: flex; flex-direction: column; gap: 5px; margin: 8px 0 10px; }
+  .grade-section-label { font-size: 11px; font-weight: 800; color: var(--accent-biz); margin: 10px 0 5px; }
+  .grade-section-label:first-child { margin-top: 4px; }
+  .grade-table { display: flex; flex-direction: column; gap: 5px; margin: 0 0 6px; }
   .grade-row {
-    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
     padding: 7px 10px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--grid);
   }
   .grade-row.current { background: var(--khaki-soft); border-color: color-mix(in srgb, var(--khaki) 60%, transparent); }
   .grade-tier {
-    font-size: 11.5px; font-weight: 900; color: var(--ink-2); min-width: 26px;
+    font-size: 11.5px; font-weight: 900; color: var(--ink-2); min-width: 26px; flex: none; padding-top: 1px;
   }
   .grade-row.current .grade-tier { color: var(--ink); }
-  .grade-amt { font-size: 13px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .grade-amt { font-size: 13px; font-weight: 700; color: var(--ink); text-align: right; line-height: 1.35; }
 
   .stat-bar {
     display: flex; align-items: stretch; gap: 0; background: var(--surface);
@@ -352,41 +360,54 @@
   var ROWS = [
     // ===== 사업부 KPI =====
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:false,
-      subgroup:"수주 목표 달성", weight:"5%", target:"7,516억원 달성", sgMergeUp:false,
-      grades:{ S:"9,099억원", A:"8,308억원", "B+":"7,516억원", B:"6,725억원", C:"-" },
-      gradeNote:"연초 목표 7,912억원 → B+ 기준 7,516억원으로 조정",
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,526억원 달성", sgMergeUp:false,
+      gradeSections:[{ label:null, rows:[
+        { t:"S", v:"9,099억원" }, { t:"A", v:"8,308억원" }, { t:"B+", v:"7,526억원" },
+        { t:"B", v:"6,725억원" }, { t:"C", v:"-" }
+      ] }],
+      gradeNote:"연초 목표 7,912억원 → B+ 기준 7,526억원으로 조정",
       kpi:"A111", kpiMergeUp:false, sub:"4,743억원", detail:"(전략사업) 다부처 1차 SAR위성(40기)", detailMergeUp:false,
       chips:[chip(7,1,"RFP 공고"), chip(8,1,"업체 선정"), chip(9,1,"계약",true)] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
-      subgroup:"수주 목표 달성", weight:"5%", target:"7,516억원 달성", sgMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,526억원 달성", sgMergeUp:true,
       kpi:"A112", kpiMergeUp:false, sub:"1,330억원", detail:"(전략사업) 다목적실용위성 8호 본체", detailMergeUp:false,
       chips:[chip(8,1,"RFP 공고"), chip(9,1,"업체 선정/협상"), chip(10,1,"계약",true)] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
-      subgroup:"수주 목표 달성", weight:"5%", target:"7,516억원 달성", sgMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,526억원 달성", sgMergeUp:true,
       kpi:"A113", kpiMergeUp:false, sub:"410억원", detail:"(전략사업) 수자원 C-Band SAR 위성", detailMergeUp:false,
       chips:[chip(9,1,"RFP 공고"), chip(10,1,"계약",true)] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
-      subgroup:"수주 목표 달성", weight:"5%", target:"7,516억원 달성", sgMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,526억원 달성", sgMergeUp:true,
       kpi:"A114", kpiMergeUp:false, sub:"523억원", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 모뎀/망제어기", detailMergeUp:false,
       chips:[chip(10,1,"RFP 공고")] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
-      subgroup:"수주 목표 달성", weight:"5%", target:"7,516억원 달성", sgMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,526억원 달성", sgMergeUp:true,
       kpi:"A114", kpiMergeUp:true, sub:"161억원", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 운반용단말", detailMergeUp:false,
       chips:[chip(11,1,"RFP 공고")] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
-      subgroup:"수주 목표 달성", weight:"5%", target:"7,516억원 달성", sgMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,526억원 달성", sgMergeUp:true,
       kpi:"A114", kpiMergeUp:true, sub:"114억원", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 휴대용단말", detailMergeUp:false,
       chips:[chip(10,4,"군-Ⅲ\n제안 제출 '27.01\n계약 '26.02", true, true)] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
-      subgroup:"수주 목표 달성", weight:"5%", target:"7,516억원 달성", sgMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,526억원 달성", sgMergeUp:true,
       kpi:"A114", kpiMergeUp:true, sub:"219억원", detail:"(전략사업) 군위성통신체계-Ⅲ 체계 고정단말", detailMergeUp:false,
       chips:[chip(12,1,"RFP 공고")] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
-      subgroup:"수주 목표 달성", weight:"5%", target:"7,516억원 달성", sgMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,526억원 달성", sgMergeUp:true,
       kpi:"A115", kpiMergeUp:false, sub:"96억원", detail:"다출처체계(기본형) 연동장비 개발", detailMergeUp:false,
       chips:[chip(12,1,"RFP 공고")] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
       subgroup:"국내사업 경쟁력 회복", weight:"20%", target:"국내 전략사업 3건중\n1건 이상 수주", sgMergeUp:false,
+      gradeSections:[
+        { label:"변경 전", rows:[
+          { t:"S", v:"7건 수주" }, { t:"A", v:"6건 수주" }, { t:"B+", v:"5건 수주" },
+          { t:"B", v:"4건 수주" }, { t:"C", v:"-" }
+        ] },
+        { label:"변경 후", rows:[
+          { t:"S", v:"3건 수주" }, { t:"A", v:"2건 수주" }, { t:"B+", v:"1건 수주" }
+        ] }
+      ],
+      gradeNote:"현재는 '변경 후' 기준으로 운영 중",
       kpi:"A116", kpiMergeUp:false, sub:"60억원\n(2과제)", detail:"군집큐브 통신위성 기술개발", detailMergeUp:false,
       chips:[chip(2,1,"RFP 공고(1과제)"), chip(3,1,"제안서 제출(1과제)"), chip(4,1,"계약(1과제)·나라스페이스 수주(시스템 컨소시엄)",true),
              chip(5,1,"RFP 공고(2과제)"), chip(7,1,"업체 선정/협상(2과제)·시스템 수주",true), chip(8,1,"계약(2과제)",true)] },
@@ -430,7 +451,13 @@
       kpi:"A311", kpiMergeUp:false, sub:"", detail:"Cloud 기반 Open Platform을 구축하여\n위성 Data/User를 단기간에 확충", detailMergeUp:false,
       chips:[chip(8,5,"제품 출시 후 국가별 사용 이력 확인",true)] },
     { accent:"biz", section:"사업부 KPI", group:"중장기 전략 달성\n(고유목표)", groupMergeUp:true,
-      subgroup:"", weight:"15%", target:"법령 내 데이터 구독/임차\n서비스 관련 내용 반영", sgMergeUp:false,
+      subgroup:"데이터 사업 전환", weight:"15%", target:"법령 내 데이터 구독/임차\n서비스 관련 내용 반영", sgMergeUp:false,
+      gradeSections:[{ label:null, rows:[
+        { t:"S", v:"A 만족, 데이터 공급플랫폼 계약" },
+        { t:"A", v:"B+ 만족, 데이터 공급플랫폼 실증" },
+        { t:"B+", v:"법령 반영" },
+        { t:"B", v:"대외활동 10건 이상" }
+      ] }],
       kpi:"A321", kpiMergeUp:false, sub:"", detail:"국회(과방위, 국방위), 기관(국방부/방사청) 등\n주요 의사결정 기관 대상 대관활동 강화", detailMergeUp:false,
       chips:[chip(12,1,"법령 반영",true)] },
     { accent:"biz", section:"사업부 KPI", group:"중장기 전략 달성\n(고유목표)", groupMergeUp:true,
@@ -558,6 +585,51 @@
     return html;
   }
 
+  // Shared modal shell: backdrop + centered card with a drag handle. Content
+  // is passed in as the card's inner HTML (breadcrumb, body, etc.); this
+  // function only owns open/close/drag so both info and grade cards behave
+  // identically.
+  function openCard(innerHtml){
+    var card = document.getElementById("infoCard");
+    card.innerHTML =
+      '<div class="info-card-backdrop" data-act="closeinfo"></div>' +
+      '<div class="info-card" id="infoCardBox">' +
+        '<div class="info-drag-handle" id="infoDragHandle"></div>' +
+        '<button type="button" class="info-close" data-act="closeinfo" aria-label="닫기">×</button>' +
+        innerHtml +
+      '</div>';
+    card.classList.add("open");
+    attachDrag(document.getElementById("infoCardBox"), document.getElementById("infoDragHandle"));
+  }
+  function closeInfoCard(){
+    document.getElementById("infoCard").classList.remove("open");
+  }
+  function attachDrag(box, handle){
+    var dragging = false, startX = 0, startY = 0, startLeft = 0, startTop = 0;
+    handle.addEventListener("pointerdown", function(e){
+      dragging = true;
+      var rect = box.getBoundingClientRect();
+      startX = e.clientX; startY = e.clientY;
+      startLeft = rect.left; startTop = rect.top;
+      box.style.transform = "none";
+      box.style.left = startLeft + "px";
+      box.style.top = startTop + "px";
+      try { handle.setPointerCapture(e.pointerId); } catch(err){}
+    });
+    handle.addEventListener("pointermove", function(e){
+      if (!dragging) return;
+      var maxLeft = window.innerWidth - box.offsetWidth - 6;
+      var maxTop = window.innerHeight - box.offsetHeight - 6;
+      var newLeft = Math.min(Math.max(6, startLeft + (e.clientX - startX)), Math.max(6, maxLeft));
+      var newTop = Math.min(Math.max(6, startTop + (e.clientY - startY)), Math.max(6, maxTop));
+      box.style.left = newLeft + "px";
+      box.style.top = newTop + "px";
+    });
+    ["pointerup", "pointercancel"].forEach(function(ev){
+      handle.addEventListener(ev, function(){ dragging = false; });
+    });
+  }
+
   function showInfoCard(idx, ci){
     var row = ROWS[idx];
     var c = row.chips[ci];
@@ -571,47 +643,43 @@
     if (row.weight && row.weight !== "-") wtParts.push("가중치 " + row.weight);
     if (row.target) wtParts.push(row.target.replace(/\n/g, " "));
 
-    var card = document.getElementById("infoCard");
-    card.innerHTML =
-      '<div class="info-card-backdrop" data-act="closeinfo"></div>' +
-      '<div class="info-card">' +
-        '<button type="button" class="info-close" data-act="closeinfo" aria-label="닫기">×</button>' +
-        '<div class="info-breadcrumb">' + esc(crumbParts.join(" › ")) + '</div>' +
-        (row.kpi ? '<div class="info-kpi">' + esc(row.kpi) + '</div>' : '') +
-        '<div class="info-detail">' + esc(detailLine) + '</div>' +
-        (wtParts.length ? '<div class="info-wt">' + esc(wtParts.join(" · ")) + '</div>' : '') +
-        '<div class="info-chip' + (c.hl ? ' hl' : '') + '">' + esc(c.t.replace(/\n/g, " · ")) + '</div>' +
-        '<div class="info-period">' + period + (c.hl ? " · 강조 항목" : "") + '</div>' +
-      '</div>';
-    card.classList.add("open");
+    openCard(
+      '<div class="info-breadcrumb">' + esc(crumbParts.join(" › ")) + '</div>' +
+      (row.kpi ? '<div class="info-kpi">' + esc(row.kpi) + '</div>' : '') +
+      '<div class="info-detail">' + esc(detailLine) + '</div>' +
+      (wtParts.length ? '<div class="info-wt">' + esc(wtParts.join(" · ")) + '</div>' : '') +
+      '<div class="info-chip' + (c.hl ? ' hl' : '') + '">' + esc(c.t.replace(/\n/g, " · ")) + '</div>' +
+      '<div class="info-period">' + period + (c.hl ? " · 강조 항목" : "") + '</div>'
+    );
 
     spotlight = { idx: idx, ci: ci };
     render();
   }
-  function closeInfoCard(){
-    document.getElementById("infoCard").classList.remove("open");
-  }
 
+  // row.gradeSections: [{ label: string|null, rows: [{t:"S", v:"..."}, ...] }, ...]
+  // The last section's "B+" row is treated as today's official target and highlighted.
   function showGradeCard(idx){
     var row = ROWS[idx];
-    if (!row || !row.grades) return;
-    var order = ["S","A","B+","B","C"];
-    var rowsHtml = order.map(function(g){
-      var isCurrent = row.target.indexOf(row.grades[g]) !== -1 && g === "B+"; // B+ is today's official target
-      return '<div class="grade-row' + (isCurrent ? ' current' : '') + '"><span class="grade-tier">' + esc(g) + '</span><span class="grade-amt">' + esc(row.grades[g]) + '</span></div>';
-    }).join("");
+    if (!row || !row.gradeSections) return;
 
-    var card = document.getElementById("infoCard");
-    card.innerHTML =
-      '<div class="info-card-backdrop" data-act="closeinfo"></div>' +
-      '<div class="info-card">' +
-        '<button type="button" class="info-close" data-act="closeinfo" aria-label="닫기">×</button>' +
-        '<div class="info-breadcrumb">' + esc(row.section + " › " + row.group.replace(/\n/g, " ")) + '</div>' +
-        '<div class="info-detail">' + esc(row.subgroup.replace(/\n/g, " ")) + ' · 등급별 목표</div>' +
-        '<div class="grade-table">' + rowsHtml + '</div>' +
-        (row.gradeNote ? '<div class="info-period">' + esc(row.gradeNote) + '</div>' : '') +
-      '</div>';
-    card.classList.add("open");
+    var bodyHtml = "";
+    row.gradeSections.forEach(function(section, si){
+      var isLastSection = si === row.gradeSections.length - 1;
+      if (section.label) bodyHtml += '<div class="grade-section-label">' + esc(section.label) + '</div>';
+      bodyHtml += '<div class="grade-table">';
+      section.rows.forEach(function(r){
+        var isCurrent = isLastSection && r.t === "B+";
+        bodyHtml += '<div class="grade-row' + (isCurrent ? ' current' : '') + '"><span class="grade-tier">' + esc(r.t) + '</span><span class="grade-amt">' + esc(r.v) + '</span></div>';
+      });
+      bodyHtml += '</div>';
+    });
+
+    openCard(
+      '<div class="info-breadcrumb">' + esc(row.section + " › " + row.group.replace(/\n/g, " ")) + '</div>' +
+      '<div class="info-detail">' + esc(row.subgroup.replace(/\n/g, " ")) + ' · 등급별 목표</div>' +
+      bodyHtml +
+      (row.gradeNote ? '<div class="info-period">' + esc(row.gradeNote) + '</div>' : '')
+    );
   }
 
   function computeSpans(list, mergeKey){
@@ -683,6 +751,22 @@
     var sgSpans = computeSpans(list, "sgMergeUp");
     var detailSpans = computeSpans(list, "detailMergeUp");
 
+    // A group's rowspan cell may absorb the subgroup column (colspan 2) only
+    // when EVERY row it spans has an empty subgroup — otherwise a sibling row
+    // needing its own subgroup cell would collide with that colspan. Computed
+    // per block so any row in the span can look up its block's outcome.
+    var groupAbsorbsSub = new Array(list.length);
+    (function(){
+      var i = 0;
+      while (i < list.length){
+        var span = groupSpans[i] > 0 ? groupSpans[i] : 1;
+        var allEmpty = true;
+        for (var k = i; k < i + span && k < list.length; k++){ if (list[k].subgroup !== "") { allEmpty = false; break; } }
+        for (var k2 = i; k2 < i + span && k2 < list.length; k2++) groupAbsorbsSub[k2] = allEmpty;
+        i += span;
+      }
+    })();
+
     var sectionSpans = new Array(list.length);
     (function(){
       var i = 0;
@@ -710,14 +794,14 @@
 
       if (sectionSpans[pos] > 0) rowsHTML += '<td class="c-lead c-section ' + accentClass + '" rowspan="' + sectionSpans[pos] + '">' + esc(row.section) + '</td>';
       if (groupSpans[pos] > 0){
-        var groupColspan = row.subgroup === "" ? 2 : 1;
+        var groupColspan = groupAbsorbsSub[pos] ? 2 : 1;
         var chevron = (!row.isSummary && !query) ? '<button type="button" class="group-toggle" data-act="collapsegroup" data-key="' + esc(row.section + "||" + row.group) + '" title="그룹 접기">▾</button>' : '';
         rowsHTML += '<td class="c-group ' + accentClass + '" rowspan="' + groupSpans[pos] + '"' + (groupColspan === 2 ? ' colspan="2"' : '') + '>' + chevron + nl2br(row.group) + '</td>';
       }
       if (sgSpans[pos] > 0){
-        if (row.subgroup !== ""){
-          var hasGrades = !row.isSummary && row.grades;
-          rowsHTML += '<td class="c-subgroup' + (hasGrades ? ' has-grades' : '') + '" rowspan="' + sgSpans[pos] + '"' + (hasGrades ? ' data-act="showgrades" data-idx="' + idx + '" title="클릭하면 등급별 목표를 볼 수 있어요"' : '') + '>' + nl2br(row.subgroup) + '</td>';
+        if (!groupAbsorbsSub[pos]){
+          var hasGrades = !row.isSummary && row.gradeSections;
+          rowsHTML += '<td class="c-subgroup' + (hasGrades ? ' has-grades' : '') + '" rowspan="' + sgSpans[pos] + '"' + (hasGrades ? ' data-act="showgrades" data-idx="' + idx + '" title="클릭하면 등급별 목표를 볼 수 있어요"' : '') + '>' + (row.subgroup !== "" ? nl2br(row.subgroup) : '') + '</td>';
         }
         rowsHTML += '<td class="c-weight" rowspan="' + sgSpans[pos] + '">' + esc(row.weight) + '</td>';
         var progHTML = "";
