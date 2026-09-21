@@ -371,7 +371,7 @@
   var ROWS = [
     // ===== 사업부 KPI =====
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:false,
-      subgroup:"국내사업 경쟁력 회복", weight:"20%", target:"국내 전략사업 3건중\n1건 이상 수주", sgMergeUp:false, targetMergeUp:false,
+      subgroup:"국내사업 경쟁력 회복", weight:"20%", target:"국내 전략사업 3건중\n1건 이상 수주", sgMergeUp:false, targetMergeUp:false, progress:1,
       gradeSections:[
         { label:"변경 전", rows:[
           { t:"S", v:"7건 수주" }, { t:"A", v:"6건 수주" }, { t:"B+", v:"5건 수주" },
@@ -393,7 +393,7 @@
       kpi:"A113", kpiMergeUp:false, sub:"410억원", detail:"(전략사업) 수자원 C-Band SAR 위성", detailMergeUp:false,
       chips:[chip(9,1,"RFP 공고"), chip(10,1,"업체 선정"), chip(11,1,"계약",true)] },
     { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
-      subgroup:"수주 목표 달성", weight:"5%", target:"7,526억원 달성", sgMergeUp:false, targetMergeUp:false,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,526억원 달성", sgMergeUp:false, targetMergeUp:false, progress:2,
       gradeSections:[{ label:null, rows:[
         { t:"S", v:"9,099억원" }, { t:"A", v:"8,308억원" }, { t:"B+", v:"7,526억원" },
         { t:"B", v:"6,725억원" }, { t:"C", v:"-" }
@@ -450,7 +450,7 @@
              chip(5,1,"RFP 공고(2과제)"), chip(7,1,"업체 선정/협상(2과제) 수주완료",true), chip(8,1,"계약(2과제)",true)] },
 
     { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:false,
-      subgroup:"전략제품 적기 출시/\n핵심기술 확보", weight:"20%", target:"UHR SAR 위성", sgMergeUp:false, targetMergeUp:false,
+      subgroup:"전략제품 적기 출시/\n핵심기술 확보", weight:"20%", target:"UHR SAR 위성", sgMergeUp:false, targetMergeUp:false, progress:2,
       matrixGrades:{ cols:["S","A","B+","B","C"], rows:[
         { label:"UHR SAR 위성(10%)", cells:["FM¹ 조립, 통합, 시험","EQM⁶ 환경시험","CDR 80점 이상 & ETB⁶ 연동시험","CDR 80점 미만 & 핵심기술² 확보","CDR 미수행"] },
         { label:"위성영상 AI 분석 솔루션(10%)", cells:["-","SAR AI 솔루션 고도화(최대 식별률 95%³ 이상@신규 Armed Aircraft)","AI 솔루션 핵심기능 3종 추가","SAR AI 솔루션 출시(최대 식별률 90% 이상@기존 Armed Aircraft)","-"] }
@@ -465,7 +465,7 @@
       kpi:"A211", kpiMergeUp:true, sub:"위성본체/탑재체", detail:"CDR 80점 이상\n& ETB(전기적테스트베드) 연동시험", detailMergeUp:true,
       chips:[chip(5,5,"EQM 제작/시험"), chip(10,3,"ETB 연동시험",true)] },
     { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
-      subgroup:"전략제품 적기 출시/\n핵심기술 확보", weight:"20%", target:"위성영상 AI 분석 솔루션", sgMergeUp:true, targetMergeUp:false,
+      subgroup:"전략제품 적기 출시/\n핵심기술 확보", weight:"20%", target:"위성영상 AI 분석 솔루션", sgMergeUp:true, targetMergeUp:false, progress:2,
       kpi:"A212", kpiMergeUp:false, sub:"제품 출시", detail:"AI 솔루션\n핵심기능 3종 추가", detailMergeUp:false,
       chips:[chip(2,4,"SAR AI Pack 고도화 학습"), chip(6,1,"제품 출시(SIA)",true)] },
     { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
@@ -474,7 +474,7 @@
       chips:[chip(7,6,"SAR AI 솔루션 기능 추가 (Fake 객체 식별·피해량 분석·타격지점 예측)",true)] },
 
     { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
-      subgroup:"해외사업 기반 구축", weight:"15%", target:"위성영상 AI 솔루션\n수출 기반 구축", sgMergeUp:false, targetMergeUp:false,
+      subgroup:"해외사업 기반 구축", weight:"15%", target:"위성영상 AI 솔루션\n수출 기반 구축", sgMergeUp:false, targetMergeUp:false, progress:1,
       subgroupPctGrades:{ cols:["S","A","B+","B","C"], rows:[
         { label:"해외사업 기반 구축", cells:["200% 달성","150% 달성","100% 달성","50% 달성","-"] }
       ] },
@@ -506,14 +506,14 @@
       chips:[chip(6,1,"입사완료",true)] },
 
     { accent:"biz", section:"사업부 KPI", group:"중장기 전략 달성\n(고유목표)", groupMergeUp:false,
-      subgroup:"생태계 구축 가속화", weight:"10%", target:"위성영상분석 AI솔루션 Open Platform MAU 20건 이상\n및 프로젝트 생성 이력", sgMergeUp:false, targetMergeUp:false,
+      subgroup:"생태계 구축 가속화", weight:"10%", target:"위성영상분석 AI솔루션 Open Platform MAU 20건 이상\n및 프로젝트 생성 이력", sgMergeUp:false, targetMergeUp:false, progress:2,
       pctGrades:{ cols:["S","A","B+","B","C"], rows:[
         { label:"생태계 구축 가속화", cells:["MAU 50건 이상 & SAR 분석 기능 추가 반영 3건","MAU 30건 이상 & 관심지역 지정 가능 접속 이력","MAU 20건 이상 & 프로젝트 생성 이력","데모/배포 50건 이상","-"] }
       ] },
       kpi:"A311", kpiMergeUp:false, sub:"", detail:"Cloud 기반 Open Platform을 구축하여\n위성 Data/User를 단기간에 확충", detailMergeUp:false,
       chips:[chip(7,6,"제품 출시 후 국가별 사용 이력 확인",true)] },
     { accent:"biz", section:"사업부 KPI", group:"중장기 전략 달성\n(고유목표)", groupMergeUp:true,
-      subgroup:"데이터 사업 전환", weight:"15%", target:"법령 내 데이터 구독/임차\n서비스 관련 내용 반영", sgMergeUp:false, targetMergeUp:false,
+      subgroup:"데이터 사업 전환", weight:"15%", target:"법령 내 데이터 구독/임차\n서비스 관련 내용 반영", sgMergeUp:false, targetMergeUp:false, progress:1,
       gradeSections:[{ label:null, rows:[
         { t:"S", v:"A 만족, 데이터 공급플랫폼 계약" },
         { t:"A", v:"B+ 만족, 데이터 공급플랫폼 실증" },
@@ -523,7 +523,7 @@
       kpi:"A321", kpiMergeUp:false, sub:"", detail:"국회(과방위, 국방위), 기관(국방부/방사청) 등\n주요 의사결정 기관 대상 대관활동 강화", detailMergeUp:false,
       chips:[chip(12,1,"법령 반영",true)] },
     { accent:"biz", section:"사업부 KPI", group:"중장기 전략 달성\n(고유목표)", groupMergeUp:true,
-      subgroup:"위성통신 사업 확대", weight:"10%", target:"K-LEO 통합소요검증 Spec-in\n(해외기술협력)", sgMergeUp:false, targetMergeUp:false,
+      subgroup:"위성통신 사업 확대", weight:"10%", target:"K-LEO 통합소요검증 Spec-in\n(해외기술협력)", sgMergeUp:false, targetMergeUp:false, progress:2,
       gradeSections:[{ label:null, rows:[
         { t:"S", v:"예산 승인" },
         { t:"A", v:"K-LEO 통합소요 검증 Spec-In(핵심부품 국산화)" },
@@ -582,9 +582,10 @@
     try {
       ROWS.forEach(function(row){
         if (row.targetMergeUp === false && /%$/.test(row.weight)){
+          var fallback = (row.progress !== undefined) ? row.progress : 0; // 배포 기본값
           var v = localStorage.getItem(progKey(row));
           var n = parseInt(v, 10);
-          row.progress = (n >= 0 && n <= 2) ? n : 0;
+          row.progress = (n >= 0 && n <= 2) ? n : fallback;
         }
       });
     } catch(e){}
