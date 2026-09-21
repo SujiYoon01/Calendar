@@ -1,1 +1,2 @@
-# Calendar
+        showBizStatusCard(gIdx);
+        showGradeCard(gIdx);
