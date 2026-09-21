@@ -485,7 +485,7 @@
       kpi:"A221", kpiMergeUp:true, sub:"미국(Short List 선정)", detail:"핵심 권역(유럽,중동,미국) 중\n1개 권역 목표 달성", detailMergeUp:true,
       chips:[chip(2,5,"DIU, 소요군向 소요 창출 및 사업 공고 유도"), chip(7,3,"Solution Brief 제출"), chip(10,3,"Short List 선정(PT업체)")] },
     { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
-      subgroup:"핵심인력 확보", weight:"", target:"위성영상 AI 솔루션\n수출 기반 구축", sgMergeUp:false, targetMergeUp:true,
+      subgroup:"핵심인력 확보", weight:"", target:"위성영상 AI 솔루션\n수출 기반 구축", sgMergeUp:false, targetMergeUp:true, weightMergeUp:true,
       kpi:"A222", kpiMergeUp:false, sub:"솔루션사업팀장 외부 채용", detail:"위성영상분석 AI/SW\n리더급 인력 1명", detailMergeUp:false,
       chips:[chip(6,1,"입사완료",true)] },
 
@@ -855,6 +855,18 @@
     var groupSpans = computeSpans(list, "groupMergeUp");
     var sgSpans = computeSpans(list, "sgMergeUp");
     var targetSpans = computeSpans(list, "targetMergeUp");
+    var weightSpans = (function(){
+      var arr = new Array(list.length), i = 0;
+      function wmu(r){ return r.weightMergeUp !== undefined ? r.weightMergeUp : r.sgMergeUp; }
+      while (i < list.length){
+        var span = 1;
+        while (i + span < list.length && wmu(list[i + span])) span++;
+        arr[i] = span;
+        for (var k = 1; k < span; k++) arr[i + k] = 0;
+        i += span;
+      }
+      return arr;
+    })();
     var detailSpans = computeSpans(list, "detailMergeUp");
 
     // A group's rowspan cell may absorb the subgroup column (colspan 2) only
@@ -924,7 +936,9 @@
           var hasGrades = !row.isSummary && row.gradeSections;
           rowsHTML += '<td class="c-subgroup' + (hasGrades ? ' has-grades' : '') + '" rowspan="' + sgSpans[pos] + '"' + (hasGrades ? ' data-act="showgrades" data-idx="' + idx + '" title="클릭하면 등급별 목표를 볼 수 있어요"' : '') + '>' + (row.subgroup !== "" ? nl2br(row.subgroup) : '') + '</td>';
         }
-        rowsHTML += '<td class="c-weight" rowspan="' + sgSpans[pos] + '">' + esc(row.weight) + '</td>';
+      }
+      if (weightSpans[pos] > 0){
+        rowsHTML += '<td class="c-weight" rowspan="' + weightSpans[pos] + '">' + esc(row.weight) + '</td>';
       }
       if (targetSpans[pos] > 0){
         var lightHTML = "";
