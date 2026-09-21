@@ -144,10 +144,9 @@
     padding: 2px 8px 2px 6px; cursor: pointer;
   }
   .light-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
-  .light-dot.gray  { background: var(--ink-muted); }
-  .light-dot.red   { background: #d6473f; box-shadow: 0 0 4px rgba(214,71,63,.5); }
-  .light-dot.green { background: #2f8f4e; box-shadow: 0 0 4px rgba(47,143,78,.5); }
-  .light-dot.blue  { background: #2f6fd6; box-shadow: 0 0 4px rgba(47,111,214,.5); }
+  .light-dot.red    { background: #d6473f; box-shadow: 0 0 4px rgba(214,71,63,.5); }
+  .light-dot.yellow { background: #e0ab1f; box-shadow: 0 0 4px rgba(224,171,31,.5); }
+  .light-dot.green  { background: #2f8f4e; box-shadow: 0 0 4px rgba(47,143,78,.5); }
   .light-label { font-size: 9.5px; font-weight: 700; color: var(--ink-2); }
 
   th.th-current { background: color-mix(in srgb, var(--accent-biz) 32%, var(--accent-biz-soft)); color: #fff; }
@@ -453,8 +452,8 @@
     { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:false,
       subgroup:"전략제품 적기 출시/\n핵심기술 확보", weight:"20%", target:"UHR SAR 위성", sgMergeUp:false, targetMergeUp:false,
       matrixGrades:{ cols:["S","A","B+","B","C"], rows:[
-        { label:"UHR SAR 위성(10%)", cells:["FM 조립, 통합, 시험","EQM 환경시험","CDR 80점 이상 & ETB 연동시험","CDR 80점 미만 & 핵심기술 확보","CDR 미수행"] },
-        { label:"위성영상 AI 분석 솔루션(10%)", cells:["-","SAR AI 솔루션 고도화(최대 식별률 95% 이상@신규 Armed Aircraft)","AI 솔루션 핵심기능 3종 추가","SAR AI 솔루션 출시(최대 식별률 90% 이상@기존 Armed Aircraft)","-"] }
+        { label:"UHR SAR 위성(10%)", cells:["FM¹ 조립, 통합, 시험","EQM⁶ 환경시험","CDR 80점 이상 & ETB⁶ 연동시험","CDR 80점 미만 & 핵심기술² 확보","CDR 미수행"] },
+        { label:"위성영상 AI 분석 솔루션(10%)", cells:["-","SAR AI 솔루션 고도화(최대 식별률 95%³ 이상@신규 Armed Aircraft)","AI 솔루션 핵심기능 3종 추가","SAR AI 솔루션 출시(최대 식별률 90% 이상@기존 Armed Aircraft)","-"] }
       ] },
       pctGrades:{ cols:["S","A","B+","B","C"], rows:[
         { label:"전략제품 적기 출시", cells:["200% 달성","150% 달성","100% 달성","50% 달성","-"] }
@@ -585,7 +584,7 @@
         if (row.targetMergeUp === false && /%$/.test(row.weight)){
           var v = localStorage.getItem(progKey(row));
           var n = parseInt(v, 10);
-          row.progress = (n >= 0 && n <= 3) ? n : 0;
+          row.progress = (n >= 0 && n <= 2) ? n : 0;
         }
       });
     } catch(e){}
@@ -1011,15 +1010,14 @@
       }
       if (targetSpans[pos] > 0){
         var lightHTML = "";
-        if (!row.isSummary && /%$/.test(row.weight)){
-          var lv = row.progress || 0; // 0=미정 1=주의 2=정상 3=완료
+        if (!row.isSummary && /%$/.test(row.weight) && row.kpi !== "A411"){
+          var lv = row.progress || 0; // 0=빨강(어려움) 1=노랑(주의) 2=초록(정상)
           var lightMeta = [
-            { cls: "gray",   label: "미정" },
-            { cls: "red",    label: "주의" },
-            { cls: "green",  label: "정상" },
-            { cls: "blue",   label: "완료" }
+            { cls: "red",    label: "적신호" },
+            { cls: "yellow", label: "주의" },
+            { cls: "green",  label: "정상" }
           ][lv];
-          lightHTML = '<button type="button" class="light-btn" data-act="progress" data-idx="' + idx + '" data-lv="' + lv + '" title="연말 달성 가능성 · 클릭해서 변경">'
+          lightHTML = '<button type="button" class="light-btn" data-act="progress" data-idx="' + idx + '" data-lv="' + lv + '" title="연말 달성 전망 · 클릭해서 변경">'
             + '<span class="light-dot ' + lightMeta.cls + '"></span><span class="light-label">' + lightMeta.label + '</span></button>';
         }
         rowsHTML += '<td class="c-target" rowspan="' + targetSpans[pos] + '">' + nl2br(row.target) + lightHTML + '</td>';
@@ -1056,11 +1054,11 @@
       var targetStarts = 0;
       for (var k = i; k < i + sgSpan; k++){ if (!ROWS[k].targetMergeUp) targetStarts++; }
       for (var k2 = i; k2 < i + sgSpan; k2++){
-        if (!ROWS[k2].targetMergeUp && /%$/.test(ROWS[k2].weight)){
+        if (!ROWS[k2].targetMergeUp && /%$/.test(ROWS[k2].weight) && ROWS[k2].kpi !== "A411"){
           var w = parseFloat(ROWS[k2].weight) / Math.max(1, targetStarts);
           if (!isNaN(w)){
             totalWeight += w;
-            weightedDone += w * ((ROWS[k2].progress || 0) / 3); // 0(미정)~3(완료) → 0~1
+            weightedDone += w * ((ROWS[k2].progress || 0) / 2); // 0(적신호)~2(정상) → 0~1
           }
         }
       }
@@ -1145,7 +1143,7 @@
         var pIdx = +actEl.dataset.idx;
         var pRow = ROWS[pIdx];
         var cur = pRow.progress || 0;
-        pRow.progress = (cur + 1) % 4;
+        pRow.progress = (cur + 1) % 3;
         saveProgress(pRow);
         render();
         return;
@@ -1219,4 +1217,3 @@
 </script>
 </body>
 </html>
-
