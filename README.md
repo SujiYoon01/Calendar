@@ -1,9 +1,27 @@
-  .info-card {
-    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-    width: 90%; max-width: 420px; max-height: 60vh; overflow: auto;
-    background: var(--surface); border-radius: 16px;
-    padding: 26px 20px 18px; box-shadow: 0 12px 40px rgba(0,0,0,0.28);
-    animation: info-card-pop .14s ease-out; cursor: grab;
-  }
-  .info-card.stack-1 { top: 2vh; bottom: auto; transform: translateX(-50%); max-height: 22vh; max-width: 320px; }
-  .info-card.stack-2 { top: 4vh; left: 50%; margin-left: 30px; }
+      subgroup:"핵심인력 확보", weight:"", target:"위성영상 AI 솔루션\n수출 기반 구축", sgMergeUp:false, targetMergeUp:true, weightMergeUp:true,
+
+    var sgSpans = computeSpans(list, "sgMergeUp");
+    var targetSpans = computeSpans(list, "targetMergeUp");
+    var weightSpans = (function(){
+      var arr = new Array(list.length), i = 0;
+      function wmu(r){ return r.weightMergeUp !== undefined ? r.weightMergeUp : r.sgMergeUp; }
+      while (i < list.length){
+        var span = 1;
+        while (i + span < list.length && wmu(list[i + span])) span++;
+        arr[i] = span;
+        for (var k = 1; k < span; k++) arr[i + k] = 0;
+        i += span;
+      }
+      return arr;
+    })();
+
+
+      if (sgSpans[pos] > 0){
+        if (!groupAbsorbsSub[pos]){
+          var hasGrades = !row.isSummary && row.gradeSections;
+          rowsHTML += '<td class="c-subgroup' + (hasGrades ? ' has-grades' : '') + '" rowspan="' + sgSpans[pos] + '"' + (hasGrades ? ' data-act="showgrades" data-idx="' + idx + '" title="클릭하면 등급별 목표를 볼 수 있어요"' : '') + '>' + (row.subgroup !== "" ? nl2br(row.subgroup) : '') + '</td>';
+        }
+      }
+      if (weightSpans[pos] > 0){
+        rowsHTML += '<td class="c-weight" rowspan="' + weightSpans[pos] + '">' + esc(row.weight) + '</td>';
+      }
