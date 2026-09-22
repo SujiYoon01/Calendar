@@ -239,8 +239,8 @@
   .orbit-arc { fill: none; stroke: var(--accent-biz); stroke-width: 9; stroke-linecap: round; transition: stroke-dasharray .3s ease; }
   .sat-emoji { font-size: 26px; text-anchor: middle; dominant-baseline: central; }
 
-  .stage { flex: 0 1 auto; min-height: 260px; position: relative; overflow: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
-  .table-shell { display: inline-block; min-width: 100%; }
+  .stage { flex: 0 1 auto; width: fit-content; max-width: 100%; min-height: 260px; position: relative; overflow: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+  .table-shell { display: inline-block; }
   table.kpi { border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: 11.5px; }
   table.kpi th, table.kpi td {
     border-bottom: 1px solid var(--grid); border-right: 1px solid var(--grid);
@@ -603,15 +603,11 @@
 
   function renderColgroup(){
     var cg = document.getElementById("colgroup");
-    var html = '<col style="width:42px">';   // section
-    html += '<col style="width:100px">';  // group
-    html += '<col style="width:118px">';  // subgroup
-    html += '<col style="width:46px">';   // weight
-    html += '<col style="width:160px">';  // target
-    html += '<col style="width:210px">';  // detail
-    html += '<col style="width:96px">';   // sub
-    MONTHS.forEach(function(){ html += '<col style="width:90px">'; });
-    cg.innerHTML = html;
+    var widths = [42, 100, 118, 46, 160, 210, 96];
+    MONTHS.forEach(function(){ widths.push(90); });
+    cg.innerHTML = widths.map(function(w){ return '<col style="width:' + w + 'px">'; }).join("");
+    var total = widths.reduce(function(a, w){ return a + w; }, 0);
+    document.getElementById("kpiTable").style.width = total + "px";
   }
 
   function renderHead(){
@@ -1218,4 +1214,3 @@
 </script>
 </body>
 </html>
-
