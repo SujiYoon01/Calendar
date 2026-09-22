@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2026 우주사업총괄 KPI &amp; HR Calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f6f5f1;
+    --surface: #ffffff;
+    --surface-2: #fbfaf7;
+    --ink: #17160f;
+    --ink-2: #5c5a4f;
+    --ink-muted: #9b978a;
+    --grid: #dedad0;
+    --grid-soft: #ececE4;
+    --border: rgba(23,22,15,0.10);
+    --accent-biz: #1f6f72;
+    --accent-biz-soft: #e4f1ef;
+    --accent-hr: #7a4f96;
+    --accent-hr-soft: #f0e8f4;
+    --khaki: #cfa843;
+    --khaki-soft: #f2e3b0;
+    --strong-border: #3a3324;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page: #14140f; --surface: #1c1b16; --surface-2: #201f19;
+      --ink: #f4f2ea; --ink-2: #c7c3b5; --ink-muted: #8f8b7d;
+      --grid: #3a3930; --grid-soft: #2b2a24; --border: rgba(244,242,234,0.12);
+      --accent-biz: #4aa3a4; --accent-biz-soft: #1c3130;
+      --accent-hr: #b28dcb; --accent-hr-soft: #322a3a;
+      --khaki: #d9b656; --khaki-soft: #3d3213; --strong-border: #e8e2d2;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #14140f; --surface: #1c1b16; --surface-2: #201f19;
+    --ink: #f4f2ea; --ink-2: #c7c3b5; --ink-muted: #8f8b7d;
+    --grid: #3a3930; --grid-soft: #2b2a24; --border: rgba(244,242,234,0.12);
+    --accent-biz: #4aa3a4; --accent-biz-soft: #1c3130;
+    --accent-hr: #b28dcb; --accent-hr-soft: #322a3a;
+    --khaki: #d9b656; --khaki-soft: #3d3213; --strong-border: #e8e2d2;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: "Noto Sans KR", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-feature-settings: "tnum" 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .wrap {
+    max-width: 1900px;
+    margin: 0 auto;
+    padding: 18px 22px 14px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+
+  header.top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    flex: none;
+  }
+  header.top h1 { margin: 0; font-size: 20px; font-weight: 900; letter-spacing: -0.01em; }
+  header.top p { margin: 3px 0 0; color: var(--ink-2); font-size: 12px; }
+  .btn-print {
+    appearance: none; border: 1px solid var(--border); background: var(--surface);
+    color: var(--ink-2); font: inherit; font-size: 12px; font-weight: 700;
+    padding: 6px 12px; border-radius: 7px; cursor: pointer;
+  }
+  .btn-print:hover { border-color: var(--accent-biz); color: var(--accent-biz); }
+
+  .control-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap; margin-bottom: 8px; flex: none;
+  }
+  .filter-group { display: flex; align-items: center; gap: 6px; }
+  .filter-pill {
+    appearance: none; border: 1px solid var(--border); background: var(--surface);
+    color: var(--ink-2); font: inherit; font-size: 12px; font-weight: 700;
+    padding: 6px 13px; border-radius: 999px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: background .12s ease, color .12s ease, border-color .12s ease;
+  }
+  .filter-pill i { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--ink-muted); }
+  .filter-pill:hover { border-color: var(--ink-muted); }
+  .filter-pill[data-f="biz"].active { background: var(--accent-biz); border-color: var(--accent-biz); color: #fff; }
+  .filter-pill[data-f="biz"].active i { background: #fff; }
+  .filter-pill[data-f="hr"].active { background: var(--accent-hr); border-color: var(--accent-hr); color: #fff; }
+  .filter-pill[data-f="hr"].active i { background: #fff; }
+  .filter-pill[data-f="all"].active { background: var(--ink); border-color: var(--ink); color: var(--surface); }
+  .filter-pill[data-f="all"].active i { background: var(--surface); }
+  .filter-pill[data-f="biz"] i { background: var(--accent-biz); }
+  .filter-pill[data-f="hr"] i { background: var(--accent-hr); }
+
+  .legend-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .swatch { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--ink-muted); font-weight: 600; }
+  .swatch i { width: 12px; height: 9px; border-radius: 2px; display: inline-block; flex: none; border: 1px solid var(--grid); }
+
+  .search-box {
+    display: flex; align-items: center; gap: 6px;
+    border: 1px solid var(--border); background: var(--surface);
+    border-radius: 999px; padding: 5px 12px; min-width: 160px;
+  }
+  .search-box input {
+    border: none; outline: none; background: transparent; font: inherit;
+    font-size: 12px; color: var(--ink); width: 140px;
+  }
+  .search-box .clear-btn { border: none; background: transparent; color: var(--ink-muted); cursor: pointer; font-size: 12px; padding: 0; display: none; }
+  .search-box.has-query .clear-btn { display: block; }
+  tr.row-dim { opacity: .22; }
+
+  .group-toggle {
+    appearance: none; border: none; background: transparent; cursor: pointer;
+    color: var(--ink-muted); font-size: 9px; margin-right: 3px; padding: 0; line-height: 1;
+    vertical-align: middle;
+  }
+  .group-toggle:hover { color: var(--ink); }
+  tr.summary-row td { cursor: pointer; color: var(--ink-muted); font-style: italic; background: var(--surface-2) !important; }
+  tr.summary-row:hover td { background: var(--grid-soft) !important; }
+
+  .light-btn {
+    display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; appearance: none;
+    border: 1px solid var(--grid); background: var(--surface); border-radius: 999px;
+    padding: 2px 8px 2px 6px; cursor: pointer;
+  }
+  .light-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .light-dot.red    { background: #d6473f; box-shadow: 0 0 4px rgba(214,71,63,.5); }
+  .light-dot.yellow { background: #e0ab1f; box-shadow: 0 0 4px rgba(224,171,31,.5); }
+  .light-dot.green  { background: #2f8f4e; box-shadow: 0 0 4px rgba(47,143,78,.5); }
+  .light-label { font-size: 9.5px; font-weight: 700; color: var(--ink-2); }
+
+  th.th-current { background: color-mix(in srgb, var(--accent-biz) 32%, var(--accent-biz-soft)); color: #fff; }
+  td.cur-month:not(.chip-cell) { background-image: linear-gradient(color-mix(in srgb, var(--accent-biz) 10%, transparent), color-mix(in srgb, var(--accent-biz) 10%, transparent)); }
+  td.chip-cell.cur-month { background-image: linear-gradient(color-mix(in srgb, var(--accent-biz) 16%, transparent), color-mix(in srgb, var(--accent-biz) 16%, transparent)); }
+
+  .month-panel {
+    border: 1px solid var(--border); border-radius: 10px; background: var(--surface);
+    padding: 8px 12px; margin-bottom: 8px; flex: none;
+    display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap;
+    max-height: 84px; overflow-y: auto;
+  }
+  .month-panel .mp-label { font-size: 11.5px; font-weight: 800; color: var(--accent-biz); flex: none; white-space: nowrap; padding-top: 4px; }
+  .month-panel .mp-item {
+    font-size: 11px; color: var(--ink-2); background: var(--surface-2); border: 1px solid var(--grid);
+    border-radius: 999px; padding: 3px 10px; cursor: pointer; white-space: nowrap;
+  }
+  .month-panel .mp-item:hover { border-color: var(--accent-biz); color: var(--accent-biz); }
+  .month-panel .mp-empty { font-size: 11.5px; color: var(--ink-muted); }
+
+  .info-card-overlay { display: none; position: fixed; inset: 0; z-index: 50; }
+  .info-card-overlay.open { display: block; }
+  .info-card-backdrop { position: absolute; inset: 0; background: rgba(15,14,10,0.4); }
+  .info-card {
+    position: absolute; left: 50%; top: 0; transform: translateX(-50%);
+    width: 92%; max-width: 420px; overflow: auto;
+    background: var(--surface); border-radius: 16px;
+    padding: 24px 18px 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.28);
+    animation: info-card-pop .14s ease-out; cursor: grab;
+  }
+  .info-card.wide { max-width: 480px; }
+  @keyframes info-card-pop { from { opacity: 0; } to { opacity: 1; } }
+  .info-drag-handle {
+    position: absolute; top: 0; left: 0; right: 0; height: 22px;
+    display: flex; align-items: center; justify-content: center; pointer-events: none;
+  }
+  .info-drag-handle::after { content: ""; width: 34px; height: 4px; border-radius: 999px; background: var(--grid); }
+  .info-close {
+    position: absolute; top: 8px; right: 12px; border: none; background: transparent;
+    font-size: 20px; line-height: 1; color: var(--ink-muted); cursor: pointer; padding: 4px; z-index: 2;
+  }
+  .info-close:hover { color: var(--ink); }
+  .info-breadcrumb { font-size: 11px; color: var(--ink-muted); font-weight: 700; margin: 2px 26px 6px 0; }
+  .info-kpi { display: inline-block; font-size: 11px; font-weight: 900; color: #fff; background: var(--accent-biz); border-radius: 5px; padding: 2px 7px; margin-bottom: 8px; }
+  .info-detail { font-size: 13.5px; color: var(--ink); line-height: 1.45; font-weight: 600; margin-bottom: 4px; }
+  .info-wt { font-size: 12px; color: var(--ink-2); margin-bottom: 12px; }
+  .info-chip {
+    display: inline-block; font-size: 12.5px; font-weight: 800; padding: 5px 12px; border-radius: 999px;
+    border: 1px solid var(--grid); background: var(--surface-2); color: var(--ink-2); margin-bottom: 8px;
+  }
+  .info-chip.hl { background: var(--khaki-soft); border-color: color-mix(in srgb, var(--khaki) 60%, transparent); color: var(--ink); }
+  .info-period { font-size: 11.5px; color: var(--ink-muted); font-weight: 700; }
+
+  .bs-table-wrap { margin-top: 8px; }
+  table.bs-table { border-collapse: collapse; width: 100%; table-layout: fixed; font-size: 10px; }
+  table.bs-table th, table.bs-table td {
+    border: 1px solid var(--grid); padding: 4px 5px; text-align: center; white-space: normal; word-break: keep-all; overflow-wrap: break-word;
+  }
+  table.bs-table thead th { background: var(--surface-2); font-weight: 800; color: var(--ink-2); }
+  table.bs-table td.bs-name { text-align: left; white-space: normal; }
+  table.bs-table tr.bs-section td { background: var(--accent-biz-soft); color: var(--accent-biz); font-weight: 800; }
+  table.bs-table tr.bs-total td { background: var(--surface-2); font-weight: 800; }
+  table.bs-table tr.bs-grandtotal td { background: var(--ink); color: #fff; font-weight: 900; }
+
+  .grade-section-label { font-size: 11px; font-weight: 800; color: var(--accent-biz); margin: 10px 0 5px; }
+  .grade-section-label:first-child { margin-top: 4px; }
+  .grade-table { display: flex; flex-direction: column; gap: 5px; margin: 0 0 6px; }
+  .grade-row {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
+    padding: 7px 10px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--grid);
+  }
+  .grade-row.current { background: var(--khaki-soft); border-color: color-mix(in srgb, var(--khaki) 60%, transparent); }
+  .grade-tier {
+    font-size: 11.5px; font-weight: 900; color: var(--ink-2); min-width: 26px; flex: none; padding-top: 1px;
+  }
+  .grade-row.current .grade-tier { color: var(--ink); }
+  .grade-amt { font-size: 13px; font-weight: 700; color: var(--ink); text-align: right; line-height: 1.35; }
+
+  .stat-bar {
+    display: flex; align-items: stretch; gap: 0; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; flex: none; overflow: hidden;
+  }
+  .stat { padding: 8px 18px; display: flex; align-items: baseline; gap: 8px; border-right: 1px solid var(--grid); }
+  .stat:last-child { border-right: none; }
+  .stat .n { font-size: 18px; font-weight: 900; letter-spacing: -0.01em; }
+  .stat .l { font-size: 11px; color: var(--ink-muted); font-weight: 600; }
+  .stat.score { flex-direction: row; align-items: center; gap: 10px; min-width: 190px; }
+  .stat.score .score-text { display: flex; flex-direction: column; gap: 2px; }
+  .orbit-track { fill: none; stroke: var(--grid); stroke-width: 9; }
+  .orbit-arc { fill: none; stroke: var(--accent-biz); stroke-width: 9; stroke-linecap: round; transition: stroke-dasharray .3s ease; }
+  .sat-emoji { font-size: 26px; text-anchor: middle; dominant-baseline: central; }
+
+  .stage { flex: 0 1 auto; width: fit-content; max-width: 100%; min-height: 260px; position: relative; overflow: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+  .table-shell { display: inline-block; }
+  table.kpi { border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: 11.5px; }
+  table.kpi th, table.kpi td {
+    border-bottom: 1px solid var(--grid); border-right: 1px solid var(--grid);
+    padding: 0; vertical-align: middle; background: var(--surface);
+    overflow: hidden; word-break: break-word;
+  }
+  table.kpi thead th {
+    background: var(--accent-biz-soft); color: var(--ink); font-size: 11px; font-weight: 700;
+    padding: 7px 5px; text-align: center; border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 5;
+  }
+  .c-lead { border-right: 2px solid var(--border) !important; }
+
+  .c-section  { width: 42px; }
+  .c-group    { width: 100px; }
+  .c-subgroup { width: 118px; }
+  .c-weight   { width: 46px; }
+  .c-target   { width: 160px; }
+  .c-detail   { width: 210px; }
+  .c-sub      { width: 96px; }
+
+  td.c-section {
+    padding: 6px 2px; text-align: center; font-weight: 900; letter-spacing: .05em; font-size: 10px;
+    writing-mode: vertical-rl; text-orientation: upright;
+  }
+  td.c-section.section-biz { background: var(--accent-biz-soft); color: var(--accent-biz); }
+  td.c-section.section-hr  { background: var(--accent-hr-soft); color: var(--accent-hr); }
+
+  td.c-group { padding: 6px 6px; font-weight: 700; font-size: 11px; line-height: 1.28; text-align: center; }
+  td.c-group.section-biz { border-left: 3px solid var(--accent-biz); }
+  td.c-group.section-hr  { border-left: 3px solid var(--accent-hr); }
+
+  td.c-subgroup { padding: 6px 6px; font-weight: 600; font-size: 10.8px; line-height: 1.28; text-align: center; color: var(--ink-2); }
+  td.c-subgroup.has-grades { cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px; text-decoration-color: var(--accent-biz); }
+  td.c-subgroup.has-grades:hover { color: var(--accent-biz); background: var(--accent-biz-soft); }
+  td.c-weight { padding: 6px 3px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink-2); }
+  td.c-target { padding: 6px 6px; font-weight: 700; line-height: 1.28; text-align: center; }
+  td.c-detail { padding: 6px 7px; line-height: 1.28; color: var(--ink-2); text-align: center; font-size: 10.5px; }
+  td.c-sub { padding: 6px 6px; line-height: 1.24; color: var(--ink-2); text-align: center; font-size: 10px; background: var(--surface-2); }
+
+  body.filter-biz tr.section-hr-row { display: none; }
+  body.filter-hr tr.section-biz-row { display: none; }
+
+  td.c-month {
+    padding: 0; height: 30px; text-align: center; vertical-align: middle;
+    transition: background-color .08s ease; width: 90px;
+  }
+  th.c-month-h { width: 90px; }
+  td.c-month:hover { background-color: var(--grid-soft); }
+
+  td.chip-cell {
+    padding: 2px 4px; font-size: 9.5px; font-weight: 700; line-height: 1.15;
+    text-align: center; vertical-align: middle; color: var(--ink-2);
+  }
+  td.chip-cell.hl { background: var(--khaki-soft); color: var(--ink); font-weight: 800; }
+  td.chip-cell.strong { border: 1.5px solid var(--strong-border) !important; font-weight: 900; }
+  td.chip-cell:hover { filter: brightness(0.95); }
+  td.chip-cell.spotlight {
+    filter: brightness(1.15) saturate(1.3);
+    box-shadow: inset 0 0 0 2px var(--accent-biz), 0 0 8px 1px color-mix(in srgb, var(--accent-biz) 50%, transparent);
+    position: relative; z-index: 2;
+  }
+
+  @media print {
+    body { overflow: visible; height: auto; }
+    .stage { overflow: visible; height: auto; border: none; }
+    .btn-print { display: none !important; }
+    @page { size: A3 landscape; margin: 8mm; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>2026 우주사업총괄 KPI &amp; HR Calendar</h1>
+      <p>사업부 KPI 및 HR 스케줄을 한눈에 보는 HRBP 리포트</p>
+    </div>
+    <button type="button" class="btn-print" id="printBtn">인쇄 / PDF</button>
+  </header>
+
+  <div class="control-row">
+    <div class="filter-group">
+      <button type="button" class="filter-pill active" data-f="all"><i></i>전체</button>
+      <button type="button" class="filter-pill" data-f="biz"><i></i>사업부 KPI</button>
+      <button type="button" class="filter-pill" data-f="hr"><i></i>HR Calendar</button>
+    </div>
+    <div class="search-box" id="searchBox">
+      <span aria-hidden="true">🔍</span>
+      <input type="text" id="searchInput" placeholder="구분·세부내용 검색" />
+      <button type="button" class="clear-btn" id="searchClear" title="검색어 지우기">×</button>
+    </div>
+    <div class="legend-row">
+      <span class="swatch"><i style="background:var(--surface)"></i>일반</span>
+      <span class="swatch"><i style="background:var(--khaki-soft)"></i>강조 표시</span>
+    </div>
+  </div>
+
+  <div class="month-panel" id="monthPanel"></div>
+
+  <div class="stat-bar" id="summaryRow"></div>
+
+  <div class="stage" id="stage">
+    <div class="table-shell" id="tableShell">
+      <table class="kpi" id="kpiTable" aria-label="2026 우주사업 KPI 및 HR 스케줄">
+        <colgroup id="colgroup"></colgroup>
+        <thead><tr id="headRow"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="info-card-overlay" id="infoCard"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var MONTHS = [2,3,4,5,6,7,8,9,10,11,12];
+
+  function chip(s, n, t, hl, strong, vspan){
+    return { s: s, n: n, t: t, hl: !!hl, strong: !!strong, vspan: vspan || 1 };
+  }
+
+  // ---- Data: 대분류 > 구분 > 소구분(+가중치·목표) > KPI No. > (세부내용, 세부구분) ----
+  var ROWS = [
+    // ===== 사업부 KPI =====
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:false,
+      subgroup:"국내사업 경쟁력 회복", weight:"20%", target:"국내 전략사업 3건중\n1건 이상 수주", sgMergeUp:false, targetMergeUp:false, progress:1,
+      gradeSections:[
+        { label:"변경 전", rows:[
+          { t:"S", v:"7건 수주" }, { t:"A", v:"6건 수주" }, { t:"B+", v:"5건 수주" },
+          { t:"B", v:"4건 수주" }, { t:"C", v:"-" }
+        ] },
+        { label:"변경 후", rows:[
+          { t:"S", v:"3건 수주" }, { t:"A", v:"2건 수주" }, { t:"B+", v:"1건 수주" }
+        ] }
+      ],
+      gradeNote:"현재는 '변경 후' 기준으로 운영 중",
+      kpi:"A111", kpiMergeUp:false, sub:"4,743억원", detail:"(전략사업) 다부처 1차 SAR위성(40기)", detailMergeUp:false,
+      chips:[chip(9,1,"RFP 공고"), chip(10,1,"업체 선정"), chip(11,1,"계약",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
+      subgroup:"국내사업 경쟁력 회복", weight:"20%", target:"국내 전략사업 3건중\n1건 이상 수주", sgMergeUp:true, targetMergeUp:true,
+      kpi:"A112", kpiMergeUp:false, sub:"1,330억원", detail:"(전략사업) 다목적실용위성 8호 본체", detailMergeUp:false,
+      chips:[chip(9,1,"RFP 공고"), chip(11,1,"업체선정/계약",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
+      subgroup:"국내사업 경쟁력 회복", weight:"20%", target:"국내 전략사업 3건중\n1건 이상 수주", sgMergeUp:true, targetMergeUp:true,
+      kpi:"A113", kpiMergeUp:false, sub:"410억원", detail:"(전략사업) 수자원 C-Band SAR 위성", detailMergeUp:false,
+      chips:[chip(9,1,"RFP 공고"), chip(10,1,"업체 선정"), chip(11,1,"계약",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,526억원 달성", sgMergeUp:false, targetMergeUp:false, progress:2,
+      gradeSections:[{ label:null, rows:[
+        { t:"S", v:"9,099억원" }, { t:"A", v:"8,308억원" }, { t:"B+", v:"7,526억원" },
+        { t:"B", v:"6,725억원" }, { t:"C", v:"-" }
+      ] }],
+      bizStatusTable:{
+        done:[
+          {no:1, name:"항재밍 고속웨이브폼", size:"57", owner:"권용엽"},
+          {no:2, name:"우주상황인식 체계", size:"288.1", owner:"곽도영"},
+          {no:3, name:"로버 전개장치 개발", size:"76.2", owner:"정도현"},
+          {no:4, name:"하드웨어 및 소프트웨어 05", size:"6.0", owner:"정도현"},
+          {no:5, name:"위성기저대역부 제작", size:"1.7", owner:"권용엽"},
+          {no:6, name:"위성체 수정계약", size:"254.3", owner:"주상운"},
+          {no:7, name:"제어부 IP 개발", size:"0.6", owner:"김도형"},
+          {no:8, name:"근접전계테스트베드 구축", size:"12.0", owner:"김성규"}
+        ],
+        totalA:"695.9",
+        planned:[
+          {no:9, name:"다부처 1차 40기", size:"4,743.0", owner:"정상원"},
+          {no:10, name:"수자원 C-Band SAR", size:"431.0", owner:"정도현"},
+          {no:11, name:"휴대용 단말(군-Ⅲ)", size:"-", owner:"조영래", note:"'27년 순연 예상"},
+          {no:12, name:"운반용 단말(군-Ⅲ)", size:"-", owner:"이미노", note:"'27년 순연 예상"},
+          {no:13, name:"모뎀/망제어기(군-Ⅲ)", size:"-", owner:"이미노", note:"'27년 순연 예상"},
+          {no:14, name:"고정용 단말(군-Ⅲ)", size:"-", owner:"서지원", note:"'27년 순연 예상"},
+          {no:15, name:"다목적 8호 본체", size:"1,163.2", owner:"정도현"},
+          {no:16, name:"다목적 8호 탑재체", size:"1,669.0", owner:"정상원"},
+          {no:17, name:"독일 IROMA 탑재체", size:"140.0", owner:"곽도영"},
+          {no:18, name:"저궤도위성 원격측정장치 기술", size:"19.0", owner:"이유진"}
+        ],
+        totalB:"8,165.2",
+        totalAB:"8,861.1"
+      },
+      kpi:"A114", kpiMergeUp:false, sub:"523억원", detail:"군위성통신체계-Ⅲ 체계 모뎀/망제어기", detailMergeUp:false,
+      chips:[chip(11,1,"RFP 공고"), chip(12,1,"군-Ⅲ\n제안 제출 '27.01\n계약 '27.02", true, true, 4)] },
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,526억원 달성", sgMergeUp:true, targetMergeUp:true,
+      kpi:"A114", kpiMergeUp:true, sub:"161억원", detail:"군위성통신체계-Ⅲ 체계 운반용단말", detailMergeUp:false,
+      chips:[chip(11,1,"RFP 공고")] },
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,526억원 달성", sgMergeUp:true, targetMergeUp:true,
+      kpi:"A114", kpiMergeUp:true, sub:"114억원", detail:"군위성통신체계-Ⅲ 체계 휴대용단말", detailMergeUp:false,
+      chips:[chip(11,1,"RFP 공고")] },
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,526억원 달성", sgMergeUp:true, targetMergeUp:true,
+      kpi:"A114", kpiMergeUp:true, sub:"219억원", detail:"군위성통신체계-Ⅲ 체계 고정단말", detailMergeUp:false,
+      chips:[chip(11,1,"RFP 공고")] },
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,526억원 달성", sgMergeUp:true, targetMergeUp:true,
+      kpi:"A115", kpiMergeUp:false, sub:"96억원", detail:"다출처체계(기본형) 연동장비 개발", detailMergeUp:false,
+      chips:[chip(10,1,"RFP 공고")] },
+    { accent:"biz", section:"사업부 KPI", group:"사업 경쟁력 회복", groupMergeUp:true,
+      subgroup:"수주 목표 달성", weight:"5%", target:"7,526억원 달성", sgMergeUp:true, targetMergeUp:true,
+      kpi:"A116", kpiMergeUp:false, sub:"60억원\n(2과제)", detail:"군집큐브 통신위성 기술개발", detailMergeUp:false,
+      chips:[chip(2,1,"RFP 공고(1과제)"), chip(3,1,"제안서 제출(1과제)"), chip(4,1,"계약(1과제)·나라스페이스 수주(시스템 컨소시엄)",true),
+             chip(5,1,"RFP 공고(2과제)"), chip(7,1,"업체 선정/협상(2과제) 수주완료",true), chip(8,1,"계약(2과제)",true)] },
+
+    { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:false,
+      subgroup:"전략제품 적기 출시/\n핵심기술 확보", weight:"20%", target:"UHR SAR 위성", sgMergeUp:false, targetMergeUp:false, progress:2,
+      matrixGrades:{ cols:["S","A","B+","B","C"], rows:[
+        { label:"UHR SAR 위성(10%)", cells:["FM 조립, 통합, 시험","EQM 환경시험","CDR 80점 이상 & ETB 연동시험","CDR 80점 미만 & 핵심기술 확보","CDR 미수행"] },
+        { label:"위성영상 AI 분석 솔루션(10%)", cells:["-","SAR AI 솔루션 고도화(최대 식별률 95% 이상@신규 Armed Aircraft)","AI 솔루션 핵심기능 3종 추가","SAR AI 솔루션 출시(최대 식별률 90% 이상@기존 Armed Aircraft)","-"] }
+      ] },
+      pctGrades:{ cols:["S","A","B+","B","C"], rows:[
+        { label:"전략제품 적기 출시", cells:["200% 달성","150% 달성","100% 달성","50% 달성","-"] }
+      ] },
+      kpi:"A211", kpiMergeUp:false, sub:"체계종합", detail:"CDR 80점 이상\n& ETB(전기적테스트베드) 연동시험", detailMergeUp:false,
+      chips:[chip(2,5,"기본설계(PDR)"), chip(7,6,"상세설계(CDR)",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
+      subgroup:"전략제품 적기 출시/\n핵심기술 확보", weight:"20%", target:"UHR SAR 위성", sgMergeUp:true, targetMergeUp:true,
+      kpi:"A211", kpiMergeUp:true, sub:"위성본체/탑재체", detail:"CDR 80점 이상\n& ETB(전기적테스트베드) 연동시험", detailMergeUp:true,
+      chips:[chip(5,5,"EQM 제작/시험"), chip(10,3,"ETB 연동시험",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
+      subgroup:"전략제품 적기 출시/\n핵심기술 확보", weight:"20%", target:"위성영상 AI 분석 솔루션", sgMergeUp:true, targetMergeUp:false, progress:2,
+      kpi:"A212", kpiMergeUp:false, sub:"제품 출시", detail:"AI 솔루션\n핵심기능 3종 추가", detailMergeUp:false,
+      chips:[chip(2,4,"SAR AI Pack 고도화 학습"), chip(6,1,"제품 출시(SIA)",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
+      subgroup:"전략제품 적기 출시/\n핵심기술 확보", weight:"20%", target:"위성영상 AI 분석 솔루션", sgMergeUp:true, targetMergeUp:true,
+      kpi:"A212", kpiMergeUp:true, sub:"기능 추가", detail:"AI 솔루션\n핵심기능 3종 추가", detailMergeUp:true,
+      chips:[chip(7,6,"SAR AI 솔루션 기능 추가 (Fake 객체 식별·피해량 분석·타격지점 예측)",true)] },
+
+    { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
+      subgroup:"해외사업 기반 구축", weight:"15%", target:"위성영상 AI 솔루션\n수출 기반 구축", sgMergeUp:false, targetMergeUp:false, progress:1,
+      subgroupPctGrades:{ cols:["S","A","B+","B","C"], rows:[
+        { label:"해외사업 기반 구축", cells:["200% 달성","150% 달성","100% 달성","50% 달성","-"] }
+      ] },
+      pctGrades:{ cols:["S","A","B+","B","C"], rows:[
+        { label:"유럽", cells:["계약","예산반영","100% 달성","50% 달성","-"] }
+      ] },
+      kpi:"A221", kpiMergeUp:false, sub:"유럽(기획과제 선정)", detail:"핵심 권역(유럽,중동,미국) 중\n1개 권역 목표 달성", detailMergeUp:false,
+      chips:[chip(2,2,"현지 파트너십 구축(공동개발)"), chip(4,4,"RFI 획득 및 기획, 제안서 제출"), chip(8,5,"기획과제 선정",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
+      subgroup:"해외사업 기반 구축", weight:"15%", target:"위성영상 AI 솔루션\n수출 기반 구축", sgMergeUp:true, targetMergeUp:true,
+      pctGrades:{ cols:["S","A","B+","B","C"], rows:[
+        { label:"중동", cells:["추가 계약 1건","최종 제안 제출 및 계약","소요군 대상 현지 시연","시연 계획서 제출","-"] }
+      ] },
+      kpi:"A221", kpiMergeUp:true, sub:"중동(소요군 대상 현지시연)", detail:"핵심 권역(유럽,중동,미국) 중\n1개 권역 목표 달성", detailMergeUp:true,
+      chips:[chip(2,2,"현지 파트너십 구축(현지화)"), chip(4,3,"기획 제안 및 시연 계획 제출"), chip(7,6,"소요군 대상 현지 시연",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
+      subgroup:"해외사업 기반 구축", weight:"15%", target:"위성영상 AI 솔루션\n수출 기반 구축", sgMergeUp:true, targetMergeUp:true,
+      pctGrades:{ cols:["S","A","B+","B","C"], rows:[
+        { label:"미국", cells:["실증/PoC","최종 제안 제출 및 계약","Short List 선정","계획서 제출","-"] }
+      ] },
+      kpi:"A221", kpiMergeUp:true, sub:"미국(Short List 선정)", detail:"핵심 권역(유럽,중동,미국) 중\n1개 권역 목표 달성", detailMergeUp:true,
+      chips:[chip(2,5,"DIU, 소요군向 소요 창출 및 사업 공고 유도"), chip(7,3,"Solution Brief 제출"), chip(10,3,"Short List 선정(PT업체)")] },
+    { accent:"biz", section:"사업부 KPI", group:"기초체력 강화", groupMergeUp:true,
+      subgroup:"핵심인력 확보", weight:"", target:"위성영상 AI 솔루션\n수출 기반 구축", sgMergeUp:false, targetMergeUp:true,
+      pctGrades:{ cols:["S","A","B+","B","C"], rows:[
+        { label:"핵심인력 확보", cells:["정성평가","1명(1개월 단축)","1명(2Q 이내)","1명(1개월 초과)","-"] }
+      ] },
+      kpi:"A222", kpiMergeUp:false, sub:"솔루션사업팀장 외부 채용", detail:"위성영상분석 AI/SW\n리더급 인력 1명", detailMergeUp:false,
+      chips:[chip(6,1,"입사완료",true)] },
+
+    { accent:"biz", section:"사업부 KPI", group:"중장기 전략 달성\n(고유목표)", groupMergeUp:false,
+      subgroup:"생태계 구축 가속화", weight:"10%", target:"위성영상분석 AI솔루션 Open Platform MAU 20건 이상\n및 프로젝트 생성 이력", sgMergeUp:false, targetMergeUp:false, progress:2,
+      pctGrades:{ cols:["S","A","B+","B","C"], rows:[
+        { label:"생태계 구축 가속화", cells:["MAU 50건 이상 & SAR 분석 기능 추가 반영 3건","MAU 30건 이상 & 관심지역 지정 가능 접속 이력","MAU 20건 이상 & 프로젝트 생성 이력","데모/배포 50건 이상","-"] }
+      ] },
+      kpi:"A311", kpiMergeUp:false, sub:"", detail:"Cloud 기반 Open Platform을 구축하여\n위성 Data/User를 단기간에 확충", detailMergeUp:false,
+      chips:[chip(7,6,"제품 출시 후 국가별 사용 이력 확인",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"중장기 전략 달성\n(고유목표)", groupMergeUp:true,
+      subgroup:"데이터 사업 전환", weight:"15%", target:"법령 내 데이터 구독/임차\n서비스 관련 내용 반영", sgMergeUp:false, targetMergeUp:false, progress:1,
+      gradeSections:[{ label:null, rows:[
+        { t:"S", v:"A 만족, 데이터 공급플랫폼 계약" },
+        { t:"A", v:"B+ 만족, 데이터 공급플랫폼 실증" },
+        { t:"B+", v:"법령 반영" },
+        { t:"B", v:"대외활동 10건 이상" }
+      ] }],
+      kpi:"A321", kpiMergeUp:false, sub:"", detail:"국회(과방위, 국방위), 기관(국방부/방사청) 등\n주요 의사결정 기관 대상 대관활동 강화", detailMergeUp:false,
+      chips:[chip(12,1,"법령 반영",true)] },
+    { accent:"biz", section:"사업부 KPI", group:"중장기 전략 달성\n(고유목표)", groupMergeUp:true,
+      subgroup:"위성통신 사업 확대", weight:"10%", target:"K-LEO 통합소요검증 Spec-in\n(해외기술협력)", sgMergeUp:false, targetMergeUp:false, progress:2,
+      gradeSections:[{ label:null, rows:[
+        { t:"S", v:"예산 승인" },
+        { t:"A", v:"K-LEO 통합소요 검증 Spec-In(핵심부품 국산화)" },
+        { t:"B+", v:"K-LEO 통합소요 검증 Spec-In(해외기술 협력)" },
+        { t:"B", v:"캐나다 잠수함 ITB로 제안(현지업체 MOU)" },
+        { t:"C", v:"-" }
+      ] }],
+      kpi:"A331", kpiMergeUp:false, sub:"", detail:"해외 상용 네트워크 활용이 아닌\n'해외기술협력+국내개발' 사업으로 결정 필요", detailMergeUp:false,
+      chips:[chip(2,1,"캐나다 잠수함 제안 지원"), chip(3,1,"방사청 TF참여"), chip(4,3,"시스템-국과연-Telesat Joint Study"),
+             chip(7,5,"통합소요 검토 지원",true), chip(12,1,"ROC 내역 확인",true)] },
+
+    { accent:"biz", section:"사업부 KPI", group:"재무목표달성", groupMergeUp:false,
+      subgroup:"", weight:"5%", target:"'26년 OCF -5억원", sgMergeUp:false, targetMergeUp:false,
+      kpi:"A411", kpiMergeUp:false, sub:"", detail:"미정", detailMergeUp:false, chips:[] },
+
+    // ===== HR Calendar =====
+    { accent:"hr", section:"HR Calendar", group:"평가/승격", groupMergeUp:false,
+      subgroup:"", weight:"-", target:"평가 및 승격 내실화", sgMergeUp:false, targetMergeUp:false,
+      kpi:"B101", kpiMergeUp:false, sub:"", detail:"업무 완료 전 조직별 단위별 세부 리뷰를\n통한 결과의 내실화", detailMergeUp:false,
+      chips:[chip(2,1,"승격세션",true), chip(7,1,"임원/1갑 평가 조직별 세션"), chip(8,1,"임원/1갑 평가 세션",true), chip(10,1,"직원 평가"), chip(11,1,"직원 역량평가 세션",true), chip(12,1,"직원 업적평가 세션",true)] },
+    { accent:"hr", section:"HR Calendar", group:"업무목표수립", groupMergeUp:false,
+      subgroup:"", weight:"-", target:"업무목표(KPI) 연계성 강화", sgMergeUp:false, targetMergeUp:false,
+      kpi:"B102", kpiMergeUp:false, sub:"", detail:"사업부-팀간 조직 목표 Cascading 강화", detailMergeUp:false,
+      chips:[chip(2,1,"조직별 사전 검토"), chip(3,1,"목표수립",true)] },
+    { accent:"hr", section:"HR Calendar", group:"Succession Plan", groupMergeUp:false,
+      subgroup:"", weight:"-", target:"적합한 대상자 선정 및\n사후 계획 실행력 제고", sgMergeUp:false, targetMergeUp:false,
+      kpi:"B103", kpiMergeUp:false, sub:"", detail:"업무 완료 전 조직별 단위별 세부 리뷰를\n통한 결과의 내실화 및 사후 관리", detailMergeUp:false,
+      chips:[chip(3,1,"조직별 사전조사 및 인터뷰"), chip(4,1,"리뷰 및 세션"), chip(5,1,"수립 완료")] },
+    { accent:"hr", section:"HR Calendar", group:"임원인사", groupMergeUp:false,
+      subgroup:"", weight:"-", target:"임원 모니터링 및 신임 선발", sgMergeUp:false, targetMergeUp:false,
+      kpi:"B104", kpiMergeUp:false, sub:"", detail:"임원 리더십 점검 및 신임 후보자 발굴", detailMergeUp:false,
+      chips:[chip(4,1,"임원 모니터링"), chip(6,1,"신임 대상 인터뷰"), chip(7,1,"초안 수립",true), chip(8,2,"세부자료 작성/보완/업데이트")] },
+    { accent:"hr", section:"HR Calendar", group:"조직개편", groupMergeUp:false,
+      subgroup:"", weight:"-", target:"사업부 조직개편 소요 발굴/실행", sgMergeUp:false, targetMergeUp:false,
+      kpi:"B105", kpiMergeUp:false, sub:"", detail:"조직목표 달성을 위한 Top-down, Bottom-up\n수요 파악 및 적정 조직 검토", detailMergeUp:false,
+      chips:[chip(6,1,"팀별별 소요 확인"), chip(7,1,"사업부 초안 수립",true), chip(8,2,"세부자료 작성/보완/업데이트",true)] },
+    { accent:"hr", section:"HR Calendar", group:"인력계획", groupMergeUp:false,
+      subgroup:"", weight:"-", target:"적정인력 운영 및\n적기 인력 수급", sgMergeUp:false, targetMergeUp:false,
+      kpi:"B106", kpiMergeUp:false, sub:"", detail:"매월 인력계획 점검을 통한 In/Out 실행", detailMergeUp:false,
+      chips:[chip(2,7,"사업부 인력계획 매월 점검"), chip(9,1,"경영계획 수립",true)] }
+  ];
+
+
+
+  var TODAY = new Date();
+  var CUR_M = TODAY.getMonth() + 1; // real device month — used only for "이번 달" emphasis, not shown as a date label
+  if (CUR_M < 2 || CUR_M > 12) CUR_M = 0; // outside the Feb–Dec range covered by this sheet
+
+  var collapsedGroups = new Set();
+  var searchQuery = "";
+  var spotlight = null; // { idx, ci } — the single chip currently spotlighted from the month panel
+
+  // ---- "연말 달성 가능성" 신호등 (per-browser convenience via localStorage; not shared/synced) ----
+  function progKey(row){ return "kpi-light-v2:" + row.group + "|" + row.subgroup + "|" + row.target + "|" + row.kpi; }
+  (function loadProgress(){
+    try {
+      ROWS.forEach(function(row){
+        if (row.targetMergeUp === false && /%$/.test(row.weight)){
+          var fallback = (row.progress !== undefined) ? row.progress : 0; // 배포 기본값
+          var v = localStorage.getItem(progKey(row));
+          var n = parseInt(v, 10);
+          row.progress = (n >= 0 && n <= 2) ? n : fallback;
+        }
+      });
+    } catch(e){}
+  })();
+  function saveProgress(row){
+    try { localStorage.setItem(progKey(row), String(row.progress)); } catch(e){}
+  }
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[c];
+    });
+  }
+  function nl2br(s){ return esc(s).replace(/\n/g, "<br>"); }
+
+  function renderColgroup(){
+    var cg = document.getElementById("colgroup");
+    var widths = [42, 100, 118, 46, 160, 210, 96];
+    MONTHS.forEach(function(){ widths.push(90); });
+    cg.innerHTML = widths.map(function(w){ return '<col style="width:' + w + 'px">'; }).join("");
+    var total = widths.reduce(function(a, w){ return a + w; }, 0);
+    document.getElementById("kpiTable").style.width = total + "px";
+  }
+
+  function renderHead(){
+    var head = document.getElementById("headRow");
+    var html = "";
+    html += '<th class="c-lead c-section">대분류</th>';
+    html += '<th class="c-group" colspan="2">구분</th>';
+    html += '<th class="c-weight">가중치</th>';
+    html += '<th class="c-target">목표</th>';
+    html += '<th class="c-lead c-detail" colspan="2">세부내용</th>';
+    MONTHS.forEach(function(m){
+      html += '<th class="c-month-h' + (m === CUR_M ? ' th-current' : '') + '">' + "'26." + m + '</th>';
+    });
+    head.innerHTML = html;
+  }
+
+  // Real <td> per month (merged via colspan for multi-month chips) — this
+  // guarantees pixel-perfect alignment with the header, since grid lines are
+  // actual cell borders on the same columns, not a simulated background.
+  function monthCellsHTML(row, idx, skipMonths){
+    skipMonths = skipMonths || {};
+    var byStart = {};
+    row.chips.forEach(function(c, ci){ byStart[c.s] = { c: c, ci: ci }; });
+    var covered = 0; // remaining months already consumed by an earlier chip (this row)
+    var html = "";
+    MONTHS.forEach(function(m){
+      if (skipMonths[m]) return; // covered by a vertical (cross-row) merge from an earlier row
+      if (covered > 0){ covered--; return; }
+      var hit = byStart[m];
+      if (hit){
+        var c = hit.c;
+        var span = Math.max(1, Math.min(c.n, 12 - m + 1));
+        covered = span - 1;
+        var spansCurrent = CUR_M && m <= CUR_M && CUR_M <= (m + span - 1);
+        var isSpot = spotlight && spotlight.idx === idx && spotlight.ci === hit.ci;
+        var rowspanAttr = c.vspan > 1 ? ' rowspan="' + c.vspan + '"' : '';
+        html += '<td class="chip-cell' + (c.hl ? ' hl' : '') + (c.strong ? ' strong' : '') + (spansCurrent ? ' cur-month' : '') + (isSpot ? ' spotlight' : '') + '" colspan="' + span + '"' + rowspanAttr + ' data-act="showinfo" data-idx="' + idx + '" data-ci="' + hit.ci + '" title="' + esc(c.t.replace(/\n/g, " · ")) + '">'
+              + nl2br(c.t)
+              + '</td>';
+      } else {
+        html += '<td class="c-month' + (m === CUR_M ? ' cur-month' : '') + '"></td>';
+      }
+    });
+    return html;
+  }
+
+  // Shared modal shell: a shared backdrop plus one or more independently
+  // draggable cards. Instead of fixed slots, cards are stacked as horizontal
+  // bars sized to their own content and the whole group is centered
+  // vertically as one block — works the same whether 1 or 4 cards are open,
+  // with no dead space and (whenever it fits) no inner scrolling.
+  function openCard(innerHtml, extraClass){
+    var overlay = document.getElementById("infoCard");
+    if (!overlay.classList.contains("open")){
+      overlay.innerHTML = '<div class="info-card-backdrop" data-act="closeinfo"></div>';
+      overlay.classList.add("open");
+    }
+    var box = document.createElement("div");
+    box.className = "info-card" + (extraClass ? " " + extraClass : "");
+    box.innerHTML =
+      '<div class="info-drag-handle"></div>' +
+      '<button type="button" class="info-close" aria-label="닫기">×</button>' +
+      innerHtml;
+    overlay.appendChild(box);
+    attachDrag(box);
+    box.querySelector(".info-close").addEventListener("click", function(){
+      box.remove();
+      if (!overlay.querySelector(".info-card")) closeInfoCard();
+      else layoutCards();
+    });
+    layoutCards();
+  }
+  function closeInfoCard(){
+    var overlay = document.getElementById("infoCard");
+    overlay.classList.remove("open");
+    overlay.innerHTML = "";
+  }
+  // Stacks every open card as a tight horizontal bar (own content height,
+  // small gap) and centers the whole stack vertically. If everything
+  // together is taller than the screen, all bars shrink proportionally to
+  // fit — only then does an individual card's own scroll kick in.
+  function layoutCards(){
+    var overlay = document.getElementById("infoCard");
+    var boxes = Array.prototype.slice.call(overlay.querySelectorAll(".info-card:not(.dragging)"));
+    var n = boxes.length;
+    if (n === 0) return;
+    var vh = window.innerHeight;
+    var margin = Math.max(10, vh * 0.03);
+    var gap = 10;
+    var available = vh - margin * 2;
+
+    boxes.forEach(function(b){ b.style.maxHeight = "none"; });
+    var natural = boxes.map(function(b){ return b.scrollHeight; });
+    var sum = natural.reduce(function(a, h){ return a + h; }, 0);
+    var totalNatural = sum + gap * (n - 1);
+
+    var heights;
+    if (totalNatural <= available){
+      heights = natural;
+    } else {
+      // Small cards keep their natural height; whatever space is left goes
+      // to the larger ones (proportionally) — so a small grade card never
+      // steals room from the big table it's paired with.
+      var smallCap = available * 0.4;
+      heights = natural.slice();
+      var reserved = 0, largeIdx = [], largeSum = 0;
+      natural.forEach(function(h, i){
+        if (h <= smallCap) reserved += h;
+        else { largeIdx.push(i); largeSum += h; }
+      });
+      var remaining = available - reserved - gap * (n - 1);
+      if (largeIdx.length && largeSum > 0){
+        var scale = Math.max(0.25, remaining / largeSum);
+        largeIdx.forEach(function(i){ heights[i] = Math.max(90, natural[i] * scale); });
+      }
+    }
+    var totalHeight = heights.reduce(function(a, h){ return a + h; }, 0) + gap * (n - 1);
+    var y = margin + Math.max(0, (available - totalHeight) / 2);
+    boxes.forEach(function(b, i){
+      b.style.top = y + "px";
+      b.style.maxHeight = heights[i] + "px";
+      y += heights[i] + gap;
+    });
+  }
+  // Draggable from anywhere on the card (not just the handle bar) — only
+  // the close button and text selection are excluded so normal reading/
+  // scrolling inside the card still works. A dragged card is pinned where
+  // the user left it and excluded from the auto-stack layout.
+  function attachDrag(box){
+    var dragging = false, moved = false, startX = 0, startY = 0, startLeft = 0, startTop = 0;
+    box.addEventListener("pointerdown", function(e){
+      if (e.target.closest(".info-close")) return;
+      dragging = true; moved = false;
+      var rect = box.getBoundingClientRect();
+      startX = e.clientX; startY = e.clientY;
+      startLeft = rect.left; startTop = rect.top;
+      try { box.setPointerCapture(e.pointerId); } catch(err){}
+    });
+    box.addEventListener("pointermove", function(e){
+      if (!dragging) return;
+      var dx = e.clientX - startX, dy = e.clientY - startY;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3){
+        if (!moved){
+          moved = true;
+          box.style.transform = "none";
+          box.style.margin = "0";
+          box.classList.add("dragging");
+        }
+        var maxLeft = window.innerWidth - box.offsetWidth - 6;
+        var maxTop = window.innerHeight - box.offsetHeight - 6;
+        box.style.left = Math.min(Math.max(6, startLeft + dx), Math.max(6, maxLeft)) + "px";
+        box.style.top = Math.min(Math.max(6, startTop + dy), Math.max(6, maxTop)) + "px";
+      }
+    });
+    ["pointerup", "pointercancel"].forEach(function(ev){
+      box.addEventListener(ev, function(){ dragging = false; });
+    });
+  }
+
+  function showInfoCard(idx, ci){
+    var row = ROWS[idx];
+    var c = row.chips[ci];
+    if (!row || !c) return;
+    var crumbParts = [row.section];
+    if (row.group) crumbParts.push(row.group.replace(/\n/g, " "));
+    if (row.subgroup) crumbParts.push(row.subgroup.replace(/\n/g, " "));
+    var detailLine = row.detail.replace(/\n/g, " ") + (row.sub ? " · " + row.sub.replace(/\n/g, " ") : "");
+    var period = "'26." + c.s + (c.n > 1 ? " ~ '26." + (c.s + c.n - 1) : "");
+    var wtParts = [];
+    if (row.weight && row.weight !== "-") wtParts.push("가중치 " + row.weight);
+    if (row.target) wtParts.push(row.target.replace(/\n/g, " "));
+
+    openCard(
+      '<div class="info-breadcrumb">' + esc(crumbParts.join(" › ")) + '</div>' +
+      (row.kpi ? '<div class="info-kpi">' + esc(row.kpi) + '</div>' : '') +
+      '<div class="info-detail">' + esc(detailLine) + '</div>' +
+      (wtParts.length ? '<div class="info-wt">' + esc(wtParts.join(" · ")) + '</div>' : '') +
+      '<div class="info-chip' + (c.hl ? ' hl' : '') + '">' + esc(c.t.replace(/\n/g, " · ")) + '</div>' +
+      '<div class="info-period">' + period + (c.hl ? " · 강조 항목" : "") + '</div>'
+    );
+
+    spotlight = { idx: idx, ci: ci };
+    render();
+  }
+
+  // row.gradeSections: [{ label: string|null, rows: [{t:"S", v:"..."}, ...] }, ...]
+  // The last section's "B+" row is treated as today's official target and highlighted.
+  function showGradeCard(idx){
+    var row = ROWS[idx];
+    if (!row || !row.gradeSections) return;
+
+    var bodyHtml = "";
+    row.gradeSections.forEach(function(section, si){
+      var isLastSection = si === row.gradeSections.length - 1;
+      if (section.label) bodyHtml += '<div class="grade-section-label">' + esc(section.label) + '</div>';
+      bodyHtml += '<div class="grade-table">';
+      section.rows.forEach(function(r){
+        var isCurrent = isLastSection && r.t === "B+";
+        bodyHtml += '<div class="grade-row' + (isCurrent ? ' current' : '') + '"><span class="grade-tier">' + esc(r.t) + '</span><span class="grade-amt">' + esc(r.v) + '</span></div>';
+      });
+      bodyHtml += '</div>';
+    });
+
+    openCard(
+      '<div class="info-breadcrumb">' + esc(row.section + " › " + row.group.replace(/\n/g, " ")) + '</div>' +
+      '<div class="info-detail">' + esc(row.subgroup.replace(/\n/g, " ")) + ' · 등급별 목표</div>' +
+      bodyHtml +
+      (row.gradeNote ? '<div class="info-period">' + esc(row.gradeNote) + '</div>' : '')
+    );
+  }
+
+  function showBizStatusCard(idx){
+    var row = ROWS[idx];
+    var t = row && row.bizStatusTable;
+    if (!t) return;
+
+    function sectionRows(items){
+      return items.map(function(it){
+        return '<tr><td>' + it.no + '</td><td class="bs-name">' + esc(it.name) + '</td><td>' + esc(it.size) + '</td><td>' + esc(it.owner) + '</td><td>' + esc(it.note || "") + '</td></tr>';
+      }).join("");
+    }
+
+    var bodyHtml =
+      '<div class="info-breadcrumb">' + esc(row.section + " › " + row.group.replace(/\n/g, " ")) + '</div>' +
+      '<div class="info-detail">' + esc(row.subgroup.replace(/\n/g, " ")) + ' · 사업 현황</div>' +
+      '<div class="bs-table-wrap"><table class="bs-table">' +
+        '<thead><tr><th>구분</th><th>사업명</th><th>사업 규모</th><th>담당자</th><th>비고</th></tr></thead>' +
+        '<tbody>' +
+          '<tr class="bs-section"><td colspan="5">수주완료 사업</td></tr>' +
+          sectionRows(t.done) +
+          '<tr class="bs-total"><td colspan="2">수주 사업 합계(A)</td><td>' + esc(t.totalA) + '</td><td colspan="2"></td></tr>' +
+          '<tr class="bs-section"><td colspan="5">수주예정 사업</td></tr>' +
+          sectionRows(t.planned) +
+          '<tr class="bs-total"><td colspan="2">수주 예정 사업 합계(B)</td><td>' + esc(t.totalB) + '</td><td colspan="2"></td></tr>' +
+          '<tr class="bs-grandtotal"><td colspan="2">총 합계(A+B)</td><td>' + esc(t.totalAB) + '</td><td colspan="2"></td></tr>' +
+        '</tbody>' +
+      '</table></div>';
+
+    openCard(bodyHtml, "wide");
+  }
+
+  // Generic small/matrix grade table: row.<field> = { cols:[...], rows:[{label, cells:[...]}] }.
+  // Reused for the 2x5 matrix (전략제품 적기 출시) and every single-row S~C table.
+  function showMatrixCard(idx, field, title, extraClass){
+    var row = ROWS[idx];
+    var t = row && row[field];
+    if (!t) return;
+    var thead = '<tr><th></th>' + t.cols.map(function(c){ return '<th>' + esc(c) + '</th>'; }).join('') + '</tr>';
+    var tbody = t.rows.map(function(r){
+      return '<tr><td class="bs-name">' + esc(r.label) + '</td>' + r.cells.map(function(v){ return '<td>' + esc(v) + '</td>'; }).join('') + '</tr>';
+    }).join('');
+    var bodyHtml =
+      '<div class="info-breadcrumb">' + esc(row.section + " › " + row.group.replace(/\n/g, " ")) + '</div>' +
+      '<div class="info-detail">' + esc(title) + '</div>' +
+      '<div class="bs-table-wrap"><table class="bs-table"><thead>' + thead + '</thead><tbody>' + tbody + '</tbody></table></div>';
+    openCard(bodyHtml, extraClass);
+  }
+
+  function computeSpans(list, mergeKey){
+    var spans = new Array(list.length);
+    var i = 0;
+    while (i < list.length){
+      var span = 1;
+      while (i + span < list.length && list[i + span][mergeKey]) span++;
+      spans[i] = span;
+      for (var k = 1; k < span; k++) spans[i + k] = 0;
+      i += span;
+    }
+    return spans;
+  }
+
+  // Builds the array actually rendered: a collapsed group becomes ONE summary
+  // row (so the existing rowspan/colspan machinery needs no special-casing —
+  // a summary row just has empty subgroup/sub, which already renders as a
+  // merged, non-editable line). Search temporarily ignores collapse so any
+  // match stays reachable; origIdx (null for summaries) maps back to ROWS for
+  // every editable/interactive action.
+  function buildDisplayRows(){
+    var out = [];
+    var query = searchQuery.trim().toLowerCase();
+    if (query){
+      ROWS.forEach(function(row, i){ out.push({ ref: row, origIdx: i }); });
+      return out;
+    }
+    var i = 0;
+    while (i < ROWS.length){
+      var row = ROWS[i];
+      var key = row.section + "||" + row.group;
+      if (collapsedGroups.has(key)){
+        var count = 1;
+        while (i + count < ROWS.length && ROWS[i + count].groupMergeUp) count++;
+        out.push({
+          ref: {
+            accent: row.accent, section: row.section, group: row.group, groupMergeUp: false,
+            subgroup: "", weight: "", target: "", sgMergeUp: false, targetMergeUp: false,
+            kpi: "", kpiMergeUp: false, sub: "", detail: count + "개 항목 · 클릭하면 펼쳐집니다", detailMergeUp: false,
+            chips: [], isSummary: true, summaryKey: key
+          },
+          origIdx: null
+        });
+        i += count;
+      } else {
+        out.push({ ref: row, origIdx: i });
+        i++;
+      }
+    }
+    return out;
+  }
+
+  function rowMatches(row, query){
+    if (!query) return true;
+    var hay = [row.group, row.subgroup, row.kpi, row.detail, row.sub, row.target]
+      .concat(row.chips.map(function(c){ return c.t; }))
+      .join(" ").toLowerCase();
+    return hay.indexOf(query) !== -1;
+  }
+
+  function render(){
+    var tbody = document.getElementById("tbody");
+    var display = buildDisplayRows();
+    var list = display.map(function(d){ return d.ref; });
+    var query = searchQuery.trim().toLowerCase();
+
+    var groupSpans = computeSpans(list, "groupMergeUp");
+    var sgSpans = computeSpans(list, "sgMergeUp");
+    var targetSpans = computeSpans(list, "targetMergeUp");
+    var detailSpans = computeSpans(list, "detailMergeUp");
+
+    // A group's rowspan cell may absorb the subgroup column (colspan 2) only
+    // when EVERY row it spans has an empty subgroup — otherwise a sibling row
+    // needing its own subgroup cell would collide with that colspan. Computed
+    // per block so any row in the span can look up its block's outcome.
+    var groupAbsorbsSub = new Array(list.length);
+    (function(){
+      var i = 0;
+      while (i < list.length){
+        var span = groupSpans[i] > 0 ? groupSpans[i] : 1;
+        var allEmpty = true;
+        for (var k = i; k < i + span && k < list.length; k++){ if (list[k].subgroup !== "") { allEmpty = false; break; } }
+        for (var k2 = i; k2 < i + span && k2 < list.length; k2++) groupAbsorbsSub[k2] = allEmpty;
+        i += span;
+      }
+    })();
+
+    var sectionSpans = new Array(list.length);
+    (function(){
+      var i = 0;
+      while (i < list.length){
+        var span = 1;
+        while (i + span < list.length && list[i + span].accent === list[i].accent) span++;
+        sectionSpans[i] = span;
+        for (var k = 1; k < span; k++) sectionSpans[i + k] = 0;
+        i += span;
+      }
+    })();
+
+    // A chip with vspan > 1 visually spans downward into the following rows'
+    // same month column (real rowspan on the owning cell). Those covered
+    // rows must not render anything of their own at that month.
+    var skipMonths = list.map(function(){ return {}; });
+    list.forEach(function(r, p){
+      r.chips.forEach(function(c){
+        if (c.vspan > 1){
+          for (var k = 1; k < c.vspan; k++){
+            if (!skipMonths[p + k]) continue;
+            for (var mm = c.s; mm <= c.s + c.n - 1; mm++) skipMonths[p + k][mm] = true;
+          }
+        }
+      });
+    });
+
+    var rowsHTML = "";
+    display.forEach(function(d, pos){
+      var row = d.ref, idx = d.origIdx;
+      var accentClass = row.accent === "hr" ? "section-hr" : "section-biz";
+      var rowMarkerClass = row.accent === "hr" ? "section-hr-row" : "section-biz-row";
+      var dim = query && !row.isSummary && !rowMatches(row, query);
+
+      if (row.isSummary){
+        rowsHTML += '<tr class="' + rowMarkerClass + ' summary-row" data-act="expandgroup" data-key="' + esc(row.summaryKey) + '">';
+      } else {
+        rowsHTML += '<tr class="' + rowMarkerClass + (dim ? ' row-dim' : '') + '">';
+      }
+
+      if (sectionSpans[pos] > 0) rowsHTML += '<td class="c-lead c-section ' + accentClass + '" rowspan="' + sectionSpans[pos] + '">' + esc(row.section) + '</td>';
+      if (groupSpans[pos] > 0){
+        var groupColspan = groupAbsorbsSub[pos] ? 2 : 1;
+        var chevron = (!row.isSummary && !query) ? '<button type="button" class="group-toggle" data-act="collapsegroup" data-key="' + esc(row.section + "||" + row.group) + '" title="그룹 접기">▾</button>' : '';
+        rowsHTML += '<td class="c-group ' + accentClass + '" rowspan="' + groupSpans[pos] + '"' + (groupColspan === 2 ? ' colspan="2"' : '') + '>' + chevron + nl2br(row.group) + '</td>';
+      }
+      if (sgSpans[pos] > 0){
+        if (!groupAbsorbsSub[pos]){
+          var hasGrades = !row.isSummary && (row.gradeSections || row.matrixGrades || row.pctGrades || row.subgroupPctGrades);
+          rowsHTML += '<td class="c-subgroup' + (hasGrades ? ' has-grades' : '') + '" rowspan="' + sgSpans[pos] + '"' + (hasGrades ? ' data-act="showgrades" data-idx="' + idx + '" title="클릭하면 등급별 목표를 볼 수 있어요"' : '') + '>' + (row.subgroup !== "" ? nl2br(row.subgroup) : '') + '</td>';
+        }
+        rowsHTML += '<td class="c-weight" rowspan="' + sgSpans[pos] + '">' + esc(row.weight) + '</td>';
+      }
+      if (targetSpans[pos] > 0){
+        var lightHTML = "";
+        if (!row.isSummary && /%$/.test(row.weight) && row.kpi !== "A411"){
+          var lv = row.progress || 0; // 0=빨강(어려움) 1=노랑(주의) 2=초록(정상)
+          var lightMeta = [
+            { cls: "red",    label: "적신호" },
+            { cls: "yellow", label: "주의" },
+            { cls: "green",  label: "정상" }
+          ][lv];
+          lightHTML = '<button type="button" class="light-btn" data-act="progress" data-idx="' + idx + '" data-lv="' + lv + '" title="연말 달성 전망 · 클릭해서 변경">'
+            + '<span class="light-dot ' + lightMeta.cls + '"></span><span class="light-label">' + lightMeta.label + '</span></button>';
+        }
+        rowsHTML += '<td class="c-target" rowspan="' + targetSpans[pos] + '">' + nl2br(row.target) + lightHTML + '</td>';
+      }
+      if (detailSpans[pos] > 0){
+        var detailColspan = row.sub === "" ? 2 : 1;
+        rowsHTML += '<td class="c-lead c-detail" rowspan="' + detailSpans[pos] + '"' + (detailColspan === 2 ? ' colspan="2"' : '') + '>' + nl2br(row.detail) + '</td>';
+      }
+      if (row.sub !== "") rowsHTML += '<td class="c-lead c-sub">' + nl2br(row.sub) + '</td>';
+
+      rowsHTML += monthCellsHTML(row, idx, skipMonths[pos]);
+      rowsHTML += '</tr>';
+    });
+
+    tbody.innerHTML = rowsHTML;
+    renderSummary();
+    renderMonthPanel();
+  }
+
+  function renderSummary(){
+    var totalRows = ROWS.length, totalChips = 0, hlCount = 0;
+    var totalWeight = 0, weightedDone = 0;
+    ROWS.forEach(function(row){
+      row.chips.forEach(function(c){ totalChips++; if (c.hl) hlCount++; });
+    });
+
+    // A subgroup+weight block can carry more than one independent target
+    // (e.g. UHR SAR위성 / 위성영상 AI 분석 솔루션 both under 20%) — split that
+    // weight evenly across each target's own light so it isn't double-counted.
+    var i = 0;
+    while (i < ROWS.length){
+      var sgSpan = 1;
+      while (i + sgSpan < ROWS.length && ROWS[i + sgSpan].sgMergeUp) sgSpan++;
+      var targetStarts = 0;
+      for (var k = i; k < i + sgSpan; k++){ if (!ROWS[k].targetMergeUp) targetStarts++; }
+      for (var k2 = i; k2 < i + sgSpan; k2++){
+        if (!ROWS[k2].targetMergeUp && /%$/.test(ROWS[k2].weight) && ROWS[k2].kpi !== "A411"){
+          var w = parseFloat(ROWS[k2].weight) / Math.max(1, targetStarts);
+          if (!isNaN(w)){
+            totalWeight += w;
+            weightedDone += w * ((ROWS[k2].progress || 0) / 2); // 0(적신호)~2(정상) → 0~1
+          }
+        }
+      }
+      i += sgSpan;
+    }
+
+    var score = totalWeight > 0 ? Math.round((weightedDone / totalWeight) * 100) : 0;
+    var R = 21, CX = 31, CY = 31;
+    var circ = 2 * Math.PI * R;
+    var arcLen = (score / 100) * circ;
+    var angle = (score / 100) * 2 * Math.PI - Math.PI / 2; // 0% at top, clockwise
+    var satX = CX + R * Math.cos(angle);
+    var satY = CY + R * Math.sin(angle);
+    var satRot = (angle * 180 / Math.PI) + 90;
+    var ringSVG =
+      '<svg width="60" height="60" viewBox="0 0 62 62" style="flex:none; overflow:visible">' +
+        '<circle class="orbit-track" cx="' + CX + '" cy="' + CY + '" r="' + R + '"/>' +
+        (arcLen > 0 ? '<circle class="orbit-arc" cx="' + CX + '" cy="' + CY + '" r="' + R + '" stroke-dasharray="' + arcLen.toFixed(2) + ' ' + circ.toFixed(2) + '" transform="rotate(-90 ' + CX + ' ' + CY + ')"/>' : '') +
+        '<text class="sat-emoji" x="' + satX.toFixed(2) + '" y="' + satY.toFixed(2) + '">🛰️</text>' +
+      '</svg>';
+    document.getElementById("summaryRow").innerHTML =
+      '<div class="stat"><span class="n">' + totalRows + '</span><span class="l">전체 KPI 항목</span></div>' +
+      '<div class="stat"><span class="n">' + totalChips + '</span><span class="l">등록된 일정</span></div>' +
+      '<div class="stat"><span class="n">' + hlCount + '</span><span class="l">강조 표시 일정</span></div>' +
+      '<div class="stat score">' +
+        ringSVG +
+        '<div class="score-text"><span class="n">' + score + '%</span><span class="l">연말 달성 전망</span></div>' +
+      '</div>';
+  }
+
+  function renderMonthPanel(){
+    var panel = document.getElementById("monthPanel");
+    if (!CUR_M){ panel.innerHTML = '<span class="mp-empty">현재 월이 표시 범위(2~12월) 밖입니다.</span>'; return; }
+    var items = [];
+    ROWS.forEach(function(row, idx){
+      row.chips.forEach(function(c, ci){
+        if (c.s <= CUR_M && CUR_M <= c.s + c.n - 1){
+          items.push({ idx: idx, ci: ci, label: (row.kpi ? row.kpi + " · " : "") + c.t.replace(/\n/g, " · ") });
+        }
+      });
+    });
+    var html = '<span class="mp-label">📌 이번 달(&#39;26.' + CUR_M + ') 주요 일정</span>';
+    if (items.length === 0){
+      html += '<span class="mp-empty">이번 달 예정된 일정이 없습니다.</span>';
+    } else {
+      items.forEach(function(it){
+        html += '<button type="button" class="mp-item" data-act="jumpto" data-idx="' + it.idx + '" data-ci="' + it.ci + '">' + esc(it.label) + '</button>';
+      });
+    }
+    panel.innerHTML = html;
+  }
+
+  function setFilter(f){
+    document.body.classList.remove("filter-biz", "filter-hr");
+    if (f === "biz") document.body.classList.add("filter-biz");
+    if (f === "hr") document.body.classList.add("filter-hr");
+    document.querySelectorAll(".filter-pill").forEach(function(btn){ btn.classList.toggle("active", btn.dataset.f === f); });
+  }
+
+  function init(){
+    renderColgroup();
+    renderHead();
+    render();
+
+    document.querySelectorAll(".filter-pill").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var f = btn.dataset.f, current = btn.classList.contains("active");
+        setFilter(current && f !== "all" ? "all" : f);
+      });
+    });
+
+    var stage = document.getElementById("stage");
+
+    stage.addEventListener("click", function(e){
+      var actEl = e.target.closest("[data-act]");
+      if (!actEl) return;
+      var act = actEl.dataset.act;
+
+      if (act === "collapsegroup"){ collapsedGroups.add(actEl.dataset.key); render(); return; }
+      if (act === "expandgroup"){ collapsedGroups.delete(actEl.dataset.key); render(); return; }
+      if (act === "progress"){
+        var pIdx = +actEl.dataset.idx;
+        var pRow = ROWS[pIdx];
+        var cur = pRow.progress || 0;
+        pRow.progress = (cur + 1) % 3;
+        saveProgress(pRow);
+        render();
+        return;
+      }
+      if (act === "showinfo"){
+        showInfoCard(+actEl.dataset.idx, +actEl.dataset.ci);
+        return;
+      }
+      if (act === "showgrades"){
+        var gIdx = +actEl.dataset.idx;
+        var gRow = ROWS[gIdx];
+        if (gRow.gradeSections) showGradeCard(gIdx);
+        if (gRow.bizStatusTable) showBizStatusCard(gIdx);
+        if (gRow.matrixGrades) showMatrixCard(gIdx, "matrixGrades", "대상 과제별 수행결과 평가 구간(Milestone 기준)", "wide");
+        if (gRow.kpi === "A221"){
+          // 해외사업 기반 구축: 전체 + 유럽/중동/미국 3개, 네 귀퉁이 그리드로
+          if (gRow.subgroupPctGrades) showMatrixCard(gIdx, "subgroupPctGrades", "해외사업 기반 구축 평가 구간");
+          if (gRow.pctGrades) showMatrixCard(gIdx, "pctGrades", "유럽 평가 구간");
+          if (ROWS[gIdx + 1] && ROWS[gIdx + 1].pctGrades) showMatrixCard(gIdx + 1, "pctGrades", "중동 평가 구간");
+          if (ROWS[gIdx + 2] && ROWS[gIdx + 2].pctGrades) showMatrixCard(gIdx + 2, "pctGrades", "미국 평가 구간");
+        } else if (gRow.pctGrades){
+          showMatrixCard(gIdx, "pctGrades", (gRow.subgroup || "").replace(/\n/g, " ") + " 평가 구간");
+        }
+        return;
+      }
+    });
+
+    document.getElementById("printBtn").addEventListener("click", function(){ window.print(); });
+
+    document.getElementById("infoCard").addEventListener("click", function(e){
+      if (e.target.closest('[data-act="closeinfo"]')) closeInfoCard();
+    });
+    document.addEventListener("keydown", function(e){
+      if (e.key === "Escape") closeInfoCard();
+    });
+    window.addEventListener("resize", function(){
+      if (document.getElementById("infoCard").classList.contains("open")) layoutCards();
+    });
+
+    var searchInput = document.getElementById("searchInput");
+    var searchBox = document.getElementById("searchBox");
+    document.getElementById("searchClear").addEventListener("click", function(){
+      searchQuery = ""; searchInput.value = ""; searchBox.classList.remove("has-query"); render();
+    });
+    searchInput.addEventListener("input", function(){
+      searchQuery = searchInput.value;
+      searchBox.classList.toggle("has-query", !!searchQuery.trim());
+      render();
+    });
+
+    document.getElementById("monthPanel").addEventListener("click", function(e){
+      var actEl = e.target.closest('[data-act="jumpto"]');
+      if (!actEl) return;
+      var idx = +actEl.dataset.idx;
+      var ci = +actEl.dataset.ci;
+      var row = ROWS[idx];
+      var key = row.section + "||" + row.group;
+      spotlight = { idx: idx, ci: ci };
+      if (collapsedGroups.has(key)){ collapsedGroups.delete(key); }
+      render();
+      requestAnimationFrame(function(){
+        var el = document.querySelector('.chip-cell.spotlight');
+        if (el && el.scrollIntoView) el.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+      });
+    });
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
+</script>
+</body>
+</html>
