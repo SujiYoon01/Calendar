@@ -1,1 +1,1 @@
-      chips:[chip(9,1,"RFP 공고"), chip(10,1,"업체 선정"), chip(11,1,"계약",true)] },
+      chips:[chip(10,1,"RFP 공고"), chip(12,1,"업체선정/계약",true)] },
