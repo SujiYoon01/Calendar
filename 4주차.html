@@ -629,7 +629,7 @@
 
   // Real <td> per month (merged via colspan for multi-month chips) — this
   // 이번 달을 5주로 나눠서 CUR_WEEK 주차만 칠함 (1~5)
-  var CUR_WEEK = 3;
+  var CUR_WEEK = 4;
   function weekBand(s, span){
     var w = 1 / span, off = (CUR_M - s) / span;
     var a = (off + (CUR_WEEK - 1) / 5 * w) * 100, b = (off + CUR_WEEK / 5 * w) * 100;
